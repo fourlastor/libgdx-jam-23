@@ -47,7 +47,7 @@ public class FishSpawnSystem extends IntervalSystem {
             float y = camera.position.y + viewport.getWorldHeight() / 2 + FISH_HEIGHT;
             float x = MathUtils.random(0f, viewport.getWorldWidth());
             Vector2 position = new Vector2(x, y);
-            engine.addEntity(factory.fish(position));
+//            engine.addEntity(factory.fish(position));
         }
     }
 }

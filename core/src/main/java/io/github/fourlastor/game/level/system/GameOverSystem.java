@@ -47,14 +47,14 @@ public class GameOverSystem extends IteratingSystem implements Telegraph {
         Body body = bodies.get(entity).body;
         float lowerBound = camera.position.y - camera.viewportHeight / 2;
         if (body.getPosition().y < lowerBound - 2f) {
-            router.goToGameOver();
+//            router.goToGameOver();
         }
     }
 
     @Override
     public boolean handleMessage(Telegram msg) {
         if (msg.message == Message.GAME_OVER.ordinal()) {
-            router.goToGameOver();
+//            router.goToGameOver();
             return true;
         }
         return false;

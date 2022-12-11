@@ -94,13 +94,10 @@ public class PlayerInputSystem extends IteratingSystem {
         @Override
         public void entityAdded(Entity entity) {
             entity.remove(PlayerRequestComponent.class);
-            Falling falling = fallingProvider.get();
-            InputStateMachine stateMachine = stateMachineFactory.create(entity, falling);
             OnGround onGround = onGroundProvider.get();
-            Jumping jumping = jumpingProvider.get();
-            ChargeJump chargeJump = chargeJumpProvider.get();
+            InputStateMachine stateMachine = stateMachineFactory.create(entity, onGround);
 
-            entity.add(new PlayerComponent(stateMachine, onGround, falling, jumping, chargeJump));
+            entity.add(new PlayerComponent(stateMachine, onGround));
             stateMachine.getCurrentState().enter(entity);
             for (Message value : Message.values()) {
                 messageDispatcher.addListener(stateMachine, value.ordinal());

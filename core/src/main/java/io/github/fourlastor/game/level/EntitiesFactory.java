@@ -2,7 +2,6 @@ package io.github.fourlastor.game.level;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -22,7 +21,6 @@ import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.ChunkRemovalComponent;
 import io.github.fourlastor.game.component.MovingComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
-import io.github.fourlastor.game.component.SoundComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.blueprint.definitions.MovingPlatform;
 import io.github.fourlastor.game.level.blueprint.definitions.Platform;
@@ -38,30 +36,22 @@ import javax.inject.Named;
 @ScreenScoped
 public class EntitiesFactory {
 
-    private static final float CHARACTER_SCALE_XY = 1f / 40f;
+    private static final float CHARACTER_SCALE_XY = 1f;
     private static final float SCALE_XY = 1f / 32f;
-    private final Animation<TextureRegion> fallingAnimation;
-    private final Animation<TextureRegion> fishAnimation;
+    private final Animation<TextureRegion> whitePixel;
     private final TextureAtlas textureAtlas;
-    private final Sound sawBladeSound;
-    private final Sound fishSound;
 
     @Inject
     public EntitiesFactory(
-            @Named(PlayerAnimationsFactory.ANIMATION_FALLING) Animation<TextureRegion> fallingAnimation,
-            TextureAtlas textureAtlas,
-            AssetManager assetManager) {
-        this.fallingAnimation = fallingAnimation;
+            @Named(PlayerAnimationsFactory.WHITE_PIXEL) Animation<TextureRegion> whitePixel,
+            TextureAtlas textureAtlas) {
+        this.whitePixel = whitePixel;
         this.textureAtlas = textureAtlas;
-        sawBladeSound = assetManager.get("audio/sounds/sawblade.ogg", Sound.class);
-        fishSound = assetManager.get("audio/sounds/fish.mp3", Sound.class);
-        fishAnimation = new Animation<>(
-                0.1f, textureAtlas.findRegions("enemies/wigglingFish/wigglingFish"), Animation.PlayMode.LOOP);
     }
 
     public Entity player() {
         Entity entity = new Entity();
-        AnimatedImage image = new AnimatedImage(fallingAnimation);
+        AnimatedImage image = new AnimatedImage(whitePixel);
         image.setScale(CHARACTER_SCALE_XY);
 
         entity.add(new AnimatedImageComponent(image));
@@ -71,9 +61,9 @@ public class EntitiesFactory {
             bodyDef.position.set(new Vector2(4.5f, 1.5f));
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(0.25f, 0.25f);
+            shape.setAsBox(1f, 1f);
             Fixture fixture = body.createFixture(shape, 0.0f);
-            fixture.setFriction(100f);
+//            fixture.setFriction(100f);
             fixture.setRestitution(0.15f);
             fixture.setUserData(UserData.PLAYER);
             shape.dispose();
@@ -94,6 +84,13 @@ public class EntitiesFactory {
             path.add(point.cpy().add(0, dY));
         }
         entity.add(new MovingComponent(path, platform.speed.speed()));
+    }
+
+    public Entity base() {
+        Entity entity = new Entity();
+        Vector2 initialPosition = Vector2.Zero;
+        entity.add(platformBuilder(initialPosition, Platform.Width.NINE));
+        return entity;
     }
 
     public Entity platform(Platform platform, float dY, float top) {
@@ -167,7 +164,6 @@ public class EntitiesFactory {
         group.addActor(image);
         group.addAction(Actions.forever(rotate));
         entity.add(new ActorComponent(group, ActorComponent.Layer.ENEMIES));
-        entity.add(new SoundComponent(sawBladeSound));
         List<Vector2> path = new ArrayList<>(sawBlade.path.size() + 1);
         path.add(initialPosition);
         for (Vector2 point : sawBlade.path) {
@@ -177,26 +173,26 @@ public class EntitiesFactory {
         return entity;
     }
 
-    public Entity fish(Vector2 initialPosition) {
-        Entity entity = new Entity();
-        entity.add(new SoundComponent(fishSound));
-        AnimatedImage image = new AnimatedImage(fishAnimation);
-        image.setScale(CHARACTER_SCALE_XY);
-        entity.add(new AnimatedImageComponent(image));
-        entity.add(new ActorComponent(image, ActorComponent.Layer.ENEMIES));
-        entity.add(new BodyBuilderComponent(world -> {
-            BodyDef bodyDef = new BodyDef();
-            bodyDef.type = BodyDef.BodyType.DynamicBody;
-            bodyDef.position.set(initialPosition);
-            Body body = world.createBody(bodyDef);
-            CircleShape shape = new CircleShape();
-            shape.setRadius(0.1f);
-            Fixture fixture = body.createFixture(shape, 0.0f);
-            fixture.setFriction(0f);
-            fixture.setRestitution(0.4f);
-            shape.dispose();
-            return body;
-        }));
-        return entity;
-    }
+//    public Entity fish(Vector2 initialPosition) {
+//        Entity entity = new Entity();
+//        entity.add(new SoundComponent(fishSound));
+//        AnimatedImage image = new AnimatedImage(fishAnimation);
+//        image.setScale(CHARACTER_SCALE_XY);
+//        entity.add(new AnimatedImageComponent(image));
+//        entity.add(new ActorComponent(image, ActorComponent.Layer.ENEMIES));
+//        entity.add(new BodyBuilderComponent(world -> {
+//            BodyDef bodyDef = new BodyDef();
+//            bodyDef.type = BodyDef.BodyType.DynamicBody;
+//            bodyDef.position.set(initialPosition);
+//            Body body = world.createBody(bodyDef);
+//            CircleShape shape = new CircleShape();
+//            shape.setRadius(0.1f);
+//            Fixture fixture = body.createFixture(shape, 0.0f);
+//            fixture.setFriction(0f);
+//            fixture.setRestitution(0.4f);
+//            shape.dispose();
+//            return body;
+//        }));
+//        return entity;
+//    }
 }

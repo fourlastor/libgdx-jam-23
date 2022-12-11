@@ -61,19 +61,19 @@ public class ChargeJump extends InputState {
 
     @Override
     public boolean keyUp(Entity entity, int keycode) {
-        if (keycode == Input.Keys.SPACE) {
-            PlayerComponent player = players.get(entity);
-            player.stateMachine.changeState(player.jumping);
-            return true;
-        }
+//        if (keycode == Input.Keys.SPACE) {
+//            PlayerComponent player = players.get(entity);
+//            player.stateMachine.changeState(player.jumping);
+//            return true;
+//        }
 
         return false;
     }
 
     @Override
     public boolean touchUp(Entity entity, int screenX, int screenY, int pointer, int button) {
-        PlayerComponent player = players.get(entity);
-        player.stateMachine.changeState(player.jumping);
+//        PlayerComponent player = players.get(entity);
+//        player.stateMachine.changeState(player.jumping);
         return true;
     }
 }
