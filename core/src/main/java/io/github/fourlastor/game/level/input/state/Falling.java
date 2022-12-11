@@ -52,15 +52,15 @@ public class Falling extends InputState {
 
     @Override
     public boolean onMessage(Entity entity, Telegram telegram) {
-        if (telegram.message == Message.PLAYER_ON_GROUND.ordinal()) {
-            PlayerComponent player = players.get(entity);
-            if (attemptedTime > 0 && fallingTime - attemptedTime < GRACE_TIME) {
-                player.stateMachine.changeState(player.chargeJump);
-            } else {
-                player.stateMachine.changeState(player.onGround);
-            }
-            return true;
-        }
+//        if (telegram.message == Message.PLAYER_ON_GROUND.ordinal()) {
+//            PlayerComponent player = players.get(entity);
+//            if (attemptedTime > 0 && fallingTime - attemptedTime < GRACE_TIME) {
+//                player.stateMachine.changeState(player.chargeJump);
+//            } else {
+//                player.stateMachine.changeState(player.onGround);
+//            }
+//            return true;
+//        }
         return false;
     }
 

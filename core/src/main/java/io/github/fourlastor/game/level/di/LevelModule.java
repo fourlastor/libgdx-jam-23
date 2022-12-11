@@ -39,14 +39,12 @@ public class LevelModule {
             ClearScreenSystem clearScreenSystem,
             @SuppressWarnings("unused") // debug only
                     PhysicsDebugSystem physicsDebugSystem,
-            ChunkSpawnSystem chunkSpawnSystem,
             GameOverSystem gameOverSystem,
             MovingSystem movingSystem,
             SoundSystem soundSystem,
             FishSpawnSystem fishSpawnSystem,
             GarbageCollectionSystem garbageCollectionSystem) {
         Engine engine = new Engine();
-        engine.addSystem(chunkSpawnSystem);
         engine.addSystem(fishSpawnSystem);
         engine.addSystem(movingSystem);
         engine.addSystem(playerInputSystem);
@@ -58,14 +56,14 @@ public class LevelModule {
         engine.addSystem(stageSystem);
         engine.addSystem(gameOverSystem);
         engine.addSystem(garbageCollectionSystem);
-        //        engine.addSystem(physicsDebugSystem);
+                engine.addSystem(physicsDebugSystem);
         return engine;
     }
 
     @Provides
     @ScreenScoped
     public Viewport viewport() {
-        return new FitViewport(9f, 16f);
+        return new FitViewport(16f, 9f);
     }
 
     @Provides

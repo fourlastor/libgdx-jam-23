@@ -23,28 +23,18 @@ public class LevelScreen extends ScreenAdapter {
     private final Viewport viewport;
     private final EntitiesFactory entitiesFactory;
 
-    private final ChunkFactory chunkFactory;
     private final World world;
-    private Music music;
 
     @Inject
     public LevelScreen(
             Engine engine,
             Viewport viewport,
             EntitiesFactory entitiesFactory,
-            ChunkFactory chunkFactory,
-            World world,
-            AssetManager assetManager,
-            TextureAtlas atlas) {
+            World world) {
         this.engine = engine;
         this.viewport = viewport;
         this.entitiesFactory = entitiesFactory;
-        this.chunkFactory = chunkFactory;
         this.world = world;
-
-        music = setUpMusic(assetManager, "511887__lusmog__postapocalypse-theme-loop.mp3");
-        Music ambientMusic = setUpMusic(assetManager, "ambiance_mix.wav");
-        ambientMusic.setPosition(MathUtils.random(0, 3 * 60));
     }
 
     @Override
@@ -59,16 +49,7 @@ public class LevelScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        engine.addEntity(entitiesFactory.parallaxBackground(0.125f, Layer.BG_PARALLAX, 0));
-        engine.addEntity(entitiesFactory.parallaxBackground(0.25f, Layer.BG_PARALLAX, 1));
-        engine.addEntity(entitiesFactory.parallaxBackground(0.5f, Layer.FG_PARALLAX, 2));
-        engine.addEntity(entitiesFactory.parallaxBackground(1f, Layer.FG_PARALLAX, 3));
-
-        for (int i = 0; i < 5; i++) {
-            for (Entity entity : chunkFactory.generate()) {
-                engine.addEntity(entity);
-            }
-        }
+        engine.addEntity(entitiesFactory.base());
         engine.addEntity(entitiesFactory.player());
     }
 
@@ -76,7 +57,6 @@ public class LevelScreen extends ScreenAdapter {
     public void hide() {
         engine.removeAllEntities();
         engine.removeAllSystems();
-        music.stop();
     }
 
     @Override
@@ -85,11 +65,4 @@ public class LevelScreen extends ScreenAdapter {
         world.dispose();
     }
 
-    private Music setUpMusic(AssetManager assetManager, String file) {
-        Music temp = assetManager.get("audio/music/" + file, Music.class);
-        temp.setVolume(.25f);
-        temp.setLooping(true);
-        temp.play();
-        return temp;
-    }
 }

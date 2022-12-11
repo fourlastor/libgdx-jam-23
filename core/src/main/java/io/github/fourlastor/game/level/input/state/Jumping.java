@@ -58,10 +58,10 @@ public class Jumping extends InputState {
 
     @Override
     public void update(Entity entity) {
-        if (bodies.get(entity).body.getLinearVelocity().y <= 0) {
-            PlayerComponent player = players.get(entity);
-            player.stateMachine.changeState(player.falling);
-        }
+//        if (bodies.get(entity).body.getLinearVelocity().y <= 0) {
+//            PlayerComponent player = players.get(entity);
+//            player.stateMachine.changeState(player.falling);
+//        }
     }
 
     private void playRandomSound(AssetManager assetManager) {

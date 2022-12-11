@@ -11,21 +11,12 @@ import io.github.fourlastor.game.level.input.state.OnGround;
 public class PlayerComponent implements Component {
     public final InputStateMachine stateMachine;
     public final OnGround onGround;
-    public final Falling falling;
-    public final Jumping jumping;
-    public final ChargeJump chargeJump;
     public float charge = 0f;
 
     public PlayerComponent(
             InputStateMachine stateMachine,
-            OnGround onGround,
-            Falling falling,
-            Jumping jumping,
-            ChargeJump chargeJump) {
+            OnGround onGround) {
         this.stateMachine = stateMachine;
         this.onGround = onGround;
-        this.falling = falling;
-        this.jumping = jumping;
-        this.chargeJump = chargeJump;
     }
 }

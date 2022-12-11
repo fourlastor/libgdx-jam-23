@@ -11,6 +11,7 @@ import javax.inject.Named;
 @Module
 public class PlayerAnimationsFactory {
 
+    public static final String WHITE_PIXEL = "whitePixel";
     public static final String ANIMATION_STANDING = "player/OnGround/OnGround";
     public static final String ANIMATION_FALLING = "player/Falling/Falling";
     public static final String ANIMATION_JUMPING = "player/Jumping/Jumping";
@@ -22,6 +23,12 @@ public class PlayerAnimationsFactory {
     @Named(ANIMATION_STANDING)
     public Animation<TextureRegion> standing(TextureAtlas textureAtlas) {
         return new Animation<>(FRAME_DURATION, textureAtlas.findRegions(ANIMATION_STANDING), Animation.PlayMode.LOOP);
+    }
+    @Provides
+    @ScreenScoped
+    @Named(WHITE_PIXEL)
+    public Animation<TextureRegion> whitePixel(TextureAtlas textureAtlas) {
+        return new Animation<>(FRAME_DURATION, textureAtlas.findRegions(WHITE_PIXEL), Animation.PlayMode.LOOP);
     }
 
     @Provides

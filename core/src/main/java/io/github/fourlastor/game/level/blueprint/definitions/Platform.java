@@ -27,7 +27,7 @@ public class Platform {
     public enum Width {
         ONE(1),
         FOUR(4),
-        NINE(9);
+        SIXTEEN(16);
 
         public final int width;
 
