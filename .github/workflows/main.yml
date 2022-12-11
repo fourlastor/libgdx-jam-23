@@ -27,4 +27,4 @@ jobs:
         with:
           arguments: --no-daemon html:dist
       - name: Deploy 🚀
-        run: butler push export sandramoen/kampenisse:html
+        run: butler push html/build/dist sandramoen/kampenisse:html
