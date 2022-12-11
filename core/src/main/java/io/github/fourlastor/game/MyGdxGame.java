@@ -1,12 +1,9 @@
 package io.github.fourlastor.game;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Cursor;
-import com.badlogic.gdx.graphics.Pixmap;
 import io.github.fourlastor.game.di.GameComponent;
 import io.github.fourlastor.game.level.di.LevelComponent;
 import io.github.fourlastor.game.route.Router;
