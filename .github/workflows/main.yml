@@ -15,8 +15,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Set up butler
         uses: jdno/setup-butler@v1
-      - name: Test butler
-        run: butler -V
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
