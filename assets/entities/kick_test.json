@@ -1,0 +1,213 @@
+{
+    "skeleton": {
+        "width": 100,
+        "height": 100,
+        "fps": 60,
+        "hash": " ",
+        "name": "Character"
+    },
+    "bones": [
+        {
+            "name": "root"
+        },
+        {
+            "x": 15.1899,
+            "y": 39.0823,
+            "rotation": -30,
+            "scaleX": 1.9862,
+            "scaleY": 1.9862,
+            "name": "bone",
+            "parent": "root"
+        }
+    ],
+    "slots": [
+        {
+            "name": "Character",
+            "bone": "root",
+            "attachment": "Idle 0"
+        },
+        {
+            "name": "hitbox",
+            "bone": "root",
+            "attachment": "explosion"
+        },
+        {
+            "name": "hurtbox",
+            "bone": "root",
+            "attachment": "idle"
+        }
+    ],
+    "skins": {
+        "default": {
+            "Character": {
+                "Idle 7": {
+                    "name": "Idle 7"
+                },
+                "Idle 6": {
+                    "name": "Idle 6"
+                },
+                "Idle 5": {
+                    "name": "Idle 5"
+                },
+                "Idle 4": {
+                    "name": "Idle 4"
+                },
+                "Idle 3": {
+                    "name": "Idle 3"
+                },
+                "Idle 2": {
+                    "name": "Idle 2"
+                },
+                "Idle 1": {
+                    "name": "Idle 1"
+                },
+                "Idle 0": {
+                    "name": "Idle 0"
+                },
+                "Left Kick 3": {
+                    "name": "Left Kick 3"
+                },
+                "Left Kick 2": {
+                    "name": "Left Kick 2"
+                },
+                "Left Kick 1": {
+                    "name": "Left Kick 1"
+                },
+                "Left Kick 0": {
+                    "name": "Left Kick 0"
+                }
+            },
+            "hitbox": {
+                "kick": {
+                    "name": "kick",
+                    "vertexCount": 4,
+                    "vertices": [
+                        10.4,
+                        3.47,
+                        11.55,
+                        -7.77,
+                        29.73,
+                        6.05,
+                        24.02,
+                        13.35
+                    ],
+                    "type": "boundingbox"
+                },
+                "explosion": {
+                    "name": "explosion",
+                    "vertexCount": 4,
+                    "vertices": [
+                        -49.05,
+                        16.75,
+                        -50,
+                        -50,
+                        50,
+                        -50,
+                        50,
+                        50
+                    ],
+                    "type": "boundingbox"
+                }
+            },
+            "hurtbox": {
+                "idle": {
+                    "name": "idle",
+                    "vertexCount": 4,
+                    "vertices": [
+                        -5.4,
+                        19.1,
+                        -10.25,
+                        -23.3,
+                        14.2,
+                        -22.65,
+                        7.2,
+                        18.45
+                    ],
+                    "type": "boundingbox"
+                }
+            }
+        }
+    },
+    "animations": {
+        "idle": {
+            "slots": {
+                "Character": {
+                    "attachment": [
+                        {
+                            "time": 0,
+                            "name": "Idle 0"
+                        },
+                        {
+                            "time": 0.1,
+                            "name": "Idle 1"
+                        },
+                        {
+                            "time": 0.2,
+                            "name": "Idle 2"
+                        },
+                        {
+                            "time": 0.3,
+                            "name": "Idle 3"
+                        },
+                        {
+                            "time": 0.4,
+                            "name": "Idle 4"
+                        },
+                        {
+                            "time": 0.5,
+                            "name": "Idle 5"
+                        },
+                        {
+                            "time": 0.6,
+                            "name": "Idle 6"
+                        },
+                        {
+                            "time": 0.7,
+                            "name": "Idle 7"
+                        }
+                    ]
+                }
+            }
+        },
+        "kick": {
+            "slots": {
+                "Character": {
+                    "attachment": [
+                        {
+                            "time": 0,
+                            "name": "Left Kick 0"
+                        },
+                        {
+                            "time": 0.2167,
+                            "name": "Left Kick 1"
+                        },
+                        {
+                            "time": 0.4167,
+                            "name": "Left Kick 2"
+                        },
+                        {
+                            "time": 0.6167,
+                            "name": "Left Kick 3"
+                        }
+                    ]
+                },
+                "hitbox": {
+                    "attachment": [
+                        {
+                            "time": 0,
+                            "name": "explosion"
+                        },
+                        {
+                            "time": 0.4,
+                            "name": "kick"
+                        },
+                        {
+                            "time": 0.6,
+                            "name": ""
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
