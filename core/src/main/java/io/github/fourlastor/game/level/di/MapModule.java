@@ -177,7 +177,7 @@ public class MapModule {
     private Platform.Width width(String identifier) {
         Platform.Width width;
         if (identifier.endsWith("9")) {
-            width = Platform.Width.NINE;
+            width = Platform.Width.SIXTEEN;
         } else if (identifier.endsWith("4")) {
             width = Platform.Width.FOUR;
         } else {

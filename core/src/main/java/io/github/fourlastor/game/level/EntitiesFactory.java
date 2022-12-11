@@ -1,7 +1,6 @@
 package io.github.fourlastor.game.level;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -88,8 +87,8 @@ public class EntitiesFactory {
 
     public Entity base() {
         Entity entity = new Entity();
-        Vector2 initialPosition = Vector2.Zero;
-        entity.add(platformBuilder(initialPosition, Platform.Width.NINE));
+        Vector2 initialPosition = new Vector2(8f, 0.5f);
+        entity.add(platformBuilder(initialPosition, Platform.Width.SIXTEEN));
         return entity;
     }
 
