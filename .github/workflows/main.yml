@@ -26,3 +26,5 @@ jobs:
           arguments: --no-daemon html:dist
       - name: Deploy 🚀
         run: butler push html/build/dist sandramoen/kampenisse:html
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
