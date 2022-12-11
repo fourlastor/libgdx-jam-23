@@ -11,16 +11,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dagger.Module;
 import dagger.Provides;
 import io.github.fourlastor.game.di.ScreenScoped;
-import io.github.fourlastor.game.level.blueprint.ChunkSpawnSystem;
 import io.github.fourlastor.game.level.input.PlayerInputSystem;
 import io.github.fourlastor.game.level.physics.PhysicsDebugSystem;
 import io.github.fourlastor.game.level.physics.PhysicsSystem;
 import io.github.fourlastor.game.level.system.ActorFollowBodySystem;
-import io.github.fourlastor.game.level.system.CameraMovementSystem;
 import io.github.fourlastor.game.level.system.ClearScreenSystem;
-import io.github.fourlastor.game.level.system.FishSpawnSystem;
-import io.github.fourlastor.game.level.system.GameOverSystem;
-import io.github.fourlastor.game.level.system.GarbageCollectionSystem;
 import io.github.fourlastor.game.level.system.MovingSystem;
 import io.github.fourlastor.game.level.system.SoundSystem;
 import io.github.fourlastor.game.level.system.StageSystem;
@@ -32,30 +27,23 @@ public class LevelModule {
     @ScreenScoped
     public Engine engine(
             PlayerInputSystem playerInputSystem,
-            CameraMovementSystem cameraMovementSystem,
             PhysicsSystem physicsSystem,
             ActorFollowBodySystem actorFollowBodySystem,
             StageSystem stageSystem,
             ClearScreenSystem clearScreenSystem,
             @SuppressWarnings("unused") // debug only
                     PhysicsDebugSystem physicsDebugSystem,
-            GameOverSystem gameOverSystem,
             MovingSystem movingSystem,
-            SoundSystem soundSystem,
-            FishSpawnSystem fishSpawnSystem,
-            GarbageCollectionSystem garbageCollectionSystem) {
+            SoundSystem soundSystem
+    ) {
         Engine engine = new Engine();
-        engine.addSystem(fishSpawnSystem);
         engine.addSystem(movingSystem);
         engine.addSystem(playerInputSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(soundSystem);
-        engine.addSystem(cameraMovementSystem);
         engine.addSystem(actorFollowBodySystem);
         engine.addSystem(clearScreenSystem);
         engine.addSystem(stageSystem);
-        engine.addSystem(gameOverSystem);
-        engine.addSystem(garbageCollectionSystem);
                 engine.addSystem(physicsDebugSystem);
         return engine;
     }
