@@ -13,13 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Install Butler
-        run: |
-          curl -L -o butler.zip https://broth.itch.ovh/butler/linux-amd64/LATEST/archive/default
-          unzip butler.zip
-          chmod +x butler
+      - name: Set up butler
+        uses: jdno/setup-butler@v1
       - name: Test butler
-        run: ./butler -V
+        run: butler -V
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
