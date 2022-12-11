@@ -63,7 +63,7 @@ public class LevelModule {
     @Provides
     @ScreenScoped
     public Viewport viewport() {
-        return new FitViewport(9f, 16f);
+        return new FitViewport(16f, 9f);
     }
 
     @Provides

@@ -20,7 +20,7 @@ public class DesktopLauncher {
         Dimension dimension = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         int height = (int) (dimension.height * PERCENT_OF_SCREEN_SIZE);
 
-        float aspectRatio = 16f / 9f;
+        float aspectRatio = 9f / 16f;
         int width = (int) (height / aspectRatio);
 
         System.out.println("Window dimensions => width: " + width + ", height: " + height);
