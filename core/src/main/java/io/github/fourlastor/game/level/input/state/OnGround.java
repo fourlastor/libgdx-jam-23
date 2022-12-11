@@ -54,7 +54,7 @@ public class OnGround extends InputState {
     @Override
     public boolean keyUp(Entity entity, int keycode) {
         boolean goingLeft = Controls.LEFT.matches(keycode) && velocity.x < 0;
-        boolean goingRight = Controls.RIGHT.matches(keycode) && velocity.y > 0;
+        boolean goingRight = Controls.RIGHT.matches(keycode) && velocity.x > 0;
         if (goingLeft || goingRight) {
             velocity.x = 0;
             return true;
