@@ -3,6 +3,7 @@ package io.github.fourlastor.game.animation.scene2d;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import io.github.fourlastor.game.animation.json.KeyFrame;
 
 import javax.inject.Inject;
 import java.util.Arrays;
@@ -37,8 +38,8 @@ public class AnimatedImage extends Image implements Animated {
         );
     }
 
-    private AnimatedValue.KeyFrame<TextureRegionDrawable> frame(int frameNo) {
-        return new AnimatedValue.KeyFrame<>(
+    private KeyFrame<TextureRegionDrawable> frame(int frameNo) {
+        return new KeyFrame<>(
                 frameNo * 100,
                 new TextureRegionDrawable(atlas.findRegion("Character/Idle " + frameNo))
         );

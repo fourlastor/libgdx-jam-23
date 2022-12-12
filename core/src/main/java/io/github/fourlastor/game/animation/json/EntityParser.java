@@ -12,22 +12,54 @@ import java.util.List;
 import java.util.Map;
 
 @Singleton
-public class AnimationParser {
+public class EntityParser {
 
     private final JsonReader json;
 
     @Inject
-    public AnimationParser(JsonReader json) {
+    public EntityParser(JsonReader json) {
         this.json = json;
     }
 
-    public Animation parse(FileHandle handle) {
+    public EntityData parse(FileHandle handle) {
         JsonValue value = json.parse(handle);
-        return new Animation(
+        return new EntityData(
                 parseBones(value.get("bones")),
                 parseSlots(value.get("slots")),
-                parseAllSkins(value.get("skins"))
+                parseAllSkins(value.get("skins")),
+                parseAnimations(value.get("animations"))
         );
+    }
+
+    private Map<String, Animation> parseAnimations(JsonValue value) {
+        HashMap<String, Animation> animations = new HashMap<>(value.size);
+        for (JsonValue it : value) {
+            animations.put(it.name, parseAnimation(it));
+        }
+        return animations;
+    }
+
+    private Animation parseAnimation(JsonValue value) {
+        return new Animation(value.name, parseAnimationSlots(value.get("slots")));
+    }
+
+    private Map<String, AnimatedSlot> parseAnimationSlots(JsonValue value) {
+        HashMap<String, AnimatedSlot> slots = new HashMap<>(value.size);
+        for (JsonValue it : value) {
+            slots.put(it.name, parseAnimationSlot(it.get("attachment")));
+        }
+        return slots;
+    }
+
+    private AnimatedSlot parseAnimationSlot(JsonValue value) {
+        ArrayList<KeyFrame<String>> keyFrames = new ArrayList<>(value.size);
+        for (JsonValue it : value) {
+            keyFrames.add(new KeyFrame<>(
+                    (int) (it.getFloat("time") * 1000),
+                    it.getString("name")
+            ));
+        }
+        return new AnimatedSlot(keyFrames);
     }
 
     private List<Bone> parseBones(JsonValue value) {

@@ -1,5 +1,7 @@
 package io.github.fourlastor.game.animation.scene2d;
 
+import io.github.fourlastor.game.animation.json.KeyFrame;
+
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -36,16 +38,6 @@ public class AnimatedValue<T> {
      */
     private int unwrapInsertionPoint(int result) {
         return result < 0 ? -result - 2 : result;
-    }
-
-    public static class KeyFrame<T> {
-        public int start;
-        public final T value;
-
-        public KeyFrame(int start, T value) {
-            this.start = start;
-            this.value = value;
-        }
     }
 
     private static class KeyExtractor implements ToIntFunction<KeyFrame<?>> {
