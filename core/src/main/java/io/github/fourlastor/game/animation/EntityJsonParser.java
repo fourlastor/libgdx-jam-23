@@ -1,8 +1,16 @@
-package io.github.fourlastor.game.animation.json;
+package io.github.fourlastor.game.animation;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
+import io.github.fourlastor.game.animation.json.AnimatedSlot;
+import io.github.fourlastor.game.animation.json.Animation;
+import io.github.fourlastor.game.animation.json.Bone;
+import io.github.fourlastor.game.animation.json.EntityData;
+import io.github.fourlastor.game.animation.json.KeyFrame;
+import io.github.fourlastor.game.animation.json.Skin;
+import io.github.fourlastor.game.animation.json.Skins;
+import io.github.fourlastor.game.animation.json.Slot;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -12,12 +20,12 @@ import java.util.List;
 import java.util.Map;
 
 @Singleton
-public class EntityParser {
+public class EntityJsonParser {
 
     private final JsonReader json;
 
     @Inject
-    public EntityParser(JsonReader json) {
+    public EntityJsonParser(JsonReader json) {
         this.json = json;
     }
 
