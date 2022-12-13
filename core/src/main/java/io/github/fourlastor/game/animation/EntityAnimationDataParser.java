@@ -21,9 +21,9 @@ public class EntityAnimationDataParser {
     }
 
     public AnimatedValue<TextureRegionDrawable> parseCharacter(EntityData entityData, String animationName, int duration) {
-        Animation idle = entityData.animations.get(animationName);
+        Animation animation = entityData.animations.get(animationName);
         return new AnimatedValue<>(
-                parseKeyFrames("Character", idle.slots.get("Character").keyFrames),
+                parseKeyFrames("Character", animation.slots.get("Character").keyFrames),
                 duration);
     }
 
