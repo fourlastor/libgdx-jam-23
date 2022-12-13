@@ -9,8 +9,9 @@ import dagger.Module;
 import dagger.Provides;
 import io.github.fourlastor.game.animation.EntityAnimationDataParser;
 import io.github.fourlastor.game.animation.EntityJsonParser;
+import io.github.fourlastor.game.animation.data.AnimatedValue;
+import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.animation.json.EntityData;
-import io.github.fourlastor.game.animation.scene2d.AnimatedValue;
 import io.github.fourlastor.game.di.ScreenScoped;
 
 import javax.inject.Named;
@@ -25,7 +26,7 @@ public class PlayerAnimationsFactory {
     public static final String ANIMATION_JUMPING = "player/Jumping/Jumping";
     public static final String ANIMATION_CHARGE_JUMP = "player/ChargeJump/ChargeJump";
     private static final float FRAME_DURATION = 0.1f;
-    private static final String KARATENISSE = "karatenisse";
+    public static final String KARATENISSE = "karatenisse";
 
     @Provides
     @ScreenScoped
@@ -36,12 +37,22 @@ public class PlayerAnimationsFactory {
 
     @Provides
     @ScreenScoped
+    @Named(KARATENISSE)
+    public CharacterAnimationData characterAnimationData(
+            EntityAnimationDataParser parser,
+            @Named(KARATENISSE) EntityData data
+    ) {
+        return parser.parseCharacterData(data);
+    }
+
+    @Provides
+    @ScreenScoped
     @Named(ANIMATION_IDLE)
     public AnimatedValue<TextureRegionDrawable> idle(
             EntityAnimationDataParser parser,
             @Named(KARATENISSE) EntityData entityData
     ) {
-        return parser.parseCharacter(entityData, "idle", 800);
+        return parser.parseAnimation(entityData, "idle", 800);
     }
 
     @Provides
@@ -51,7 +62,7 @@ public class PlayerAnimationsFactory {
             EntityAnimationDataParser parser,
             @Named(KARATENISSE) EntityData entityData
     ) {
-        return parser.parseCharacter(entityData, "kick", 800);
+        return parser.parseAnimation(entityData, "kick", 800);
     }
 
     @Provides

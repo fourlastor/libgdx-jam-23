@@ -1,4 +1,4 @@
-package io.github.fourlastor.game.animation.scene2d;
+package io.github.fourlastor.game.animation.data;
 
 import io.github.fourlastor.game.animation.json.KeyFrame;
 

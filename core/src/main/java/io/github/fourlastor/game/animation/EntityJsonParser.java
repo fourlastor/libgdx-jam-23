@@ -140,7 +140,7 @@ public class EntityJsonParser {
     }
 
     private String getString(JsonValue value, String name) {
-        return value.has(name) ? value.getString("name") : null;
+        return value.has(name) ? value.getString(name) : null;
     }
 
     private int getInt(JsonValue value, String name) {
