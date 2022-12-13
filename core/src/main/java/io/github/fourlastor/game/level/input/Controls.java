@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.IntArray;
 
 public enum Controls {
 
-    LEFT(Input.Keys.LEFT), RIGHT(Input.Keys.RIGHT);
+    LEFT(Input.Keys.LEFT), RIGHT(Input.Keys.RIGHT), KICK(Input.Keys.SPACE);
 
     private final IntArray keys;
 

@@ -2,14 +2,10 @@ package io.github.fourlastor.game.level.input.state;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import io.github.fourlastor.game.component.AnimatedImageComponent;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import io.github.fourlastor.game.animation.scene2d.AnimatedValue;
+import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.PlayerAnimationsFactory;
@@ -21,24 +17,24 @@ import javax.inject.Named;
 public class OnGround extends InputState {
 
     private static final float VELOCITY = 4f;
-    private final Animation<TextureRegion> animation;
+    private final AnimatedValue<TextureRegionDrawable> animation;
 
     @Inject
     public OnGround(
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
-            ComponentMapper<AnimatedImageComponent> images,
-            @Named(PlayerAnimationsFactory.WHITE_PIXEL) Animation<TextureRegion> animation) {
+            ComponentMapper<AnimationImageComponent> images,
+            @Named(PlayerAnimationsFactory.ANIMATION_IDLE) AnimatedValue<TextureRegionDrawable> animation) {
         super(players, bodies, images);
         this.animation = animation;
     }
 
     @Override
-    protected Animation<TextureRegion> animation() {
+    protected AnimatedValue<TextureRegionDrawable> animation() {
         return animation;
     }
 
-    private Vector2 velocity = Vector2.Zero.cpy();
+    private final Vector2 velocity = Vector2.Zero.cpy();
 
     @Override
     public boolean keyDown(Entity entity, int keycode) {
@@ -46,6 +42,11 @@ public class OnGround extends InputState {
         boolean goingRight = Controls.RIGHT.matches(keycode);
         if (goingLeft || goingRight) {
             velocity.x = goingLeft ? -VELOCITY : VELOCITY;
+            return true;
+        }
+        if (Controls.KICK.matches(keycode)) {
+            PlayerComponent player = players.get(entity);
+            player.stateMachine.changeState(player.kicking);
             return true;
         }
         return super.keyDown(entity, keycode);
