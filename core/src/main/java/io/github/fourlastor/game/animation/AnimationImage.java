@@ -1,20 +1,16 @@
-package io.github.fourlastor.game.animation.scene2d;
+package io.github.fourlastor.game.animation;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import io.github.fourlastor.game.animation.data.AnimatedValue;
 
 
-public class AnimationImage extends Image implements Animated {
+public class AnimationImage extends Image {
 
     private float playTime = 0f;
     private int lastIndex = -1;
 
     private AnimatedValue<TextureRegionDrawable> animatedValue = null;
-
-    public AnimationImage() {
-        setWidth(5f);
-        setHeight(5f);
-    }
 
     public void setAnimatedValue(AnimatedValue<TextureRegionDrawable> animatedValue) {
         this.animatedValue = animatedValue;
@@ -33,12 +29,10 @@ public class AnimationImage extends Image implements Animated {
         int index = value.findIndex((int) playTime);
         if (lastIndex != index) {
             lastIndex = index;
-            setDrawable(value.get(index).value);
+            TextureRegionDrawable drawable = value.get(index).value;
+            setDrawable(drawable);
+            setSize(drawable.getRegion().getRegionWidth(), drawable.getRegion().getRegionHeight());
         }
         super.act(delta);
-    }
-
-    @Override
-    public void enter(String name) {
     }
 }

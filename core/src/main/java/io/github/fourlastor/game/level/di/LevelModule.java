@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dagger.Module;
 import dagger.Provides;
 import io.github.fourlastor.game.di.ScreenScoped;
+import io.github.fourlastor.game.level.WorldConfig;
 import io.github.fourlastor.game.level.input.PlayerInputSystem;
 import io.github.fourlastor.game.level.physics.PhysicsDebugSystem;
 import io.github.fourlastor.game.level.physics.PhysicsSystem;
@@ -44,14 +45,20 @@ public class LevelModule {
         engine.addSystem(actorFollowBodySystem);
         engine.addSystem(clearScreenSystem);
         engine.addSystem(stageSystem);
-                engine.addSystem(physicsDebugSystem);
+        engine.addSystem(physicsDebugSystem);
         return engine;
     }
 
     @Provides
     @ScreenScoped
-    public Viewport viewport() {
-        return new FitViewport(16f, 9f);
+    public WorldConfig worldConfig() {
+        return new WorldConfig(16f, 9f, 2f / 53f);
+    }
+
+    @Provides
+    @ScreenScoped
+    public Viewport viewport(WorldConfig config) {
+        return new FitViewport(config.width, config.height);
     }
 
     @Provides
