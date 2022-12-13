@@ -11,11 +11,6 @@ public class AnimationImage extends Image implements Animated {
 
     private AnimatedValue<TextureRegionDrawable> animatedValue = null;
 
-    public AnimationImage() {
-        setWidth(5f);
-        setHeight(5f);
-    }
-
     public void setAnimatedValue(AnimatedValue<TextureRegionDrawable> animatedValue) {
         this.animatedValue = animatedValue;
         playTime = 0f;
@@ -33,7 +28,9 @@ public class AnimationImage extends Image implements Animated {
         int index = value.findIndex((int) playTime);
         if (lastIndex != index) {
             lastIndex = index;
-            setDrawable(value.get(index).value);
+            TextureRegionDrawable drawable = value.get(index).value;
+            setDrawable(drawable);
+            setSize(drawable.getRegion().getRegionWidth(), drawable.getRegion().getRegionHeight());
         }
         super.act(delta);
     }

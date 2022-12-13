@@ -23,13 +23,17 @@ import javax.inject.Inject;
 @ScreenScoped
 public class EntitiesFactory {
 
+    private final WorldConfig config;
+
     @Inject
-    public EntitiesFactory() {
+    public EntitiesFactory(WorldConfig config) {
+        this.config = config;
     }
 
     public Entity player() {
         Entity entity = new Entity();
         AnimationImage image = new AnimationImage();
+        image.setScale(config.scale);
         entity.add(new AnimationImageComponent(image));
         entity.add(new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();
@@ -37,11 +41,13 @@ public class EntitiesFactory {
             bodyDef.position.set(new Vector2(4.5f, 1.5f));
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(1f, 1f);
-            Fixture fixture = body.createFixture(shape, 0.0f);
+            shape.setAsBox(0.4f, 0.8f);
+            Fixture fixture = body.createFixture(shape, 0f);
 //            fixture.setFriction(100f);
             fixture.setRestitution(0.15f);
             fixture.setUserData(UserData.PLAYER);
+            shape.setAsBox(9f * config.scale, 4f * config.scale, new Vector2(15f * config.scale, 5f * config.scale), 0f);
+            body.createFixture(shape, 0f).setSensor(true);
             shape.dispose();
             return body;
         }));
