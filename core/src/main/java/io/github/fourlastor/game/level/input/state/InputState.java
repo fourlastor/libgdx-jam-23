@@ -4,9 +4,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import io.github.fourlastor.game.component.AnimatedImageComponent;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import io.github.fourlastor.game.animation.scene2d.AnimatedValue;
+import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 
@@ -14,22 +14,22 @@ public abstract class InputState implements State<Entity> {
 
     protected final ComponentMapper<PlayerComponent> players;
     protected final ComponentMapper<BodyComponent> bodies;
-    protected final ComponentMapper<AnimatedImageComponent> images;
+    protected final ComponentMapper<AnimationImageComponent> images;
 
     public InputState(
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
-            ComponentMapper<AnimatedImageComponent> images) {
+            ComponentMapper<AnimationImageComponent> images) {
         this.players = players;
         this.bodies = bodies;
         this.images = images;
     }
 
-    protected abstract Animation<TextureRegion> animation();
+    protected abstract AnimatedValue<TextureRegionDrawable> animation();
 
     @Override
     public void enter(Entity entity) {
-        images.get(entity).image.setAnimation(animation());
+        images.get(entity).image.setAnimatedValue(animation());
     }
 
     @Override

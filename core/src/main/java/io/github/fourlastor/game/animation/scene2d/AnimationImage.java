@@ -3,36 +3,37 @@ package io.github.fourlastor.game.animation.scene2d;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-import javax.inject.Inject;
 
 public class AnimationImage extends Image implements Animated {
 
     private float playTime = 0f;
-    private int animationLength = 800;
     private int lastIndex = -1;
 
-    private final AnimatedValue<TextureRegionDrawable> animatedValue;
+    private AnimatedValue<TextureRegionDrawable> animatedValue = null;
 
-    @Inject
-    public AnimationImage(AnimatedValue<TextureRegionDrawable> animatedValue) {
-        this.animatedValue = animatedValue;
-
+    public AnimationImage() {
         setWidth(5f);
         setHeight(5f);
     }
 
+    public void setAnimatedValue(AnimatedValue<TextureRegionDrawable> animatedValue) {
+        this.animatedValue = animatedValue;
+        playTime = 0f;
+        lastIndex = -1;
+    }
 
     @Override
     public void act(float delta) {
-        if (animationLength == 0) {
+        AnimatedValue<TextureRegionDrawable> value = animatedValue;
+        if (value == null) {
             return;
         }
         playTime += delta * 1000;
-        playTime = playTime % animationLength;
-        int index = animatedValue.findIndex((int) playTime);
+        playTime = playTime % value.duration;
+        int index = value.findIndex((int) playTime);
         if (lastIndex != index) {
             lastIndex = index;
-            setDrawable(animatedValue.get(index).value);
+            setDrawable(value.get(index).value);
         }
         super.act(delta);
     }

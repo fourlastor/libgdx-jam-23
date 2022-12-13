@@ -20,11 +20,11 @@ public class EntityAnimationDataParser {
         this.atlas = atlas;
     }
 
-    public AnimatedValue<TextureRegionDrawable> parseCharacter(EntityData entityData) {
-        Animation idle = entityData.animations.get("idle");
+    public AnimatedValue<TextureRegionDrawable> parseCharacter(EntityData entityData, String animationName, int duration) {
+        Animation idle = entityData.animations.get(animationName);
         return new AnimatedValue<>(
-                parseKeyFrames("Character", idle.slots.get("Character").keyFrames)
-        );
+                parseKeyFrames("Character", idle.slots.get("Character").keyFrames),
+                duration);
     }
 
     private List<KeyFrame<TextureRegionDrawable>> parseKeyFrames(String path, List<KeyFrame<String>> json) {
