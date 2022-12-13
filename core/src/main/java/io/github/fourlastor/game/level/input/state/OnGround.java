@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.fourlastor.game.animation.data.AnimatedValue;
+import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
@@ -24,9 +25,9 @@ public class OnGround extends InputState {
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
-            @Named(PlayerAnimationsFactory.ANIMATION_IDLE) AnimatedValue<TextureRegionDrawable> animation) {
+            @Named(PlayerAnimationsFactory.KARATENISSE) CharacterAnimationData animationData) {
         super(players, bodies, images);
-        this.animation = animation;
+        this.animation = animationData.animations.get("idle").sprite;
     }
 
     @Override
