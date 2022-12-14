@@ -193,13 +193,17 @@ class Box2DDebugRenderer implements Disposable {
 
     private static final Color HITBOX_COLOR = new Color(0xa34848FF);
     private static final Color HURTBOX_COLOR = new Color(0x7fa658FF);
+    private static final Color DISABLED_COLOR = new Color(0x3e4b4fFF);
 
     private void drawShape(Fixture fixture, Transform transform, Color color) {
-        if (fixture.getFilterData().categoryBits == Bits.Category.HURTBOX.bits) {
+        if (fixture.getFilterData().maskBits == Bits.Mask.HURTBOX.bits) {
             color = HURTBOX_COLOR;
         }
-        if (fixture.getFilterData().categoryBits == Bits.Category.HITBOX.bits) {
+        if (fixture.getFilterData().maskBits == Bits.Mask.HITBOX.bits) {
             color = HITBOX_COLOR;
+        }
+        if (fixture.getFilterData().maskBits == Bits.Mask.DISABLED.bits) {
+            color = DISABLED_COLOR;
         }
         if (fixture.getType() == Shape.Type.Circle) {
             CircleShape circle = (CircleShape) fixture.getShape();
