@@ -18,6 +18,7 @@ import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.UserData;
+
 import javax.inject.Inject;
 
 public class PhysicsSystem extends IntervalSystem {
@@ -76,8 +77,8 @@ public class PhysicsSystem extends IntervalSystem {
         @Override
         public void entityAdded(Entity entity) {
             BodyBuilderComponent component = bodyBuilders.get(entity);
-            Body body = component.factory.build(world);
-            entity.add(new BodyComponent(body));
+            BodyComponent body = component.factory.build(world);
+            entity.add(body);
             entity.remove(BodyBuilderComponent.class);
         }
 
@@ -103,6 +104,7 @@ public class PhysicsSystem extends IntervalSystem {
             if (component.body != null) {
                 world.destroyBody(component.body);
                 component.body = null;
+                component.hitboxes.clear();
             }
         }
     }

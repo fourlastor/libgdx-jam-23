@@ -12,10 +12,8 @@ public class AnimatedValue<T> {
     private static final Comparator<KeyFrame<?>> COMPARATOR = Comparator.comparingInt(new KeyExtractor());
 
     private final List<KeyFrame<T>> values;
-    public final int duration;
 
-    public AnimatedValue(List<KeyFrame<T>> values, int duration) {
-        this.duration = duration;
+    public AnimatedValue(List<KeyFrame<T>> values) {
         values.sort(COMPARATOR);
         this.values = values;
     }

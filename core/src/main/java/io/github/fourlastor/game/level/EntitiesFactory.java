@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import io.github.fourlastor.game.animation.AnimationImage;
@@ -13,12 +14,16 @@ import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.ActorComponent;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyBuilderComponent;
+import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.blueprint.definitions.Platform;
+import io.github.fourlastor.game.level.physics.Bits;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Factory to create various entities: player, buildings, enemies..
@@ -48,15 +53,26 @@ public class EntitiesFactory {
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(0.4f, 0.8f);
-            Fixture fixture = body.createFixture(shape, 0f);
-            fixture.setRestitution(0.15f);
-            fixture.setUserData(UserData.PLAYER);
-            for (Rectangle value : karatenisse.hitboxes.values()) {
-                shape.setAsBox(value.width * scale, value.height * scale, new Vector2(value.x, value.y).scl(scale), 0f);
-                body.createFixture(shape, 0f).setSensor(true);
+            FixtureDef def = new FixtureDef();
+            def.shape = shape;
+            def.filter.categoryBits = Bits.Category.BODY.bits;
+            def.filter.maskBits = Bits.Mask.BODY.bits;
+            def.restitution = 0.15f;
+            body.createFixture(def).setUserData(UserData.PLAYER);
+            HashMap<String, Fixture> hitboxes = new HashMap<>();
+            def = new FixtureDef();
+            def.shape = shape;
+            def.filter.categoryBits = Bits.Category.HITBOX.bits;
+            def.filter.maskBits = Bits.Mask.HITBOX.bits;
+            def.isSensor = true;
+            for (Map.Entry<String, Rectangle> value : karatenisse.hitboxes.entrySet()) {
+                Rectangle rectangle = value.getValue();
+                shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(rectangle.x, rectangle.y).scl(scale), 0f);
+                Fixture fixture = body.createFixture(def);
+                hitboxes.put(value.getKey(), fixture);
             }
             shape.dispose();
-            return body;
+            return new BodyComponent(body, hitboxes);
         }));
         image.setPosition(-0.5f, -0.5f);
         Group group = new Group();
@@ -84,7 +100,7 @@ public class EntitiesFactory {
             shape.setAsBox(width.width / 2f, 0.25f);
             body.createFixture(shape, 0.0f).setUserData(UserData.PLATFORM);
             shape.dispose();
-            return body;
+            return new BodyComponent(body);
         });
     }
 }

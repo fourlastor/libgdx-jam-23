@@ -3,8 +3,7 @@ package io.github.fourlastor.game.level.input.state;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import io.github.fourlastor.game.animation.data.AnimatedValue;
+import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
@@ -18,7 +17,7 @@ import javax.inject.Named;
 public class OnGround extends InputState {
 
     private static final float VELOCITY = 4f;
-    private final AnimatedValue<TextureRegionDrawable> animation;
+    private final AnimationData animation;
 
     @Inject
     public OnGround(
@@ -27,11 +26,11 @@ public class OnGround extends InputState {
             ComponentMapper<AnimationImageComponent> images,
             @Named(PlayerAnimationsFactory.KARATENISSE) CharacterAnimationData animationData) {
         super(players, bodies, images);
-        this.animation = animationData.animations.get("idle").sprite;
+        this.animation = animationData.animations.get("idle");
     }
 
     @Override
-    protected AnimatedValue<TextureRegionDrawable> animation() {
+    protected AnimationData animation() {
         return animation;
     }
 
