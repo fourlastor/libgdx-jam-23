@@ -22,7 +22,8 @@ import io.github.fourlastor.game.level.physics.Bits;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,17 +60,17 @@ public class EntitiesFactory {
             def.filter.maskBits = Bits.Mask.BODY.bits;
             def.restitution = 0.15f;
             body.createFixture(def).setUserData(UserData.PLAYER);
-            HashMap<String, Fixture> hitboxes = new HashMap<>();
             def = new FixtureDef();
             def.shape = shape;
             def.filter.categoryBits = Bits.Category.HITBOX.bits;
             def.filter.maskBits = Bits.Mask.HITBOX.bits;
             def.isSensor = true;
+            List<BodyComponent.Box> hitboxes = new ArrayList<>(karatenisse.hitboxes.size());
             for (Map.Entry<String, Rectangle> value : karatenisse.hitboxes.entrySet()) {
                 Rectangle rectangle = value.getValue();
                 shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(rectangle.x, rectangle.y).scl(scale), 0f);
                 Fixture fixture = body.createFixture(def);
-                hitboxes.put(value.getKey(), fixture);
+                hitboxes.add(new BodyComponent.Box(value.getKey(), fixture));
             }
             shape.dispose();
             return new BodyComponent(body, hitboxes);

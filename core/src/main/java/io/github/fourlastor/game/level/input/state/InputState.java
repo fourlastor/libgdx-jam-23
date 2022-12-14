@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
@@ -13,7 +12,7 @@ import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.physics.Bits;
 
-import java.util.Map;
+import java.util.List;
 
 public abstract class InputState implements State<Entity> {
 
@@ -51,8 +50,10 @@ public abstract class InputState implements State<Entity> {
         if (index != lastIndex) {
             String name = hitbox.get(index).value;
             lastIndex = index;
-            for (Map.Entry<String, Fixture> it : bodies.get(entity).hitboxes.entrySet()) {
-                it.getValue().getFilterData().maskBits = it.getKey().equals(name)
+            List<BodyComponent.Box> hitboxes = bodies.get(entity).hitboxes;
+            for (int i = 0; i < hitboxes.size(); i++) {
+                BodyComponent.Box box = hitboxes.get(i);
+                box.feature.getFilterData().maskBits = box.name.equals(name)
                         ? Bits.Mask.HITBOX.bits
                         : Bits.Mask.DISABLED.bits;
             }
