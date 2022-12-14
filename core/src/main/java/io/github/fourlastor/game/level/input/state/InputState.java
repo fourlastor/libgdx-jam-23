@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.physics.box2d.Filter;
 import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
@@ -53,15 +54,29 @@ public abstract class InputState implements State<Entity> {
             List<BodyComponent.Box> hitboxes = bodies.get(entity).hitboxes;
             for (int i = 0; i < hitboxes.size(); i++) {
                 BodyComponent.Box box = hitboxes.get(i);
-                box.feature.getFilterData().maskBits = box.name.equals(name)
+                Filter oldFilter = box.feature.getFilterData();
+                Filter filter = new Filter();
+                copyFilter(filter, oldFilter);
+                filter.maskBits = box.name.equals(name)
                         ? Bits.Mask.HITBOX.bits
                         : Bits.Mask.DISABLED.bits;
+                box.feature.setFilterData(filter);
             }
         }
     }
 
+    /**
+     * Filter#set doesn't exist in GWT.
+     */
+    public void copyFilter(Filter newFilter, Filter filter) {
+        newFilter.categoryBits = filter.categoryBits;
+        newFilter.maskBits = filter.maskBits;
+        newFilter.groupIndex = filter.groupIndex;
+    }
+
     @Override
-    public void exit(Entity entity) {}
+    public void exit(Entity entity) {
+    }
 
     @Override
     public boolean onMessage(Entity entity, Telegram telegram) {
