@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 import java.util.Collections;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Actual body already running in Box2D
@@ -13,14 +13,24 @@ import java.util.Map;
 public class BodyComponent implements Component {
 
     public Body body;
-    public final Map<String, Fixture> hitboxes;
+    public final List<Box> hitboxes;
 
     public BodyComponent(Body body) {
-        this(body, Collections.emptyMap());
+        this(body, Collections.emptyList());
     }
 
-    public BodyComponent(Body body, Map<String, Fixture> hitboxes) {
+    public BodyComponent(Body body, List<Box> hitboxes) {
         this.body = body;
         this.hitboxes = hitboxes;
+    }
+
+    public static class Box {
+        public final String name;
+        public final Fixture feature;
+
+        public Box(String name, Fixture feature) {
+            this.name = name;
+            this.feature = feature;
+        }
     }
 }

@@ -15,7 +15,7 @@ import io.github.fourlastor.game.animation.json.Skins;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +53,8 @@ public class EntityAnimationDataParser {
     }
 
     private AnimatedValue<String> parseHitboxesValues(Animation animation) {
-        AnimatedSlot hitbox = animation.slots.getOrDefault("hitbox", new AnimatedSlot(Collections.singletonList(
+        @SuppressWarnings("ArraysAsListWithZeroOrOneArgument") // this needs to be mutable, Collections.singletonList breaks GWT
+        AnimatedSlot hitbox = animation.slots.getOrDefault("hitbox", new AnimatedSlot(Arrays.asList(
                 new KeyFrame<>(0, "")
         )));
         return new AnimatedValue<>(hitbox.keyFrames);

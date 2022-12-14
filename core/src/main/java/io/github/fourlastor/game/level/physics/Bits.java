@@ -7,7 +7,7 @@ public class Bits {
         public final short bits;
 
         Category() {
-            this.bits = (short) Math.pow(2.0, ordinal());
+            this.bits = (short) (1 << ordinal());
         }
     }
 
