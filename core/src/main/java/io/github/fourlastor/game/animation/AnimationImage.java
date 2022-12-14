@@ -11,9 +11,14 @@ public class AnimationImage extends Image {
     private int lastIndex = -1;
 
     private AnimatedValue<TextureRegionDrawable> animatedValue = null;
+    private int duration;
 
-    public void setAnimatedValue(AnimatedValue<TextureRegionDrawable> animatedValue) {
+    public void setAnimatedValue(
+            AnimatedValue<TextureRegionDrawable> animatedValue,
+            int duration
+    ) {
         this.animatedValue = animatedValue;
+        this.duration = duration;
         playTime = 0f;
         lastIndex = -1;
     }
@@ -25,7 +30,7 @@ public class AnimationImage extends Image {
             return;
         }
         playTime += delta * 1000;
-        playTime = playTime % value.duration;
+        playTime = playTime % duration;
         int index = value.findIndex((int) playTime);
         if (lastIndex != index) {
             lastIndex = index;

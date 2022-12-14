@@ -44,7 +44,8 @@ public class EntityAnimationDataParser {
         HashMap<String, AnimationData> animationMap = new HashMap<>();
         for (Animation it : animations.values()) {
             animationMap.put(it.name, new AnimationData(
-                    parseSprite(animationLengths.get(it.name), it),
+                    animationLengths.get(it.name),
+                    parseSprite(it),
                     parseHitboxesValues(it)
             ));
         }
@@ -55,10 +56,7 @@ public class EntityAnimationDataParser {
         AnimatedSlot hitbox = animation.slots.getOrDefault("hitbox", new AnimatedSlot(Collections.singletonList(
                 new KeyFrame<>(0, "")
         )));
-        return new AnimatedValue<>(
-                hitbox.keyFrames,
-                800
-        );
+        return new AnimatedValue<>(hitbox.keyFrames);
     }
 
     private Map<String, Rectangle> parseHitboxes(Skins skins) {
@@ -90,15 +88,16 @@ public class EntityAnimationDataParser {
         return hitboxes;
     }
 
-    public AnimatedValue<TextureRegionDrawable> parseAnimation(EntityData entityData, String animationName, int duration) {
+    public AnimatedValue<TextureRegionDrawable> parseAnimation(EntityData entityData, String animationName) {
         Animation animation = entityData.animations.get(animationName);
-        return parseSprite(duration, animation);
+        return parseSprite(animation);
     }
 
-    private AnimatedValue<TextureRegionDrawable> parseSprite(int duration, Animation animation) {
-        return new AnimatedValue<>(
-                parseKeyFrames("Character", animation.slots.get("Character").keyFrames),
-                duration);
+    private AnimatedValue<TextureRegionDrawable> parseSprite(Animation animation) {
+        return new AnimatedValue<>(parseKeyFrames(
+                "Character",
+                animation.slots.get("Character").keyFrames
+        ));
     }
 
     private List<KeyFrame<TextureRegionDrawable>> parseKeyFrames(String path, List<KeyFrame<String>> json) {

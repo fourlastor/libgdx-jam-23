@@ -52,7 +52,7 @@ public class PlayerAnimationsFactory {
             EntityAnimationDataParser parser,
             @Named(KARATENISSE) EntityData entityData
     ) {
-        return parser.parseAnimation(entityData, "idle", 800);
+        return parser.parseAnimation(entityData, "idle");
     }
 
     @Provides
@@ -62,7 +62,7 @@ public class PlayerAnimationsFactory {
             EntityAnimationDataParser parser,
             @Named(KARATENISSE) EntityData entityData
     ) {
-        return parser.parseAnimation(entityData, "kick", 800);
+        return parser.parseAnimation(entityData, "kick");
     }
 
     @Provides

@@ -3,8 +3,7 @@ package io.github.fourlastor.game.level.input.state;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import io.github.fourlastor.game.animation.data.AnimatedValue;
+import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
@@ -16,7 +15,7 @@ import javax.inject.Named;
 
 public class Kicking extends InputState {
 
-    private final AnimatedValue<TextureRegionDrawable> animation;
+    private final AnimationData animation;
 
     @Inject
     public Kicking(
@@ -26,11 +25,11 @@ public class Kicking extends InputState {
             @Named(PlayerAnimationsFactory.KARATENISSE) CharacterAnimationData animationData
     ) {
         super(players, bodies, images);
-        this.animation = animationData.animations.get("kick").sprite;
+        this.animation = animationData.animations.get("kick");
     }
 
     @Override
-    protected AnimatedValue<TextureRegionDrawable> animation() {
+    protected AnimationData animation() {
         return animation;
     }
 
