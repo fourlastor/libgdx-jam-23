@@ -2,6 +2,7 @@ package io.github.fourlastor.game.level.input.state;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -51,6 +52,12 @@ public class Idle extends InputState {
             return true;
         }
         return super.keyDown(entity, keycode);
+    }
+
+    @Override
+    public void update(Entity entity) {
+        super.update(entity);
+        bodies.get(entity).body.setLinearVelocity(Vector2.Zero);
     }
 
     @AssistedFactory
