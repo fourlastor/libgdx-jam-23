@@ -1,15 +1,13 @@
 package io.github.fourlastor.game.level;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.files.FileHandle;
 import dagger.Module;
 import dagger.Provides;
+import dagger.multibindings.IntoMap;
+import dagger.multibindings.StringKey;
 import io.github.fourlastor.game.animation.EntityAnimationDataParser;
 import io.github.fourlastor.game.animation.EntityJsonParser;
-import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.animation.json.EntityData;
 import io.github.fourlastor.game.di.ScreenScoped;
@@ -18,86 +16,65 @@ import javax.inject.Named;
 
 @Module
 public class PlayerAnimationsFactory {
-
-    public static final String WHITE_PIXEL = "whitePixel";
-    public static final String ANIMATION_IDLE = "idle";
-    public static final String ANIMATION_KICK = "attack_0";
-    public static final String ANIMATION_FALLING = "player/Falling/Falling";
-    public static final String ANIMATION_JUMPING = "player/Jumping/Jumping";
-    public static final String ANIMATION_CHARGE_JUMP = "player/ChargeJump/ChargeJump";
-    private static final float FRAME_DURATION = 0.1f;
     public static final String KARATENISSE = "karatenisse";
+    public static final String NISSEMOR = "nissemor";
+    public static final String LANGNISSE = "langnisse";
 
     @Provides
     @ScreenScoped
     @Named(KARATENISSE)
-    public EntityData entityData(EntityJsonParser parser) {
-        return parser.parse(Gdx.files.internal("images/included/animations/karatenisse/karatenisse.json"));
+    public EntityData karatenisseEntity(EntityJsonParser parser) {
+        return parser.parse(animationJson(KARATENISSE));
     }
 
     @Provides
     @ScreenScoped
-    @Named(KARATENISSE)
-    public CharacterAnimationData characterAnimationData(
+    @Named(NISSEMOR)
+    public EntityData nissemorEntity(EntityJsonParser parser) {
+        return parser.parse(animationJson(NISSEMOR));
+    }
+
+    @Provides
+    @ScreenScoped
+    @Named(LANGNISSE)
+    public EntityData langnisseEntity(EntityJsonParser parser) {
+        return parser.parse(animationJson(LANGNISSE));
+    }
+
+    private FileHandle animationJson(String name) {
+        return Gdx.files.internal("images/included/animations/" + name + "/" + name + ".json");
+    }
+
+    @Provides
+    @ScreenScoped
+    @StringKey(KARATENISSE)
+    @IntoMap
+    public CharacterAnimationData karatenisseAnimation(
             EntityAnimationDataParser parser,
             @Named(KARATENISSE) EntityData data
     ) {
-        return parser.parseCharacterData(data);
+        return parser.parseCharacterData(data, KARATENISSE);
     }
 
     @Provides
     @ScreenScoped
-    @Named(ANIMATION_IDLE)
-    public AnimatedValue<TextureRegionDrawable> idle(
+    @StringKey(NISSEMOR)
+    @IntoMap
+    public CharacterAnimationData nissemorAnimation(
             EntityAnimationDataParser parser,
-            @Named(KARATENISSE) EntityData entityData
+            @Named(NISSEMOR) EntityData data
     ) {
-        return parser.parseAnimation(entityData, "idle");
+        return parser.parseCharacterData(data, NISSEMOR);
     }
 
     @Provides
     @ScreenScoped
-    @Named(ANIMATION_KICK)
-    public AnimatedValue<TextureRegionDrawable> kick(
+    @StringKey(LANGNISSE)
+    @IntoMap
+    public CharacterAnimationData langnisseAnimation(
             EntityAnimationDataParser parser,
-            @Named(KARATENISSE) EntityData entityData
+            @Named(LANGNISSE) EntityData data
     ) {
-        return parser.parseAnimation(entityData, "attack_0");
-    }
-
-    @Provides
-    @ScreenScoped
-    @Named(ANIMATION_IDLE)
-    public Animation<TextureRegion> standing(TextureAtlas textureAtlas) {
-        return new Animation<>(FRAME_DURATION, textureAtlas.findRegions(ANIMATION_IDLE), Animation.PlayMode.LOOP);
-    }
-
-    @Provides
-    @ScreenScoped
-    @Named(WHITE_PIXEL)
-    public Animation<TextureRegion> whitePixel(TextureAtlas textureAtlas) {
-        return new Animation<>(FRAME_DURATION, textureAtlas.findRegions(WHITE_PIXEL), Animation.PlayMode.LOOP);
-    }
-
-    @Provides
-    @ScreenScoped
-    @Named(ANIMATION_FALLING)
-    public Animation<TextureRegion> falling(TextureAtlas textureAtlas) {
-        return new Animation<>(FRAME_DURATION, textureAtlas.findRegions(ANIMATION_FALLING), Animation.PlayMode.NORMAL);
-    }
-
-    @Provides
-    @ScreenScoped
-    @Named(ANIMATION_JUMPING)
-    public Animation<TextureRegion> jumping(TextureAtlas textureAtlas) {
-        return new Animation<>(FRAME_DURATION, textureAtlas.findRegions(ANIMATION_JUMPING), Animation.PlayMode.NORMAL);
-    }
-
-    @Provides
-    @ScreenScoped
-    @Named(ANIMATION_CHARGE_JUMP)
-    public Animation<TextureRegion> chargeJump(TextureAtlas textureAtlas) {
-        return new Animation<>(
-                FRAME_DURATION, textureAtlas.findRegions(ANIMATION_CHARGE_JUMP), Animation.PlayMode.NORMAL);
+        return parser.parseCharacterData(data, LANGNISSE);
     }
 }

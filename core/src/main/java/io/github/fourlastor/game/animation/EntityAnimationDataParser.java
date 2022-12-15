@@ -34,19 +34,19 @@ public class EntityAnimationDataParser {
         animationLengths.put("walking", 800);
     }
 
-    public CharacterAnimationData parseCharacterData(EntityData data) {
+    public CharacterAnimationData parseCharacterData(EntityData data, String name) {
         return new CharacterAnimationData(
                 parseHitboxes(data.skins.get("hitbox")),
-                parseAnimations(data.animations)
+                parseAnimations(data.animations, name)
         );
     }
 
-    private Map<String, AnimationData> parseAnimations(Map<String, Animation> animations) {
+    private Map<String, AnimationData> parseAnimations(Map<String, Animation> animations, String name) {
         HashMap<String, AnimationData> animationMap = new HashMap<>();
         for (Animation it : animations.values()) {
             animationMap.put(it.name, new AnimationData(
                     animationLengths.get(it.name),
-                    parseSprite(it),
+                    parseSprite(it, name),
                     parseHitboxesValues(it)
             ));
         }
@@ -90,14 +90,9 @@ public class EntityAnimationDataParser {
         return hitboxes;
     }
 
-    public AnimatedValue<TextureRegionDrawable> parseAnimation(EntityData entityData, String animationName) {
-        Animation animation = entityData.animations.get(animationName);
-        return parseSprite(animation);
-    }
-
-    private AnimatedValue<TextureRegionDrawable> parseSprite(Animation animation) {
+    private AnimatedValue<TextureRegionDrawable> parseSprite(Animation animation, String name) {
         return new AnimatedValue<>(parseKeyFrames(
-                "animations/karatenisse/library",
+                "animations/" + name + "/library",
                 animation.slots.get("sprite").keyFrames
         ));
     }

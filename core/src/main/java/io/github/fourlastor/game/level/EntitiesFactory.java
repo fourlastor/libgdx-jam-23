@@ -18,10 +18,10 @@ import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.blueprint.definitions.Platform;
+import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,19 +33,20 @@ import java.util.Map;
 public class EntitiesFactory {
 
     private final WorldConfig config;
-    private final CharacterAnimationData karatenisse;
+    private final Map<String, CharacterAnimationData> animations;
 
     @Inject
-    public EntitiesFactory(WorldConfig config, @Named(PlayerAnimationsFactory.KARATENISSE) CharacterAnimationData karatenisse) {
+    public EntitiesFactory(WorldConfig config, Map<String, CharacterAnimationData> animations) {
         this.config = config;
-        this.karatenisse = karatenisse;
+        this.animations = animations;
     }
 
-    public Entity player() {
+    public Entity player(String name, Controls controls, boolean flipped) {
         Entity entity = new Entity();
         AnimationImage image = new AnimationImage();
         float scale = config.scale;
-        image.setScale(scale);
+        int flippedFactor = flipped ? -1 : 1;
+        image.setScale(flippedFactor * scale, scale);
         entity.add(new AnimationImageComponent(image));
         entity.add(new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();
@@ -65,10 +66,11 @@ public class EntitiesFactory {
             def.filter.categoryBits = Bits.Category.HITBOX.bits;
             def.filter.maskBits = Bits.Mask.HITBOX.bits;
             def.isSensor = true;
-            List<BodyComponent.Box> hitboxes = new ArrayList<>(karatenisse.hitboxes.size());
-            for (Map.Entry<String, Rectangle> value : karatenisse.hitboxes.entrySet()) {
+            CharacterAnimationData animationData = animations.get(name);
+            List<BodyComponent.Box> hitboxes = new ArrayList<>(animationData.hitboxes.size());
+            for (Map.Entry<String, Rectangle> value : animationData.hitboxes.entrySet()) {
                 Rectangle rectangle = value.getValue();
-                shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(rectangle.x, rectangle.y).scl(scale), 0f);
+                shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(flippedFactor * rectangle.x, rectangle.y).scl(scale), 0f);
                 Fixture fixture = body.createFixture(def);
                 hitboxes.add(new BodyComponent.Box(value.getKey(), fixture));
             }
@@ -80,7 +82,7 @@ public class EntitiesFactory {
         group.addActor(image);
 
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
-        entity.add(new PlayerRequestComponent());
+        entity.add(new PlayerRequestComponent(name, controls));
         return entity;
     }
 

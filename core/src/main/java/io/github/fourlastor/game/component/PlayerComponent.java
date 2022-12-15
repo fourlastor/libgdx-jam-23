@@ -10,6 +10,7 @@ import io.github.fourlastor.game.level.input.state.Walking;
  * Bag containing the player state machine, and the possible states it can get into.
  */
 public class PlayerComponent implements Component {
+
     public final InputStateMachine stateMachine;
     public final Idle idle;
     public final Walking walking;
