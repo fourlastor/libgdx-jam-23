@@ -3,30 +3,32 @@ package io.github.fourlastor.game.level.input.state;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import dagger.assisted.Assisted;
+import dagger.assisted.AssistedFactory;
+import dagger.assisted.AssistedInject;
 import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.PlayerAnimationsFactory;
 import io.github.fourlastor.game.level.input.Controls;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import java.util.Map;
 
 public class Attacking extends InputState {
 
     private final AnimationData animation;
 
-    @Inject
+    @AssistedInject
     public Attacking(
+            @Assisted String name,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
-            @Named(PlayerAnimationsFactory.KARATENISSE) CharacterAnimationData animationData
+            Map<String, CharacterAnimationData> animations
     ) {
         super(players, bodies, images);
-        this.animation = animationData.animations.get("attack_0");
+        this.animation = animations.get(name).animations.get("attack_0");
     }
 
     @Override
@@ -54,5 +56,11 @@ public class Attacking extends InputState {
                 player.stateMachine.changeState(player.idle);
             }
         }
+    }
+
+
+    @AssistedFactory
+    public interface Factory {
+        Attacking create(String name);
     }
 }

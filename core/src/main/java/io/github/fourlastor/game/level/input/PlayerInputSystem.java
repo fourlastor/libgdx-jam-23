@@ -20,7 +20,6 @@ import io.github.fourlastor.game.level.input.state.Idle;
 import io.github.fourlastor.game.level.input.state.Walking;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 public class PlayerInputSystem extends IteratingSystem {
 
@@ -68,33 +67,35 @@ public class PlayerInputSystem extends IteratingSystem {
      */
     public static class PlayerSetup implements EntityListener {
 
-        private final Provider<Idle> idleProvider;
-        private final Provider<Walking> walkingProvider;
-        private final Provider<Attacking> attackingProvider;
+        private final Idle.Factory idleFactory;
+        private final Walking.Factory walkingFactory;
+        private final Attacking.Factory attackingFactory;
         private final InputStateMachine.Factory stateMachineFactory;
         private final MessageDispatcher messageDispatcher;
 
         @Inject
         public PlayerSetup(
-                Provider<Idle> idleProvider,
-                Provider<Walking> walkingProvider, Provider<Attacking> attackingProvider,
+                Idle.Factory idleFactory,
+                Walking.Factory walkingFactory,
+                Attacking.Factory attackingFactory,
                 InputStateMachine.Factory stateMachineFactory,
                 MessageDispatcher messageDispatcher) {
-            this.idleProvider = idleProvider;
-            this.walkingProvider = walkingProvider;
-            this.attackingProvider = attackingProvider;
+            this.idleFactory = idleFactory;
+            this.walkingFactory = walkingFactory;
+            this.attackingFactory = attackingFactory;
             this.stateMachineFactory = stateMachineFactory;
             this.messageDispatcher = messageDispatcher;
         }
 
         @Override
         public void entityAdded(Entity entity) {
-            entity.remove(PlayerRequestComponent.class);
-            Idle idle = idleProvider.get();
-            Walking walking = walkingProvider.get();
-            Attacking attacking = attackingProvider.get();
-            InputStateMachine stateMachine = stateMachineFactory.create(entity, idle);
+            PlayerRequestComponent request = entity.remove(PlayerRequestComponent.class);
 
+            String name = request.name;
+            Idle idle = idleFactory.create(name);
+            Walking walking = walkingFactory.create(name);
+            Attacking attacking = attackingFactory.create(name);
+            InputStateMachine stateMachine = stateMachineFactory.create(entity, idle);
             entity.add(new PlayerComponent(stateMachine, idle, walking, attacking));
             stateMachine.getCurrentState().enter(entity);
             for (Message value : Message.values()) {
