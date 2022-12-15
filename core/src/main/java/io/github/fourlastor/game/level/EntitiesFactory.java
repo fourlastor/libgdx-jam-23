@@ -59,7 +59,6 @@ public class EntitiesFactory {
             def.shape = shape;
             def.filter.categoryBits = Bits.Category.BODY.bits;
             def.filter.maskBits = Bits.Mask.BODY.bits;
-            def.friction = 1f;
             body.createFixture(def).setUserData(UserData.PLAYER);
             def = new FixtureDef();
             def.shape = shape;
