@@ -1,0 +1,217 @@
+{
+    "skeleton": {
+        "width": 46,
+        "height": 53,
+        "fps": 60,
+        "hash": " ",
+        "name": "Armature"
+    },
+    "bones": [
+        {
+            "name": "root"
+        }
+    ],
+    "slots": [
+        {
+            "name": "sprite",
+            "bone": "root",
+            "attachment": "Right Punch 1"
+        },
+        {
+            "name": "hitbox",
+            "bone": "root"
+        },
+        {
+            "name": "hurtbox",
+            "bone": "root",
+            "attachment": "root_boundingBox"
+        }
+    ],
+    "skins": {
+        "default": {
+            "hitbox": {
+                "punch": {
+                    "name": "punch",
+                    "vertexCount": 4,
+                    "vertices": [
+                        3.97,
+                        3.25,
+                        3.97,
+                        -2.85,
+                        20.37,
+                        -2.7,
+                        20.37,
+                        3.4
+                    ],
+                    "type": "boundingbox"
+                }
+            },
+            "hurtbox": {
+                "root_boundingBox": {
+                    "name": "root_boundingBox",
+                    "vertexCount": 4,
+                    "vertices": [
+                        -13.09,
+                        16.54,
+                        -13.09,
+                        -22.71,
+                        3.86,
+                        -22.71,
+                        3.86,
+                        16.54
+                    ],
+                    "type": "boundingbox"
+                }
+            },
+            "sprite": {
+                "Walking 5": {
+                    "name": "Walking 5"
+                },
+                "Walking 4": {
+                    "name": "Walking 4"
+                },
+                "Walking 3": {
+                    "name": "Walking 3"
+                },
+                "Walking 2": {
+                    "name": "Walking 2"
+                },
+                "Walking 1": {
+                    "name": "Walking 1"
+                },
+                "Walking 0": {
+                    "name": "Walking 0"
+                },
+                "Right Punch 2": {
+                    "name": "Right Punch 2"
+                },
+                "Right Punch 1": {
+                    "name": "Right Punch 1"
+                },
+                "Right Punch 0": {
+                    "name": "Right Punch 0"
+                },
+                "Idle 5": {
+                    "name": "Idle 5"
+                },
+                "Idle 4": {
+                    "name": "Idle 4"
+                },
+                "Idle 3": {
+                    "name": "Idle 3"
+                },
+                "Idle 2": {
+                    "name": "Idle 2"
+                },
+                "Idle 1": {
+                    "name": "Idle 1"
+                },
+                "Idle 0": {
+                    "name": "Idle 0"
+                }
+            }
+        }
+    },
+    "animations": {
+        "idle": {
+            "slots": {
+                "sprite": {
+                    "attachment": [
+                        {
+                            "time": 0,
+                            "name": "Idle 0"
+                        },
+                        {
+                            "time": 0.1667,
+                            "name": "Idle 1"
+                        },
+                        {
+                            "time": 0.3334,
+                            "name": "Idle 2"
+                        },
+                        {
+                            "time": 0.5001,
+                            "name": "Idle 3"
+                        },
+                        {
+                            "time": 0.6668,
+                            "name": "Idle 4"
+                        },
+                        {
+                            "time": 0.8335,
+                            "name": "Idle 5"
+                        }
+                    ]
+                }
+            }
+        },
+        "attack_0": {
+            "slots": {
+                "sprite": {
+                    "attachment": [
+                        {
+                            "time": 0,
+                            "name": "Right Punch 0"
+                        },
+                        {
+                            "time": 0.1667,
+                            "name": "Right Punch 1"
+                        },
+                        {
+                            "time": 0.3334,
+                            "name": "Right Punch 2"
+                        }
+                    ]
+                },
+                "hitbox": {
+                    "attachment": [
+                        {
+                            "time": 0,
+                            "name": ""
+                        },
+                        {
+                            "time": 0.1667,
+                            "name": "punch"
+                        },
+                        {
+                            "time": 0.3334,
+                            "name": ""
+                        }
+                    ]
+                }
+            }
+        },
+        "walking": {
+            "slots": {
+                "sprite": {
+                    "attachment": [
+                        {
+                            "time": 0,
+                            "name": "Walking 0"
+                        },
+                        {
+                            "time": 0.1333,
+                            "name": "Walking 1"
+                        },
+                        {
+                            "time": 0.2666,
+                            "name": "Walking 2"
+                        },
+                        {
+                            "time": 0.3999,
+                            "name": "Walking 3"
+                        },
+                        {
+                            "time": 0.4999,
+                            "name": "Walking 4"
+                        },
+                        {
+                            "time": 0.5999,
+                            "name": "Walking 5"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

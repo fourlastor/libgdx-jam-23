@@ -15,8 +15,9 @@ import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.level.Message;
-import io.github.fourlastor.game.level.input.state.Kicking;
-import io.github.fourlastor.game.level.input.state.OnGround;
+import io.github.fourlastor.game.level.input.state.Attacking;
+import io.github.fourlastor.game.level.input.state.Idle;
+import io.github.fourlastor.game.level.input.state.Walking;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -67,18 +68,21 @@ public class PlayerInputSystem extends IteratingSystem {
      */
     public static class PlayerSetup implements EntityListener {
 
-        private final Provider<OnGround> onGroundProvider;
-        private final Provider<Kicking> kickingProvider;
+        private final Provider<Idle> idleProvider;
+        private final Provider<Walking> walkingProvider;
+        private final Provider<Attacking> attackingProvider;
         private final InputStateMachine.Factory stateMachineFactory;
         private final MessageDispatcher messageDispatcher;
 
         @Inject
         public PlayerSetup(
-                Provider<OnGround> onGroundProvider,
-                Provider<Kicking> kickingProvider, InputStateMachine.Factory stateMachineFactory,
+                Provider<Idle> idleProvider,
+                Provider<Walking> walkingProvider, Provider<Attacking> attackingProvider,
+                InputStateMachine.Factory stateMachineFactory,
                 MessageDispatcher messageDispatcher) {
-            this.onGroundProvider = onGroundProvider;
-            this.kickingProvider = kickingProvider;
+            this.idleProvider = idleProvider;
+            this.walkingProvider = walkingProvider;
+            this.attackingProvider = attackingProvider;
             this.stateMachineFactory = stateMachineFactory;
             this.messageDispatcher = messageDispatcher;
         }
@@ -86,11 +90,12 @@ public class PlayerInputSystem extends IteratingSystem {
         @Override
         public void entityAdded(Entity entity) {
             entity.remove(PlayerRequestComponent.class);
-            OnGround onGround = onGroundProvider.get();
-            Kicking kicking = kickingProvider.get();
-            InputStateMachine stateMachine = stateMachineFactory.create(entity, onGround);
+            Idle idle = idleProvider.get();
+            Walking walking = walkingProvider.get();
+            Attacking attacking = attackingProvider.get();
+            InputStateMachine stateMachine = stateMachineFactory.create(entity, idle);
 
-            entity.add(new PlayerComponent(stateMachine, onGround, kicking));
+            entity.add(new PlayerComponent(stateMachine, idle, walking, attacking));
             stateMachine.getCurrentState().enter(entity);
             for (Message value : Message.values()) {
                 messageDispatcher.addListener(stateMachine, value.ordinal());
