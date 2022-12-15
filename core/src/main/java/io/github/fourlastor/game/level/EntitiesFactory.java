@@ -41,11 +41,12 @@ public class EntitiesFactory {
         this.animations = animations;
     }
 
-    public Entity player(String name, Controls controls) {
+    public Entity player(String name, Controls controls, boolean flipped) {
         Entity entity = new Entity();
         AnimationImage image = new AnimationImage();
         float scale = config.scale;
-        image.setScale(scale);
+        int flippedFactor = flipped ? -1 : 1;
+        image.setScale(flippedFactor * scale, scale);
         entity.add(new AnimationImageComponent(image));
         entity.add(new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();
@@ -69,7 +70,7 @@ public class EntitiesFactory {
             List<BodyComponent.Box> hitboxes = new ArrayList<>(animationData.hitboxes.size());
             for (Map.Entry<String, Rectangle> value : animationData.hitboxes.entrySet()) {
                 Rectangle rectangle = value.getValue();
-                shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(rectangle.x, rectangle.y).scl(scale), 0f);
+                shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(flippedFactor * rectangle.x, rectangle.y).scl(scale), 0f);
                 Fixture fixture = body.createFixture(def);
                 hitboxes.add(new BodyComponent.Box(value.getKey(), fixture));
             }

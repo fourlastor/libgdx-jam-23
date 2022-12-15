@@ -42,7 +42,7 @@ public class LevelScreen extends ScreenAdapter {
     @Override
     public void show() {
         engine.addEntity(entitiesFactory.base());
-        engine.addEntity(entitiesFactory.player(PlayerAnimationsFactory.NISSEMOR, Controls.Setup.P1));
+        engine.addEntity(entitiesFactory.player(PlayerAnimationsFactory.NISSEMOR, Controls.Setup.P1, true));
     }
 
     @Override
