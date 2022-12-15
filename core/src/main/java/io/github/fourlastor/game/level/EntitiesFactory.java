@@ -59,7 +59,7 @@ public class EntitiesFactory {
             def.shape = shape;
             def.filter.categoryBits = Bits.Category.BODY.bits;
             def.filter.maskBits = Bits.Mask.BODY.bits;
-            def.restitution = 0.15f;
+            def.friction = 1f;
             body.createFixture(def).setUserData(UserData.PLAYER);
             def = new FixtureDef();
             def.shape = shape;
@@ -73,6 +73,13 @@ public class EntitiesFactory {
                 shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(flippedFactor * rectangle.x, rectangle.y).scl(scale), 0f);
                 Fixture fixture = body.createFixture(def);
                 hitboxes.add(new BodyComponent.Box(value.getKey(), fixture));
+            }
+            def.filter.categoryBits = Bits.Category.HURTBOX.bits;
+            def.filter.maskBits = Bits.Mask.HURTBOX.bits;
+            for (Map.Entry<String, Rectangle> value : animationData.hurtboxes.entrySet()) {
+                Rectangle rectangle = value.getValue();
+                shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(flippedFactor * rectangle.x, rectangle.y).scl(scale), 0f);
+                body.createFixture(def);
             }
             shape.dispose();
             return new BodyComponent(body, hitboxes);

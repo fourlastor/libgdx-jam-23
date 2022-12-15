@@ -36,7 +36,8 @@ public class EntityAnimationDataParser {
 
     public CharacterAnimationData parseCharacterData(EntityData data, String name) {
         return new CharacterAnimationData(
-                parseHitboxes(data.skins.get("hitbox")),
+                parseBoundingBoxes(data.skins.get("hitbox")),
+                parseBoundingBoxes(data.skins.get("hurtbox")),
                 parseAnimations(data.animations, name)
         );
     }
@@ -61,7 +62,7 @@ public class EntityAnimationDataParser {
         return new AnimatedValue<>(hitbox.keyFrames);
     }
 
-    private Map<String, Rectangle> parseHitboxes(Skins skins) {
+    private Map<String, Rectangle> parseBoundingBoxes(Skins skins) {
         HashMap<String, Rectangle> hitboxes = new HashMap<>();
         for (Skin it : skins.skins.values()) {
             if (it instanceof Skin.BoundingBox) {
