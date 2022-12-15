@@ -52,6 +52,7 @@ public class EntitiesFactory {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             bodyDef.position.set(new Vector2(4.5f, 1.5f));
+            bodyDef.allowSleep = false;
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(0.4f, 0.8f);
