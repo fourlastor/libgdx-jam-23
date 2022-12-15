@@ -18,6 +18,7 @@ import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.blueprint.definitions.Platform;
+import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
 
 import javax.inject.Inject;
@@ -40,7 +41,7 @@ public class EntitiesFactory {
         this.animations = animations;
     }
 
-    public Entity player(String name) {
+    public Entity player(String name, Controls controls) {
         Entity entity = new Entity();
         AnimationImage image = new AnimationImage();
         float scale = config.scale;
@@ -80,7 +81,7 @@ public class EntitiesFactory {
         group.addActor(image);
 
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
-        entity.add(new PlayerRequestComponent(name));
+        entity.add(new PlayerRequestComponent(name, controls));
         return entity;
     }
 

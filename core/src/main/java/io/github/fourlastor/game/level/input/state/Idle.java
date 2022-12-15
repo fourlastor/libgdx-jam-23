@@ -10,7 +10,7 @@ import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.input.Controls;
+import io.github.fourlastor.game.level.input.controls.Controls;
 
 import java.util.Map;
 
@@ -21,11 +21,13 @@ public class Idle extends InputState {
     @AssistedInject
     public Idle(
             @Assisted String name,
+            @Assisted Controls controls,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
-            Map<String, CharacterAnimationData> animations) {
-        super(players, bodies, images);
+            Map<String, CharacterAnimationData> animations
+    ) {
+        super(players, bodies, images, controls);
         this.animation = animations.get(name).animations.get("idle");
     }
 
@@ -36,14 +38,14 @@ public class Idle extends InputState {
 
     @Override
     public boolean keyDown(Entity entity, int keycode) {
-        boolean goingLeft = Controls.LEFT.matches(keycode);
-        boolean goingRight = Controls.RIGHT.matches(keycode);
+        boolean goingLeft = controls.left().matches(keycode);
+        boolean goingRight = controls.right().matches(keycode);
         if (goingLeft || goingRight) {
             PlayerComponent player = players.get(entity);
             player.stateMachine.changeState(player.walking);
             return true;
         }
-        if (Controls.ATTACK.matches(keycode)) {
+        if (controls.attack().matches(keycode)) {
             PlayerComponent player = players.get(entity);
             player.stateMachine.changeState(player.attacking);
             return true;
@@ -53,6 +55,6 @@ public class Idle extends InputState {
 
     @AssistedFactory
     public interface Factory {
-        Idle create(String name);
+        Idle create(String name, Controls controls);
     }
 }

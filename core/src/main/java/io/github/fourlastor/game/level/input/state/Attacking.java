@@ -11,7 +11,7 @@ import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.input.Controls;
+import io.github.fourlastor.game.level.input.controls.Controls;
 
 import java.util.Map;
 
@@ -22,12 +22,13 @@ public class Attacking extends InputState {
     @AssistedInject
     public Attacking(
             @Assisted String name,
+            @Assisted Controls controls,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             Map<String, CharacterAnimationData> animations
     ) {
-        super(players, bodies, images);
+        super(players, bodies, images, controls);
         this.animation = animations.get(name).animations.get("attack_0");
     }
 
@@ -50,7 +51,7 @@ public class Attacking extends InputState {
         timePassed += Gdx.graphics.getDeltaTime();
         if (timePassed * 1000 >= animation.duration) {
             PlayerComponent player = players.get(entity);
-            if (Controls.LEFT.pressed() || Controls.RIGHT.pressed()) {
+            if (controls.left().pressed() || controls.right().pressed()) {
                 player.stateMachine.changeState(player.walking);
             } else {
                 player.stateMachine.changeState(player.idle);
@@ -61,6 +62,6 @@ public class Attacking extends InputState {
 
     @AssistedFactory
     public interface Factory {
-        Attacking create(String name);
+        Attacking create(String name, Controls controls);
     }
 }

@@ -11,7 +11,7 @@ import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.input.Controls;
+import io.github.fourlastor.game.level.input.controls.Controls;
 
 import java.util.Map;
 
@@ -23,11 +23,12 @@ public class Walking extends InputState {
     @AssistedInject
     public Walking(
             @Assisted String name,
+            @Assisted Controls controls,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             Map<String, CharacterAnimationData> animations) {
-        super(players, bodies, images);
+        super(players, bodies, images, controls);
         this.animation = animations.get(name).animations.get("walking");
     }
 
@@ -40,7 +41,7 @@ public class Walking extends InputState {
 
     @Override
     public boolean keyDown(Entity entity, int keycode) {
-        if (Controls.ATTACK.matches(keycode)) {
+        if (controls.attack().matches(keycode)) {
             PlayerComponent player = players.get(entity);
             player.stateMachine.changeState(player.attacking);
             return true;
@@ -50,8 +51,8 @@ public class Walking extends InputState {
 
     @Override
     public boolean keyUp(Entity entity, int keycode) {
-        boolean goingLeft = Controls.LEFT.matches(keycode) && velocity.x < 0;
-        boolean goingRight = Controls.RIGHT.matches(keycode) && velocity.x > 0;
+        boolean goingLeft = controls.left().matches(keycode) && velocity.x < 0;
+        boolean goingRight = controls.right().matches(keycode) && velocity.x > 0;
         if (goingLeft || goingRight) {
             PlayerComponent player = players.get(entity);
             player.stateMachine.changeState(player.idle);
@@ -71,8 +72,8 @@ public class Walking extends InputState {
     @Override
     public void update(Entity entity) {
         super.update(entity);
-        boolean goingLeft = Controls.LEFT.pressed();
-        boolean goingRight = Controls.RIGHT.pressed();
+        boolean goingLeft = controls.left().pressed();
+        boolean goingRight = controls.right().pressed();
         if (goingLeft || goingRight) {
             velocity.x = goingLeft ? -VELOCITY : VELOCITY;
         }
@@ -85,6 +86,6 @@ public class Walking extends InputState {
 
     @AssistedFactory
     public interface Factory {
-        Walking create(String name);
+        Walking create(String name, Controls controls);
     }
 }

@@ -15,6 +15,7 @@ import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.level.Message;
+import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.input.state.Attacking;
 import io.github.fourlastor.game.level.input.state.Idle;
 import io.github.fourlastor.game.level.input.state.Walking;
@@ -92,9 +93,10 @@ public class PlayerInputSystem extends IteratingSystem {
             PlayerRequestComponent request = entity.remove(PlayerRequestComponent.class);
 
             String name = request.name;
-            Idle idle = idleFactory.create(name);
-            Walking walking = walkingFactory.create(name);
-            Attacking attacking = attackingFactory.create(name);
+            Controls controls = request.controls;
+            Idle idle = idleFactory.create(name, controls);
+            Walking walking = walkingFactory.create(name, controls);
+            Attacking attacking = attackingFactory.create(name, controls);
             InputStateMachine stateMachine = stateMachineFactory.create(entity, idle);
             entity.add(new PlayerComponent(stateMachine, idle, walking, attacking));
             stateMachine.getCurrentState().enter(entity);

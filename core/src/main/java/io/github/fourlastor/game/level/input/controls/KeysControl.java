@@ -1,16 +1,13 @@
-package io.github.fourlastor.game.level.input;
+package io.github.fourlastor.game.level.input.controls;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.IntArray;
 
-public enum Controls {
-
-    LEFT(Input.Keys.LEFT, Input.Keys.W), RIGHT(Input.Keys.RIGHT, Input.Keys.S), ATTACK(Input.Keys.SPACE);
+class KeysControl implements Control {
 
     private final IntArray keys;
 
-    Controls(int... keys) {
+    public KeysControl(int... keys) {
         this.keys = new IntArray(keys);
     }
 
@@ -26,5 +23,4 @@ public enum Controls {
         }
         return false;
     }
-
 }
