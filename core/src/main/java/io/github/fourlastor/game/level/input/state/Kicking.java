@@ -25,7 +25,7 @@ public class Kicking extends InputState {
             @Named(PlayerAnimationsFactory.KARATENISSE) CharacterAnimationData animationData
     ) {
         super(players, bodies, images);
-        this.animation = animationData.animations.get("kick");
+        this.animation = animationData.animations.get("attack_0");
     }
 
     @Override

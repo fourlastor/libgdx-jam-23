@@ -21,7 +21,7 @@ public class PlayerAnimationsFactory {
 
     public static final String WHITE_PIXEL = "whitePixel";
     public static final String ANIMATION_IDLE = "idle";
-    public static final String ANIMATION_KICK = "kick";
+    public static final String ANIMATION_KICK = "attack_0";
     public static final String ANIMATION_FALLING = "player/Falling/Falling";
     public static final String ANIMATION_JUMPING = "player/Jumping/Jumping";
     public static final String ANIMATION_CHARGE_JUMP = "player/ChargeJump/ChargeJump";
@@ -32,7 +32,7 @@ public class PlayerAnimationsFactory {
     @ScreenScoped
     @Named(KARATENISSE)
     public EntityData entityData(EntityJsonParser parser) {
-        return parser.parse(Gdx.files.internal("entities/kick_test.json"));
+        return parser.parse(Gdx.files.internal("images/included/animations/karatenisse/karatenisse.json"));
     }
 
     @Provides
@@ -62,7 +62,7 @@ public class PlayerAnimationsFactory {
             EntityAnimationDataParser parser,
             @Named(KARATENISSE) EntityData entityData
     ) {
-        return parser.parseAnimation(entityData, "kick");
+        return parser.parseAnimation(entityData, "attack_0");
     }
 
     @Provides

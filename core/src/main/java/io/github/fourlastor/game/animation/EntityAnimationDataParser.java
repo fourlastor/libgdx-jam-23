@@ -30,7 +30,8 @@ public class EntityAnimationDataParser {
     public EntityAnimationDataParser(TextureAtlas atlas) {
         this.atlas = atlas;
         animationLengths.put("idle", 800);
-        animationLengths.put("kick", 800);
+        animationLengths.put("attack_0", 800);
+        animationLengths.put("walking", 800);
     }
 
     public CharacterAnimationData parseCharacterData(EntityData data) {
@@ -96,8 +97,8 @@ public class EntityAnimationDataParser {
 
     private AnimatedValue<TextureRegionDrawable> parseSprite(Animation animation) {
         return new AnimatedValue<>(parseKeyFrames(
-                "Character",
-                animation.slots.get("Character").keyFrames
+                "animations/karatenisse/library",
+                animation.slots.get("sprite").keyFrames
         ));
     }
 
