@@ -7,7 +7,6 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IntervalSystem;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -16,8 +15,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
-import io.github.fourlastor.game.level.Message;
-import io.github.fourlastor.game.level.UserData;
 
 import javax.inject.Inject;
 
@@ -26,7 +23,7 @@ public class PhysicsSystem extends IntervalSystem {
     private static final Family FAMILY_BUILDER =
             Family.all(BodyBuilderComponent.class).get();
     private static final Family FAMILY_BODY = Family.all(BodyComponent.class).get();
-    private static final float STEP = 1f / 16f;
+    private static final float STEP = 1f / 60f;
 
     private final World world;
     private final ComponentMapper<BodyBuilderComponent> bodyBuilders;
@@ -110,49 +107,39 @@ public class PhysicsSystem extends IntervalSystem {
     }
 
     private final ContactListener contactListener = new ContactListener() {
-
         @Override
-        public void beginContact(Contact contact) {}
-
-        private void checkCollision(Contact contact, Fixture playerFixture, Fixture platformFixture) {
-            Body playerBody = playerFixture.getBody();
-            Body platformBody = platformFixture.getBody();
-            float playerBottom = playerBody.getPosition().y - 0.25f;
-            double platformTop = platformBody.getPosition().y + 0.2;
-            boolean shouldNotCollide = playerBottom < platformTop;
-            if (shouldNotCollide) {
-                contact.setEnabled(false);
-            } else {
-                messageDispatcher.dispatchMessage(Message.PLAYER_ON_GROUND.ordinal());
+        public void beginContact(Contact contact) {
+            Fixture fixtureA = contact.getFixtureA();
+            Fixture fixtureB = contact.getFixtureB();
+            System.out.println("Contact");
+            if (isHitbox(fixtureA) && isHurtbox(fixtureB)) {
+                System.out.println("HIT");
+            } else if (isHurtbox(fixtureA) && isHitbox(fixtureB)) {
+                System.out.println("HIT");
             }
+        }
+
+        private boolean isHurtbox(Fixture fixture) {
+            return fixture.getFilterData().categoryBits == Bits.Category.HURTBOX.bits;
+        }
+
+        private boolean isHitbox(Fixture fixture) {
+            return fixture.getFilterData().categoryBits == Bits.Category.HITBOX.bits;
         }
 
         @Override
         public void endContact(Contact contact) {
-            contact.setEnabled(true);
+
         }
 
         @Override
         public void preSolve(Contact contact, Manifold oldManifold) {
-            Fixture fixtureA = contact.getFixtureA();
-            Fixture fixtureB = contact.getFixtureB();
-            Fixture playerFixture;
-            Fixture otherFixture;
-            if (UserData.PLAYER == fixtureA.getUserData()) {
-                playerFixture = fixtureA;
-                otherFixture = fixtureB;
-            } else if (UserData.PLAYER == fixtureB.getUserData()) {
-                playerFixture = fixtureB;
-                otherFixture = fixtureA;
-            } else {
-                return;
-            }
-            if (UserData.PLATFORM == otherFixture.getUserData()) {
-                checkCollision(contact, playerFixture, otherFixture);
-            }
+
         }
 
         @Override
-        public void postSolve(Contact contact, ContactImpulse impulse) {}
+        public void postSolve(Contact contact, ContactImpulse impulse) {
+
+        }
     };
 }

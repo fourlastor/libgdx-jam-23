@@ -81,6 +81,7 @@ class Box2DDebugRenderer implements Disposable {
     public final Color SHAPE_NOT_ACTIVE = new Color(0.5f, 0.5f, 0.3f, 1);
     public final Color SHAPE_STATIC = new Color(0.5f, 0.9f, 0.5f, 1);
     public final Color SHAPE_KINEMATIC = new Color(0.5f, 0.5f, 0.9f, 1);
+    public final Color SHAPE_OTHER = new Color(0.2f, 0.2f, 0.2f, 1);
     public final Color SHAPE_NOT_AWAKE = new Color(0.6f, 0.6f, 0.6f, 1);
     public final Color SHAPE_AWAKE = new Color(0.9f, 0.7f, 0.7f, 1);
     public final Color JOINT_COLOR = new Color(0.5f, 0.8f, 0.8f, 1);
@@ -138,10 +139,8 @@ class Box2DDebugRenderer implements Disposable {
             return SHAPE_STATIC;
         else if (body.getType() == BodyDef.BodyType.KinematicBody)
             return SHAPE_KINEMATIC;
-        else if (!body.isAwake())
-            return SHAPE_NOT_AWAKE;
         else
-            return SHAPE_AWAKE;
+            return SHAPE_OTHER;
     }
 
     private void drawAABB(Fixture fixture, Transform transform) {
