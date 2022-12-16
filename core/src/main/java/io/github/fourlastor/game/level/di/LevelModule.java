@@ -52,7 +52,7 @@ public class LevelModule {
     @Provides
     @ScreenScoped
     public WorldConfig worldConfig() {
-        return new WorldConfig(16f, 9f, 2f / 53f);
+        return new WorldConfig(16f, 9f, 13f / 256f);
     }
 
     @Provides
