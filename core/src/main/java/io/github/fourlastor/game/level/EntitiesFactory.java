@@ -42,6 +42,7 @@ public class EntitiesFactory {
     }
 
     public Entity player(String name, Controls controls, boolean flipped) {
+        CharacterAnimationData animationData = animations.get(name);
         Entity entity = new Entity();
         AnimationImage image = new AnimationImage();
         float scale = config.scale;
@@ -51,11 +52,14 @@ public class EntitiesFactory {
         entity.add(new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
-            bodyDef.position.set(new Vector2(4.5f, 1.5f));
+            float x = flipped ? 15f : 1f;
+            float height = animationData.height * config.scale;
+
+            bodyDef.position.set(new Vector2(x, height));
             bodyDef.allowSleep = false;
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(0.4f, 0.8f);
+            shape.setAsBox(0.4f, 0.4f, new Vector2(0f, (-height / 2) + 0.4f), 0f);
             FixtureDef def = new FixtureDef();
             def.shape = shape;
             def.filter.categoryBits = Bits.Category.BODY.bits;
@@ -66,7 +70,6 @@ public class EntitiesFactory {
             def.filter.categoryBits = Bits.Category.HITBOX.bits;
             def.filter.maskBits = Bits.Mask.HITBOX.bits;
             def.isSensor = true;
-            CharacterAnimationData animationData = animations.get(name);
             List<BodyComponent.Box> hitboxes = new ArrayList<>(animationData.hitboxes.size());
             for (Map.Entry<String, Rectangle> value : animationData.hitboxes.entrySet()) {
                 Rectangle rectangle = value.getValue();
@@ -91,7 +94,7 @@ public class EntitiesFactory {
 
     public Entity base() {
         Entity entity = new Entity();
-        Vector2 initialPosition = new Vector2(8f, 0.5f);
+        Vector2 initialPosition = new Vector2(config.width / 2, 1f);
         entity.add(platformBuilder(initialPosition, Platform.Width.SIXTEEN));
         return entity;
     }
