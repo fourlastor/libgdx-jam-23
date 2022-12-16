@@ -2,16 +2,15 @@ package io.github.fourlastor.game.di.modules;
 
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import dagger.Module;
 import dagger.Provides;
 import io.github.fourlastor.game.MyGdxGame;
 import io.github.fourlastor.game.level.di.LevelComponent;
-import java.util.Random;
+import io.github.fourlastor.game.selection.CharacterSelectionComponent;
+
 import javax.inject.Singleton;
+import java.util.Random;
 
 @Module
 public class GameModule {
@@ -45,9 +44,10 @@ public class GameModule {
     @Singleton
     public MyGdxGame game(
             InputMultiplexer multiplexer,
-            LevelComponent.Builder levelBuilder
+            LevelComponent.Builder levelBuilder,
+            CharacterSelectionComponent.Builder characterSelectionFactory
     ) {
-        return new MyGdxGame(multiplexer, levelBuilder);
+        return new MyGdxGame(multiplexer, levelBuilder, characterSelectionFactory);
     }
 
     @Provides

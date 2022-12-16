@@ -8,21 +8,25 @@ import io.github.fourlastor.game.di.GameComponent;
 import io.github.fourlastor.game.level.di.LevelComponent;
 import io.github.fourlastor.game.route.Router;
 import io.github.fourlastor.game.route.RouterModule;
+import io.github.fourlastor.game.selection.CharacterSelectionComponent;
 
 public class MyGdxGame extends Game implements Router {
 
     private final InputMultiplexer multiplexer;
 
     private final LevelComponent.Builder levelScreenFactory;
+    private final CharacterSelectionComponent.Builder caracterSelectionFactory;
 
     private Screen pendingScreen = null;
 
     public MyGdxGame(
             InputMultiplexer multiplexer,
-            LevelComponent.Builder levelScreenFactory
+            LevelComponent.Builder levelScreenFactory,
+            CharacterSelectionComponent.Builder caracterSelectionFactory
     ) {
         this.multiplexer = multiplexer;
         this.levelScreenFactory = levelScreenFactory;
+        this.caracterSelectionFactory = caracterSelectionFactory;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class MyGdxGame extends Game implements Router {
 //            Gdx.graphics.setCursor(customCursor);
 //        }
         Gdx.input.setInputProcessor(multiplexer);
-        goToLevel();
+        goToCharacterSelection();
     }
 
     @Override
@@ -49,6 +53,11 @@ public class MyGdxGame extends Game implements Router {
         return GameComponent.component().game();
     }
 
+
+    @Override
+    public void goToCharacterSelection() {
+        pendingScreen = caracterSelectionFactory.router(new RouterModule(this)).build().screen();
+    }
 
     @Override
     public void goToLevel() {
