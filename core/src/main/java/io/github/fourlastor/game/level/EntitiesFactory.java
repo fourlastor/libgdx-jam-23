@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.level;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -34,11 +35,13 @@ public class EntitiesFactory {
 
     private final WorldConfig config;
     private final Map<String, CharacterAnimationData> animations;
+    private final TextureAtlas atlas;
 
     @Inject
-    public EntitiesFactory(WorldConfig config, Map<String, CharacterAnimationData> animations) {
+    public EntitiesFactory(WorldConfig config, Map<String, CharacterAnimationData> animations, TextureAtlas atlas) {
         this.config = config;
         this.animations = animations;
+        this.atlas = atlas;
     }
 
     public Entity player(String name, Controls controls, boolean flipped) {
@@ -89,6 +92,15 @@ public class EntitiesFactory {
         }));
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
         entity.add(new PlayerRequestComponent(name, controls));
+        return entity;
+    }
+
+    public Entity background() {
+        Entity entity = new Entity();
+        Image image = new Image(atlas.findRegion("arena/arena 0/arena 0"));
+        image.setScale(config.scale);
+        image.setPosition(0, 0);
+        entity.add(new ActorComponent(image, ActorComponent.Layer.BG_PARALLAX));
         return entity;
     }
 
