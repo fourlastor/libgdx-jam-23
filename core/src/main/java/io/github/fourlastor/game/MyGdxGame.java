@@ -1,5 +1,6 @@
 package io.github.fourlastor.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -31,6 +32,7 @@ public class MyGdxGame extends Game implements Router {
 
     @Override
     public void create() {
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
 //        if (Gdx.app.getType() != Application.ApplicationType.Android) {
 //            Cursor customCursor =
 //                    Gdx.graphics.newCursor(new Pixmap(Gdx.files.internal("images/included/cursor.png")), 0, 0);

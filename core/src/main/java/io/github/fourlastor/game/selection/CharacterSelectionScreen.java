@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.fourlastor.game.level.input.controls.Controls;
+import io.github.fourlastor.game.ui.WaveActor;
+import io.github.fourlastor.game.util.Text;
 
 import javax.inject.Inject;
 
@@ -26,7 +28,7 @@ public class CharacterSelectionScreen implements Screen {
     private final AssetManager assetManager;
     private final Stage stage = new Stage(new FitViewport(320f, 180f));
 
-    private String[] names = new String[]{
+    private final String[] names = new String[]{
             "nissemor", "rumpnisse", "tontut", "langnisse",
             "joulupukki", "blånisse", "nissefar", "goblin"
     };
@@ -38,7 +40,7 @@ public class CharacterSelectionScreen implements Screen {
     private Image p2Name;
     private Image p2Avatar;
     private Image cursorP2;
-    private InputProcessor processor = new InputAdapter() {
+    private final InputProcessor processor = new InputAdapter() {
 
         @Override
         public boolean keyDown(int keycode) {
@@ -91,14 +93,13 @@ public class CharacterSelectionScreen implements Screen {
     }
 
     private void setupBackgrounds() {
-        // TODO check if shader works in web
-//        String defShader = assetManager.get("shaders/default.vs", Text.class).getString();
-//        String wave = assetManager.get("shaders/wave.fs", Text.class).getString();
-//        ShaderProgram shaderProgram = initShaderProgram(defShader, wave);
         Image map = new Image(atlas.findRegion("character-selection/map"));
         map.setFillParent(true);
         stage.addActor(map);
-        Image fog = new Image(atlas.findRegion("character-selection/fog"));
+        String defShader = assetManager.get("shaders/default.vs", Text.class).getString();
+        String wave = assetManager.get("shaders/wave.fs", Text.class).getString();
+        ShaderProgram shaderProgram = initShaderProgram(defShader, wave);
+        Image fog = new WaveActor(atlas.findRegion("character-selection/fog"), shaderProgram);
         fog.setFillParent(true);
         stage.addActor(fog);
         Image table = new Image(atlas.findRegion("character-selection/character table"));
@@ -121,6 +122,8 @@ public class CharacterSelectionScreen implements Screen {
     }
 
     private ShaderProgram initShaderProgram(String vertexShader, String fragmentShader) {
+        Gdx.app.debug("Shader", "Vertex: " + vertexShader);
+        Gdx.app.debug("Shader", "Fragment: " + fragmentShader);
         ShaderProgram.pedantic = false;
         ShaderProgram shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
         if (!shaderProgram.isCompiled())
