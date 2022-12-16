@@ -32,11 +32,15 @@ public class EntityJsonParser {
     public EntityData parse(FileHandle handle) {
         JsonValue value = json.parse(handle);
         return new EntityData(
-                parseBones(value.get("bones")),
+                parseSkeleton(value.get("skeleton")), parseBones(value.get("bones")),
                 parseSlots(value.get("slots")),
                 parseAllSkins(value.get("skins")),
                 parseAnimations(value.get("animations"))
         );
+    }
+
+    private EntityData.Skeleton parseSkeleton(JsonValue value) {
+        return new EntityData.Skeleton(value.getInt("width"), value.getInt("height"));
     }
 
     private Map<String, Animation> parseAnimations(JsonValue value) {
