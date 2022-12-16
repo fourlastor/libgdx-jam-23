@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import io.github.fourlastor.game.animation.AnimationImage;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.ActorComponent;
@@ -84,10 +84,6 @@ public class EntitiesFactory {
             shape.dispose();
             return new BodyComponent(body, hitboxes);
         }));
-        image.setPosition(-0.5f, -0.5f);
-        Group group = new Group();
-        group.addActor(image);
-
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
         entity.add(new PlayerRequestComponent(name, controls));
         return entity;
