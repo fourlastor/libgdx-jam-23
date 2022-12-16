@@ -5,8 +5,10 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -20,6 +22,8 @@ import javax.inject.Inject;
 public class CharacterSelectionScreen implements Screen {
     private final InputMultiplexer inputMultiplexer;
     private final TextureAtlas atlas;
+
+    private final AssetManager assetManager;
     private final Stage stage = new Stage(new FitViewport(320f, 180f));
 
     private String[] names = new String[]{
@@ -63,9 +67,11 @@ public class CharacterSelectionScreen implements Screen {
     @Inject
     public CharacterSelectionScreen(
             InputMultiplexer inputMultiplexer,
-            TextureAtlas atlas) {
+            TextureAtlas atlas,
+            AssetManager assetManager) {
         this.inputMultiplexer = inputMultiplexer;
         this.atlas = atlas;
+        this.assetManager = assetManager;
     }
 
     @Override
@@ -85,6 +91,10 @@ public class CharacterSelectionScreen implements Screen {
     }
 
     private void setupBackgrounds() {
+        // TODO check if shader works in web
+//        String defShader = assetManager.get("shaders/default.vs", Text.class).getString();
+//        String wave = assetManager.get("shaders/wave.fs", Text.class).getString();
+//        ShaderProgram shaderProgram = initShaderProgram(defShader, wave);
         Image map = new Image(atlas.findRegion("character-selection/map"));
         map.setFillParent(true);
         stage.addActor(map);
@@ -108,6 +118,14 @@ public class CharacterSelectionScreen implements Screen {
         cursorP2 = new Image(atlas.findRegion("character-selection/2P selection cursor"));
         positionOnGrid(cursorP2, 3, 1);
         stage.addActor(cursorP2);
+    }
+
+    private ShaderProgram initShaderProgram(String vertexShader, String fragmentShader) {
+        ShaderProgram.pedantic = false;
+        ShaderProgram shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
+        if (!shaderProgram.isCompiled())
+            Gdx.app.error("Shader", "Couldn't compile shader: " + shaderProgram.getLog());
+        return shaderProgram;
     }
 
     private void addGridAvatar(String name, int hIndex, int vIndex) {
