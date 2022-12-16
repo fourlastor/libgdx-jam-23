@@ -1,14 +1,19 @@
 package io.github.fourlastor.game.selection;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import io.github.fourlastor.game.level.input.controls.Controls;
 
 import javax.inject.Inject;
 
@@ -16,10 +21,44 @@ public class CharacterSelectionScreen implements Screen {
     private final InputMultiplexer inputMultiplexer;
     private final TextureAtlas atlas;
     private final Stage stage = new Stage(new FitViewport(320f, 180f));
+
+    private String[] names = new String[]{
+            "nissemor", "rumpnisse", "tontut", "langnisse",
+            "joulupukki", "blånisse", "nissefar", "goblin"
+    };
+    private int p1Index = 0;
     private Image p1Name;
-    private Image p2Name;
     private Image p1Avatar;
+    private Image cursorP1;
+    private int p2Index = 7;
+    private Image p2Name;
     private Image p2Avatar;
+    private Image cursorP2;
+    private InputProcessor processor = new InputAdapter() {
+
+        @Override
+        public boolean keyDown(int keycode) {
+            if (Controls.Setup.P1.left().matches(keycode)) {
+                p1Index = Math.max(0, p1Index - 1);
+                updatePlayersData();
+                return true;
+            } else if (Controls.Setup.P1.right().matches(keycode)) {
+                p1Index = Math.min(7, p1Index + 1);
+                updatePlayersData();
+                return true;
+            }
+            if (Controls.Setup.P2.left().matches(keycode)) {
+                p2Index = Math.max(0, p2Index - 1);
+                updatePlayersData();
+                return true;
+            } else if (Controls.Setup.P2.right().matches(keycode)) {
+                p2Index = Math.min(7, p2Index + 1);
+                updatePlayersData();
+                return true;
+            }
+            return false;
+        }
+    };
 
     @Inject
     public CharacterSelectionScreen(
@@ -31,13 +70,12 @@ public class CharacterSelectionScreen implements Screen {
 
     @Override
     public void show() {
-        inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(processor);
         setupBackgrounds();
         Table root = new Table();
         root.setFillParent(true);
         stage.addActor(root);
         root.padTop(2f);
-        root.padBottom(1f);
         setupTopText(root);
         setup1P2PLine(root);
         setupCharacterNames(root);
@@ -64,12 +102,43 @@ public class CharacterSelectionScreen implements Screen {
         addGridAvatar("blånisse", 1, 1);
         addGridAvatar("nissefar", 2, 1);
         addGridAvatar("goblin", 3, 1);
+        cursorP1 = new Image(atlas.findRegion("character-selection/1P selection cursor"));
+        positionOnGrid(cursorP1, 0, 0);
+        stage.addActor(cursorP1);
+        cursorP2 = new Image(atlas.findRegion("character-selection/2P selection cursor"));
+        positionOnGrid(cursorP2, 3, 1);
+        stage.addActor(cursorP2);
     }
 
     private void addGridAvatar(String name, int hIndex, int vIndex) {
         Image nissemorAvatar = new Image(atlas.findRegion("character-selection/small-portraits/" + name));
-        nissemorAvatar.setPosition(86 + 37 * hIndex, 32 - 29 * vIndex);
+        positionOnGrid(nissemorAvatar, hIndex, vIndex);
         stage.addActor(nissemorAvatar);
+    }
+
+    private void updatePlayersData() {
+        positionOnGrid(cursorP1, p1Index % 4, p1Index / 4);
+        positionOnGrid(cursorP2, p2Index % 4, p2Index / 4);
+        p1Avatar.setDrawable(characterPortrait(p1Index));
+        p1Name.setDrawable(characterName(p1Index));
+        p2Avatar.setDrawable(characterPortrait(p2Index));
+        p2Name.setDrawable(characterName(p2Index));
+    }
+
+    private TextureRegionDrawable characterName(int index) {
+        return new TextureRegionDrawable(
+                atlas.findRegion("character-selection/text/" + names[index])
+        );
+    }
+
+    private TextureRegionDrawable characterPortrait(int index) {
+        return new TextureRegionDrawable(
+                atlas.findRegion("character-selection/big-portraits/" + names[index])
+        );
+    }
+
+    private static void positionOnGrid(Image image, int hIndex, int vIndex) {
+        image.setPosition(86 + 37 * hIndex, 32 - 29 * vIndex);
     }
 
     private void setupTopText(Table root) {
@@ -88,20 +157,22 @@ public class CharacterSelectionScreen implements Screen {
     }
 
     private void setupCharacterNames(Table root) {
-        p1Name = new Image(atlas.findRegion("character-selection/text/nissemor"));
-        p2Name = new Image(atlas.findRegion("character-selection/text/nissefar"));
-        root.add(p1Name).left();
+        p1Name = new Image(characterName(p1Index));
+        p2Name = new Image(characterName(p2Index));
+        root.add(p1Name);
         root.add().expandX();
-        root.add(p2Name).right();
+        root.add(p2Name);
         root.row();
     }
 
     private void setupCharacterBigAvatars(Table root) {
-        p1Avatar = new Image(atlas.findRegion("character-selection/big-portraits/nissemor"));
-        p2Avatar = new Image(atlas.findRegion("character-selection/big-portraits/nissefar"));
-        root.add(p1Avatar).left().padLeft(5f).bottom();
+        p1Avatar = new Image(characterPortrait(p1Index));
+        p2Avatar = new Image(characterPortrait(p2Index));
+        p2Avatar.setOrigin(Align.center);
+        p2Avatar.setScale(-1f, 1f);
+        root.add(p1Avatar).left().bottom();
         root.add();
-        root.add(p2Avatar).right().padRight(5f).bottom();
+        root.add(p2Avatar).right().bottom();
         root.row();
     }
 
@@ -130,7 +201,7 @@ public class CharacterSelectionScreen implements Screen {
 
     @Override
     public void hide() {
-        inputMultiplexer.removeProcessor(stage);
+        inputMultiplexer.removeProcessor(processor);
     }
 
     @Override
