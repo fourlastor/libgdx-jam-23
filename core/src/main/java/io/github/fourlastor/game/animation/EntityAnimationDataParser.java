@@ -36,7 +36,7 @@ public class EntityAnimationDataParser {
 
     public CharacterAnimationData parseCharacterData(EntityData data, String name) {
         return new CharacterAnimationData(
-                parseBoundingBoxes(data.skins.get("hitbox")),
+                data.skeleton.width, data.skeleton.height, parseBoundingBoxes(data.skins.get("hitbox")),
                 parseBoundingBoxes(data.skins.get("hurtbox")),
                 parseAnimations(data.animations, name)
         );
