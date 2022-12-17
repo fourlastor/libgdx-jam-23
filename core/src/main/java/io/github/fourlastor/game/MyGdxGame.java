@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import io.github.fourlastor.game.di.GameComponent;
 import io.github.fourlastor.game.level.di.LevelComponent;
+import io.github.fourlastor.game.level.di.LevelModule;
 import io.github.fourlastor.game.route.Router;
 import io.github.fourlastor.game.route.RouterModule;
 import io.github.fourlastor.game.selection.CharacterSelectionComponent;
@@ -62,8 +63,12 @@ public class MyGdxGame extends Game implements Router {
     }
 
     @Override
-    public void goToLevel() {
+    public void goToLevel(String p1, String p2) {
         pendingScreen =
-                levelScreenFactory.router(new RouterModule(this)).build().screen();
+                levelScreenFactory
+                        .router(new RouterModule(this))
+                        .level(new LevelModule(p1, p2))
+                        .build()
+                        .screen();
     }
 }

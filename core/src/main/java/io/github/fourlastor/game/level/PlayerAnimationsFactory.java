@@ -16,15 +16,15 @@ import javax.inject.Named;
 
 @Module
 public class PlayerAnimationsFactory {
-    public static final String KARATENISSE = "karatenisse";
+    public static final String NISSEFAR = "nissefar";
     public static final String NISSEMOR = "nissemor";
     public static final String LANGNISSE = "langnisse";
 
     @Provides
     @ScreenScoped
-    @Named(KARATENISSE)
+    @Named(NISSEFAR)
     public EntityData karatenisseEntity(EntityJsonParser parser) {
-        return parser.parse(animationJson(KARATENISSE));
+        return parser.parse(animationJson(NISSEFAR));
     }
 
     @Provides
@@ -47,13 +47,13 @@ public class PlayerAnimationsFactory {
 
     @Provides
     @ScreenScoped
-    @StringKey(KARATENISSE)
+    @StringKey(NISSEFAR)
     @IntoMap
     public CharacterAnimationData karatenisseAnimation(
             EntityAnimationDataParser parser,
-            @Named(KARATENISSE) EntityData data
+            @Named(NISSEFAR) EntityData data
     ) {
-        return parser.parseCharacterData(data, KARATENISSE);
+        return parser.parseCharacterData(data, NISSEFAR);
     }
 
     @Provides

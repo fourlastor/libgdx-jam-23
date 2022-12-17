@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.selection;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.fourlastor.game.level.input.controls.Controls;
+import io.github.fourlastor.game.route.Router;
 import io.github.fourlastor.game.ui.WaveActor;
 import io.github.fourlastor.game.util.Text;
 
@@ -24,6 +26,7 @@ import javax.inject.Inject;
 public class CharacterSelectionScreen implements Screen {
     private final InputMultiplexer inputMultiplexer;
     private final TextureAtlas atlas;
+    private final Router router;
 
     private final AssetManager assetManager;
     private final Stage stage = new Stage(new FitViewport(320f, 180f));
@@ -32,6 +35,11 @@ public class CharacterSelectionScreen implements Screen {
             "nissemor", "rumpnisse", "tontut", "langnisse",
             "joulupukki", "blånisse", "nissefar", "goblin"
     };
+    private final boolean[] valid = new boolean[]{
+            true, false, false, true,
+            false, false, true, false
+    };
+
     private int p1Index = 0;
     private Image p1Name;
     private Image p1Avatar;
@@ -62,6 +70,9 @@ public class CharacterSelectionScreen implements Screen {
                 updatePlayersData();
                 return true;
             }
+            if (Input.Keys.SPACE == keycode && valid[p1Index] && valid[p2Index]) {
+                router.goToLevel(names[p1Index], names[p2Index]);
+            }
             return false;
         }
     };
@@ -70,9 +81,10 @@ public class CharacterSelectionScreen implements Screen {
     public CharacterSelectionScreen(
             InputMultiplexer inputMultiplexer,
             TextureAtlas atlas,
-            AssetManager assetManager) {
+            Router router, AssetManager assetManager) {
         this.inputMultiplexer = inputMultiplexer;
         this.atlas = atlas;
+        this.router = router;
         this.assetManager = assetManager;
     }
 
