@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import dagger.Module;
 import dagger.Provides;
@@ -21,6 +22,10 @@ import java.util.Random;
 public class GameModule {
 
     private static final String PATH_TEXTURE_ATLAS = "images/included/packed/images.pack.atlas";
+    public static final String SELECT_CHANGE = "audio/sound/character selection screen/select-change.wav";
+    public static final String SELECT_FAIL = "audio/sound/character selection screen/select-fail.wav";
+    public static final String SELECT_SUCCESS = "audio/sound/character selection screen/select-success.wav";
+    public static final String CHARACTER_SELECTION_BG = "audio/music/character_selection_bg.mp3";
 
     @Provides
     @Singleton
@@ -33,7 +38,10 @@ public class GameModule {
                 )
         );
         assetManager.load(PATH_TEXTURE_ATLAS, TextureAtlas.class);
-        assetManager.load("music/character_selection_bg.mp3", Music.class);
+        assetManager.load(CHARACTER_SELECTION_BG, Music.class);
+        assetManager.load(SELECT_CHANGE, Sound.class);
+        assetManager.load(SELECT_FAIL, Sound.class);
+        assetManager.load(SELECT_SUCCESS, Sound.class);
         assetManager.load(new AssetDescriptor<>("shaders/default.vs", Text.class, new TextLoader.TextParameter()));
         assetManager.load(new AssetDescriptor<>("shaders/wave.fs", Text.class, new TextLoader.TextParameter()));
         assetManager.finishLoading();
