@@ -10,6 +10,7 @@ import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.input.controls.Controls;
 
@@ -27,8 +28,9 @@ public class Walking extends InputState {
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
+            ComponentMapper<HpComponent> hps,
             Map<String, CharacterAnimationData> animations) {
-        super(players, bodies, images, controls);
+        super(players, bodies, images, hps, controls);
         this.animation = animations.get(name).animations.get("walking");
     }
 

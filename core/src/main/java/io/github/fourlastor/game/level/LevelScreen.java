@@ -7,7 +7,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import io.github.fourlastor.game.level.input.controls.Controls;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 public class LevelScreen extends ScreenAdapter {
 
@@ -16,8 +15,7 @@ public class LevelScreen extends ScreenAdapter {
     private final EntitiesFactory entitiesFactory;
 
     private final World world;
-    private final String p1;
-    private final String p2;
+    private final Match match;
     private final boolean p2IsImpostor;
 
     @Inject
@@ -26,16 +24,13 @@ public class LevelScreen extends ScreenAdapter {
             Viewport viewport,
             EntitiesFactory entitiesFactory,
             World world,
-            @Named("P1") String p1,
-            @Named("P2") String p2
-    ) {
+            Match match) {
         this.engine = engine;
         this.viewport = viewport;
         this.entitiesFactory = entitiesFactory;
         this.world = world;
-        this.p1 = p1;
-        this.p2 = p2;
-        this.p2IsImpostor = p1.equals(p2);
+        this.match = match;
+        this.p2IsImpostor = match.p1.equals(match.p2);
     }
 
     @Override
@@ -52,8 +47,8 @@ public class LevelScreen extends ScreenAdapter {
     public void show() {
         engine.addEntity(entitiesFactory.background());
         engine.addEntity(entitiesFactory.base());
-        engine.addEntity(entitiesFactory.player(p1, Controls.Setup.P1, false));
-        engine.addEntity(entitiesFactory.player(p2, Controls.Setup.P2, true, p2IsImpostor));
+        engine.addEntity(entitiesFactory.player(match.p1, Controls.Setup.P1, Player.P1));
+        engine.addEntity(entitiesFactory.player(match.p2, Controls.Setup.P2, Player.P2, p2IsImpostor));
     }
 
     @Override
@@ -67,5 +62,4 @@ public class LevelScreen extends ScreenAdapter {
         super.dispose();
         world.dispose();
     }
-
 }

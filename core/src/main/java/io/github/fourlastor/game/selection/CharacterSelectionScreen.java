@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.fourlastor.game.MyGdxGame;
 import io.github.fourlastor.game.di.modules.GameModule;
+import io.github.fourlastor.game.level.Round;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.route.Router;
 import io.github.fourlastor.game.ui.WaveActor;
@@ -83,7 +84,7 @@ public class CharacterSelectionScreen implements Screen {
             if (Input.Keys.SPACE == keycode)
                 if (valid[p1Index] && valid[p2Index]) {
                     selectSuccess.play(VOLUME);
-                    router.goToLevel(names[p1Index], names[p2Index]);
+                    router.goToLevel(names[p1Index], names[p2Index], Round.ROUND_1, null);
                 } else {
                     selectFail.play(VOLUME);
                 }
@@ -120,7 +121,6 @@ public class CharacterSelectionScreen implements Screen {
         setupBackgrounds();
         Table root = new Table();
         root.setFillParent(true);
-        stage.addActor(root);
         root.padTop(2f);
         setupTopText(root);
         setup1P2PLine(root);
@@ -128,6 +128,7 @@ public class CharacterSelectionScreen implements Screen {
         setupCharacterBigAvatars(root);
         music.play();
         root.pack();
+        stage.addActor(root);
     }
 
     private void setupBackgrounds() {

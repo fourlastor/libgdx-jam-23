@@ -11,41 +11,33 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dagger.Module;
 import dagger.Provides;
 import io.github.fourlastor.game.di.ScreenScoped;
+import io.github.fourlastor.game.level.Match;
 import io.github.fourlastor.game.level.WorldConfig;
 import io.github.fourlastor.game.level.input.PlayerInputSystem;
 import io.github.fourlastor.game.level.physics.PhysicsDebugSystem;
 import io.github.fourlastor.game.level.physics.PhysicsSystem;
 import io.github.fourlastor.game.level.system.ActorFollowBodySystem;
 import io.github.fourlastor.game.level.system.ClearScreenSystem;
+import io.github.fourlastor.game.level.system.GoToNextScreenSystem;
 import io.github.fourlastor.game.level.system.MovingSystem;
 import io.github.fourlastor.game.level.system.SoundSystem;
 import io.github.fourlastor.game.level.system.StageSystem;
-
-import javax.inject.Named;
+import io.github.fourlastor.game.level.system.UiSystem;
 
 @Module
 public class LevelModule {
 
-    private final String p1Name;
-    private final String p2Name;
 
-    public LevelModule(String p1Name, String p2Name) {
-        this.p1Name = p1Name;
-        this.p2Name = p2Name;
+    private final Match match;
+
+    public LevelModule(Match match) {
+        this.match = match;
     }
 
     @Provides
-    @Named("P1")
-    public String p1() {
-        return p1Name;
+    public Match match() {
+        return match;
     }
-
-    @Provides
-    @Named("P2")
-    public String p2() {
-        return p2Name;
-    }
-
 
     @Provides
     @ScreenScoped
@@ -56,9 +48,11 @@ public class LevelModule {
             StageSystem stageSystem,
             ClearScreenSystem clearScreenSystem,
             @SuppressWarnings("unused") // debug only
-                    PhysicsDebugSystem physicsDebugSystem,
+            PhysicsDebugSystem physicsDebugSystem,
             MovingSystem movingSystem,
-            SoundSystem soundSystem
+            SoundSystem soundSystem,
+            UiSystem uiSystem,
+            GoToNextScreenSystem goToNextScreenSystem
     ) {
         Engine engine = new Engine();
         engine.addSystem(movingSystem);
@@ -68,7 +62,9 @@ public class LevelModule {
         engine.addSystem(actorFollowBodySystem);
         engine.addSystem(clearScreenSystem);
         engine.addSystem(stageSystem);
-        engine.addSystem(physicsDebugSystem);
+        engine.addSystem(uiSystem);
+        engine.addSystem(goToNextScreenSystem);
+//        engine.addSystem(physicsDebugSystem);
         return engine;
     }
 

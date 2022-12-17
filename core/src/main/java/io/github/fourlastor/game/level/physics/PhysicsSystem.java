@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.level.Message;
 
 import javax.inject.Inject;
 
@@ -113,9 +114,9 @@ public class PhysicsSystem extends IntervalSystem {
             Fixture fixtureB = contact.getFixtureB();
             System.out.println("Contact");
             if (isHitbox(fixtureA) && isHurtbox(fixtureB)) {
-                System.out.println("HIT");
+                propagateHit(fixtureA, fixtureB);
             } else if (isHurtbox(fixtureA) && isHitbox(fixtureB)) {
-                System.out.println("HIT");
+                propagateHit(fixtureB, fixtureA);
             }
         }
 
@@ -142,4 +143,13 @@ public class PhysicsSystem extends IntervalSystem {
 
         }
     };
+
+    private void propagateHit(@SuppressWarnings("unused") Fixture hitbox, Fixture hurtbox) {
+        Object userData = hurtbox.getUserData();
+        if (!(userData instanceof Entity)) {
+            return;
+        }
+
+        messageDispatcher.dispatchMessage(Message.PLAYER_HIT.ordinal(), userData);
+    }
 }

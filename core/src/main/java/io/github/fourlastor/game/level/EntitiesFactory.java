@@ -17,6 +17,7 @@ import io.github.fourlastor.game.component.ActorComponent;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.blueprint.definitions.Platform;
@@ -45,25 +46,31 @@ public class EntitiesFactory {
         this.atlas = atlas;
     }
 
-    public Entity player(String name, Controls controls, boolean flipped) {
-        return player(name, controls, flipped, false);
+    public Entity player(String name,
+                         Controls controls,
+                         Player player) {
+        return player(name, controls, player, false);
     }
 
-    public Entity player(String name, Controls controls, boolean flipped, boolean isImpostor) {
+    public Entity player(String name,
+                         Controls controls,
+                         Player player,
+                         boolean isImpostor) {
         CharacterAnimationData animationData = animations.get(name);
         Entity entity = new Entity();
+        entity.add(new HpComponent());
         AnimationImage image = new AnimationImage();
         if (isImpostor) {
             image.setColor(MyGdxGame.IMPOSTOR_COLOR);
         }
         float scale = config.scale;
-        int flippedFactor = flipped ? -1 : 1;
+        int flippedFactor = player.flipped ? -1 : 1;
         image.setScale(flippedFactor * scale, scale);
         entity.add(new AnimationImageComponent(image));
         entity.add(new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
-            float x = flipped ? 15f : 1f;
+            float x = player.flipped ? 15f : 1f;
             float height = animationData.height * config.scale;
 
             bodyDef.position.set(new Vector2(x, height));
@@ -86,6 +93,7 @@ public class EntitiesFactory {
                 Rectangle rectangle = value.getValue();
                 shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(flippedFactor * rectangle.x, rectangle.y).scl(scale), 0f);
                 Fixture fixture = body.createFixture(def);
+                fixture.setUserData(entity);
                 hitboxes.add(new BodyComponent.Box(value.getKey(), fixture));
             }
             def.filter.categoryBits = Bits.Category.HURTBOX.bits;
@@ -93,13 +101,14 @@ public class EntitiesFactory {
             for (Map.Entry<String, Rectangle> value : animationData.hurtboxes.entrySet()) {
                 Rectangle rectangle = value.getValue();
                 shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(flippedFactor * rectangle.x, rectangle.y).scl(scale), 0f);
-                body.createFixture(def);
+                Fixture fixture = body.createFixture(def);
+                fixture.setUserData(entity);
             }
             shape.dispose();
             return new BodyComponent(body, hitboxes);
         }));
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
-        entity.add(new PlayerRequestComponent(name, controls));
+        entity.add(new PlayerRequestComponent(name, controls, player));
         return entity;
     }
 
