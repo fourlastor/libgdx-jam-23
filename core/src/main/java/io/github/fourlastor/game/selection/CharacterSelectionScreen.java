@@ -84,7 +84,7 @@ public class CharacterSelectionScreen implements Screen {
             if (Input.Keys.SPACE == keycode)
                 if (valid[p1Index] && valid[p2Index]) {
                     selectSuccess.play(VOLUME);
-                    router.goToLevel(names[p1Index], names[p2Index], Round.ROUND_1);
+                    router.goToLevel(names[p1Index], names[p2Index], Round.ROUND_1, null);
                 } else {
                     selectFail.play(VOLUME);
                 }

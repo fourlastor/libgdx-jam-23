@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.fourlastor.game.component.AnimationFinishedComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.Round;
+import io.github.fourlastor.game.level.Match;
 
 import javax.inject.Inject;
 
@@ -30,16 +30,16 @@ public class UiSystem extends EntitySystem {
     private final Stage stage = new Stage(new FitViewport(UI_WIDTH, UI_HEIGHT));
 
     private final TextureAtlas atlas;
-    private final Round round;
+    private final Match match;
     private Image koImage;
 
     @Inject
     public UiSystem(
             TextureAtlas atlas,
-            Round round
+            Match match
     ) {
         this.atlas = atlas;
-        this.round = round;
+        this.match = match;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class UiSystem extends EntitySystem {
         koImage.setPosition(UI_WIDTH / 2 - koImage.getWidth() / 2, UI_HEIGHT - koImage.getHeight());
         stage.addActor(koImage);
         engine.addEntityListener(Family.all(HpComponent.class, PlayerComponent.class).get(), entityListener);
-        Image overlayImage = new Image(atlas.findRegion("text-overlays/" + round.fileName));
+        Image overlayImage = new Image(atlas.findRegion("text-overlays/" + match.round.fileName));
         overlayImage.setOrigin(Align.center);
         overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
         overlayImage.addAction(Actions.sequence(
