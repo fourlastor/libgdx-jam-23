@@ -21,8 +21,31 @@ import io.github.fourlastor.game.level.system.MovingSystem;
 import io.github.fourlastor.game.level.system.SoundSystem;
 import io.github.fourlastor.game.level.system.StageSystem;
 
+import javax.inject.Named;
+
 @Module
 public class LevelModule {
+
+    private final String p1Name;
+    private final String p2Name;
+
+    public LevelModule(String p1Name, String p2Name) {
+        this.p1Name = p1Name;
+        this.p2Name = p2Name;
+    }
+
+    @Provides
+    @Named("P1")
+    public String p1() {
+        return p1Name;
+    }
+
+    @Provides
+    @Named("P2")
+    public String p2() {
+        return p2Name;
+    }
+
 
     @Provides
     @ScreenScoped

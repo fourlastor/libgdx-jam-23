@@ -18,6 +18,8 @@ public interface LevelComponent {
 
         Builder router(RouterModule routerModule);
 
+        Builder level(LevelModule levelModule);
+
         LevelComponent build();
     }
 }
