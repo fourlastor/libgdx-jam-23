@@ -23,6 +23,7 @@ import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.Match;
 import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.Player;
+import io.github.fourlastor.game.route.Router;
 
 import javax.inject.Inject;
 
@@ -37,16 +38,18 @@ public class UiSystem extends EntitySystem implements Telegraph {
     private final TextureAtlas atlas;
     private final Match match;
     private final MessageDispatcher dispatcher;
+    private final Router router;
     private Image koImage;
 
     @Inject
     public UiSystem(
             TextureAtlas atlas,
             Match match,
-            MessageDispatcher dispatcher) {
+            MessageDispatcher dispatcher, Router router) {
         this.atlas = atlas;
         this.match = match;
         this.dispatcher = dispatcher;
+        this.router = router;
     }
 
     @Override
@@ -138,6 +141,10 @@ public class UiSystem extends EntitySystem implements Telegraph {
             overlayImage.setOrigin(Align.center);
             overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
             stage.addActor(overlayImage);
+            stage.addAction(Actions.sequence(
+                    Actions.delay(4f),
+                    Actions.run(() -> router.goToCharacterSelection())
+            ));
             return true;
         }
         return false;
