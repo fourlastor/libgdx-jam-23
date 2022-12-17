@@ -17,6 +17,7 @@ import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.input.state.Attacking;
+import io.github.fourlastor.game.level.input.state.Hurt;
 import io.github.fourlastor.game.level.input.state.Idle;
 import io.github.fourlastor.game.level.input.state.Walking;
 
@@ -71,6 +72,7 @@ public class PlayerInputSystem extends IteratingSystem {
         private final Idle.Factory idleFactory;
         private final Walking.Factory walkingFactory;
         private final Attacking.Factory attackingFactory;
+        private final Hurt.Factory hurtFactory;
         private final InputStateMachine.Factory stateMachineFactory;
         private final MessageDispatcher messageDispatcher;
 
@@ -79,11 +81,12 @@ public class PlayerInputSystem extends IteratingSystem {
                 Idle.Factory idleFactory,
                 Walking.Factory walkingFactory,
                 Attacking.Factory attackingFactory,
-                InputStateMachine.Factory stateMachineFactory,
+                Hurt.Factory hurtFactory, InputStateMachine.Factory stateMachineFactory,
                 MessageDispatcher messageDispatcher) {
             this.idleFactory = idleFactory;
             this.walkingFactory = walkingFactory;
             this.attackingFactory = attackingFactory;
+            this.hurtFactory = hurtFactory;
             this.stateMachineFactory = stateMachineFactory;
             this.messageDispatcher = messageDispatcher;
         }
@@ -97,8 +100,9 @@ public class PlayerInputSystem extends IteratingSystem {
             Idle idle = idleFactory.create(name, controls);
             Walking walking = walkingFactory.create(name, controls);
             Attacking attacking = attackingFactory.create(name, controls);
+            Hurt hurt = hurtFactory.create(name, controls);
             InputStateMachine stateMachine = stateMachineFactory.create(entity, idle);
-            entity.add(new PlayerComponent(stateMachine, idle, walking, attacking));
+            entity.add(new PlayerComponent(stateMachine, idle, walking, attacking, hurt));
             stateMachine.getCurrentState().enter(entity);
             for (Message value : Message.values()) {
                 messageDispatcher.addListener(stateMachine, value.ordinal());

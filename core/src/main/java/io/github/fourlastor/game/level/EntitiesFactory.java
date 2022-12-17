@@ -86,6 +86,7 @@ public class EntitiesFactory {
                 Rectangle rectangle = value.getValue();
                 shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(flippedFactor * rectangle.x, rectangle.y).scl(scale), 0f);
                 Fixture fixture = body.createFixture(def);
+                fixture.setUserData(entity);
                 hitboxes.add(new BodyComponent.Box(value.getKey(), fixture));
             }
             def.filter.categoryBits = Bits.Category.HURTBOX.bits;
@@ -93,7 +94,8 @@ public class EntitiesFactory {
             for (Map.Entry<String, Rectangle> value : animationData.hurtboxes.entrySet()) {
                 Rectangle rectangle = value.getValue();
                 shape.setAsBox(rectangle.width * scale, rectangle.height * scale, new Vector2(flippedFactor * rectangle.x, rectangle.y).scl(scale), 0f);
-                body.createFixture(def);
+                Fixture fixture = body.createFixture(def);
+                fixture.setUserData(entity);
             }
             shape.dispose();
             return new BodyComponent(body, hitboxes);

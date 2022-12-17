@@ -11,6 +11,7 @@ import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
+import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
 
@@ -38,6 +39,10 @@ public abstract class InputState implements State<Entity> {
     }
 
     protected abstract AnimationData animation();
+
+    protected final float delta() {
+        return Gdx.graphics.getDeltaTime();
+    }
 
     @Override
     public void enter(Entity entity) {
@@ -84,6 +89,11 @@ public abstract class InputState implements State<Entity> {
 
     @Override
     public boolean onMessage(Entity entity, Telegram telegram) {
+        if (telegram.message == Message.PLAYER_HIT.ordinal() && telegram.extraInfo == entity) {
+            PlayerComponent player = players.get(entity);
+            player.stateMachine.changeState(player.hurt);
+            return true;
+        }
         return false;
     }
 
