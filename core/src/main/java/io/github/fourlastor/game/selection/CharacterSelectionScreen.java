@@ -251,6 +251,7 @@ public class CharacterSelectionScreen implements Screen {
     @Override
     public void hide() {
         inputMultiplexer.removeProcessor(processor);
+        music.stop();
     }
 
     @Override
