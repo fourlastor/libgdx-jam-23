@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.fourlastor.game.MyGdxGame;
+import io.github.fourlastor.game.di.modules.GameModule;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.route.Router;
 import io.github.fourlastor.game.ui.WaveActor;
@@ -27,12 +29,17 @@ import io.github.fourlastor.game.util.Text;
 import javax.inject.Inject;
 
 public class CharacterSelectionScreen implements Screen {
+    private static final float VOLUME = 0.4f;
     private final InputMultiplexer inputMultiplexer;
     private final TextureAtlas atlas;
     private final Router router;
 
     private final AssetManager assetManager;
     private final Stage stage = new Stage(new FitViewport(320f, 180f));
+    private final Music music;
+    private final Sound selectChange;
+    private final Sound selectFail;
+    private final Sound selectSuccess;
 
     private final String[] names = new String[]{
             "nissemor", "rumpnisse", "tontut", "langnisse",
@@ -73,9 +80,13 @@ public class CharacterSelectionScreen implements Screen {
                 updatePlayersData();
                 return true;
             }
-            if (Input.Keys.SPACE == keycode && valid[p1Index] && valid[p2Index]) {
-                router.goToLevel(names[p1Index], names[p2Index]);
-            }
+            if (Input.Keys.SPACE == keycode)
+                if (valid[p1Index] && valid[p2Index]) {
+                    selectSuccess.play(VOLUME);
+                    router.goToLevel(names[p1Index], names[p2Index]);
+                } else {
+                    selectFail.play(VOLUME);
+                }
             if (Input.Keys.M == keycode) {
                 if (music.isPlaying()) {
                     music.stop();
@@ -86,7 +97,6 @@ public class CharacterSelectionScreen implements Screen {
             return false;
         }
     };
-    private Music music;
 
     @Inject
     public CharacterSelectionScreen(
@@ -97,6 +107,11 @@ public class CharacterSelectionScreen implements Screen {
         this.atlas = atlas;
         this.router = router;
         this.assetManager = assetManager;
+        this.music = assetManager.get(GameModule.CHARACTER_SELECTION_BG);
+        this.music.setVolume(0.5f);
+        this.selectChange = assetManager.get(GameModule.SELECT_CHANGE);
+        this.selectFail = assetManager.get(GameModule.SELECT_FAIL);
+        this.selectSuccess = assetManager.get(GameModule.SELECT_SUCCESS);
     }
 
     @Override
@@ -111,9 +126,7 @@ public class CharacterSelectionScreen implements Screen {
         setup1P2PLine(root);
         setupCharacterNames(root);
         setupCharacterBigAvatars(root);
-        music = assetManager.get("music/character_selection_bg.mp3", Music.class);
         music.play();
-
         root.pack();
     }
 
@@ -161,6 +174,7 @@ public class CharacterSelectionScreen implements Screen {
     }
 
     private void updatePlayersData() {
+        selectChange.play(VOLUME);
         positionOnGrid(cursorP1, p1Index % 4, p1Index / 4);
         positionOnGrid(cursorP2, p2Index % 4, p2Index / 4);
         p1Avatar.setDrawable(characterPortrait(p1Index));
@@ -251,6 +265,7 @@ public class CharacterSelectionScreen implements Screen {
     @Override
     public void hide() {
         inputMultiplexer.removeProcessor(processor);
+        music.stop();
     }
 
     @Override
