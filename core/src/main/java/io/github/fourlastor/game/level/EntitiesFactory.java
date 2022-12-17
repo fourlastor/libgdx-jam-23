@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import io.github.fourlastor.game.MyGdxGame;
 import io.github.fourlastor.game.animation.AnimationImage;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.ActorComponent;
@@ -45,9 +46,16 @@ public class EntitiesFactory {
     }
 
     public Entity player(String name, Controls controls, boolean flipped) {
+        return player(name, controls, flipped, false);
+    }
+
+    public Entity player(String name, Controls controls, boolean flipped, boolean isImpostor) {
         CharacterAnimationData animationData = animations.get(name);
         Entity entity = new Entity();
         AnimationImage image = new AnimationImage();
+        if (isImpostor) {
+            image.setColor(MyGdxGame.IMPOSTOR_COLOR);
+        }
         float scale = config.scale;
         int flippedFactor = flipped ? -1 : 1;
         image.setScale(flippedFactor * scale, scale);

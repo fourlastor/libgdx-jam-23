@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import io.github.fourlastor.game.di.GameComponent;
 import io.github.fourlastor.game.level.di.LevelComponent;
 import io.github.fourlastor.game.level.di.LevelModule;
@@ -14,6 +15,7 @@ import io.github.fourlastor.game.selection.CharacterSelectionComponent;
 
 public class MyGdxGame extends Game implements Router {
 
+    public static final Color IMPOSTOR_COLOR = new Color(0.7f, 1f, 0.8f, 1f);
     private final InputMultiplexer multiplexer;
 
     private final LevelComponent.Builder levelScreenFactory;

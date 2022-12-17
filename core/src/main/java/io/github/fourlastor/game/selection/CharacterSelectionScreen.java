@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import io.github.fourlastor.game.MyGdxGame;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.route.Router;
 import io.github.fourlastor.game.ui.WaveActor;
@@ -155,6 +157,11 @@ public class CharacterSelectionScreen implements Screen {
         p1Avatar.setDrawable(characterPortrait(p1Index));
         p1Name.setDrawable(characterName(p1Index));
         p2Avatar.setDrawable(characterPortrait(p2Index));
+        if (p1Index == p2Index) {
+            p2Avatar.setColor(MyGdxGame.IMPOSTOR_COLOR);
+        } else {
+            p2Avatar.setColor(Color.WHITE);
+        }
         p2Name.setDrawable(characterName(p2Index));
     }
 

@@ -18,6 +18,7 @@ public class LevelScreen extends ScreenAdapter {
     private final World world;
     private final String p1;
     private final String p2;
+    private final boolean p2IsImpostor;
 
     @Inject
     public LevelScreen(
@@ -34,6 +35,7 @@ public class LevelScreen extends ScreenAdapter {
         this.world = world;
         this.p1 = p1;
         this.p2 = p2;
+        this.p2IsImpostor = p1.equals(p2);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class LevelScreen extends ScreenAdapter {
         engine.addEntity(entitiesFactory.background());
         engine.addEntity(entitiesFactory.base());
         engine.addEntity(entitiesFactory.player(p1, Controls.Setup.P1, false));
-        engine.addEntity(entitiesFactory.player(p2, Controls.Setup.P2, true));
+        engine.addEntity(entitiesFactory.player(p2, Controls.Setup.P2, true, p2IsImpostor));
     }
 
     @Override
