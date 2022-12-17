@@ -147,8 +147,6 @@ public class CharacterSelectionScreen implements Screen {
     }
 
     private ShaderProgram initShaderProgram(String vertexShader, String fragmentShader) {
-        Gdx.app.debug("Shader", "Vertex: " + vertexShader);
-        Gdx.app.debug("Shader", "Fragment: " + fragmentShader);
         ShaderProgram.pedantic = false;
         ShaderProgram shaderProgram = new ShaderProgram(vertexShader, fragmentShader);
         if (!shaderProgram.isCompiled())
