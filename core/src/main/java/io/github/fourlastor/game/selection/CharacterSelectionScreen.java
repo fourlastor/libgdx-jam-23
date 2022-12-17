@@ -120,7 +120,6 @@ public class CharacterSelectionScreen implements Screen {
         setupBackgrounds();
         Table root = new Table();
         root.setFillParent(true);
-        stage.addActor(root);
         root.padTop(2f);
         setupTopText(root);
         setup1P2PLine(root);
@@ -128,6 +127,7 @@ public class CharacterSelectionScreen implements Screen {
         setupCharacterBigAvatars(root);
         music.play();
         root.pack();
+        stage.addActor(root);
     }
 
     private void setupBackgrounds() {
