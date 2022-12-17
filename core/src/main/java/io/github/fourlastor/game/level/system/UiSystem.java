@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import io.github.fourlastor.game.component.AnimationFinishedComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 
@@ -62,7 +63,13 @@ public class UiSystem extends EntitySystem {
                     overlayImage.setOrigin(Align.center);
                     overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
                 }),
-                Actions.scaleTo(1f, 1f, 0.7f, Interpolation.bounceOut)
+                Actions.scaleTo(1f, 1f, 0.7f, Interpolation.bounceOut),
+                Actions.run(() -> {
+                    Entity entity = new Entity();
+                    entity.add(new AnimationFinishedComponent());
+                    engine.addEntity(entity);
+                    overlayImage.remove();
+                })
         ));
         stage.addActor(overlayImage);
     }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
+import io.github.fourlastor.game.component.AnimationFinishedComponent;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
@@ -27,6 +28,8 @@ public class PlayerInputSystem extends IteratingSystem {
 
     private static final Family FAMILY_REQUEST =
             Family.all(PlayerRequestComponent.class, BodyComponent.class).get();
+    private static final Family FAMILY_ANIMATION_FINISHED =
+            Family.all(AnimationFinishedComponent.class).get();
     private static final Family FAMILY = Family.all(
                     PlayerComponent.class, BodyComponent.class, AnimationImageComponent.class)
             .get();
@@ -54,14 +57,29 @@ public class PlayerInputSystem extends IteratingSystem {
         super.addedToEngine(engine);
         inputMultiplexer.addProcessor(inputProcessor);
         engine.addEntityListener(FAMILY_REQUEST, playerSetup);
+        setProcessing(false);
+        engine.addEntityListener(FAMILY_ANIMATION_FINISHED, enableOnAnimationFinished);
     }
 
     @Override
     public void removedFromEngine(Engine engine) {
         engine.removeEntityListener(playerSetup);
+        engine.removeEntityListener(enableOnAnimationFinished);
         inputMultiplexer.removeProcessor(inputProcessor);
         super.removedFromEngine(engine);
     }
+
+    private final EntityListener enableOnAnimationFinished = new EntityListener() {
+        @Override
+        public void entityAdded(Entity entity) {
+            setProcessing(true);
+        }
+
+        @Override
+        public void entityRemoved(Entity entity) {
+
+        }
+    };
 
     /**
      * Creates a player component whenever a request to set up a player is made.
