@@ -50,7 +50,7 @@ public class GoToNextScreenSystem extends EntitySystem implements Telegraph {
         if (msg.message == Message.PLAYER_DEFEATED.ordinal() && msg.extraInfo instanceof Player) {
             Player previousLoser = ((Player) msg.extraInfo);
             if (match.round == Round.FINAL_ROUND || (match.round == Round.ROUND_2 && previousLoser == match.previousLoser)) {
-                // TODO should celebrate the winner
+                dispatcher.dispatchMessage(Message.MATCH_END.ordinal(), previousLoser == Player.P1 ? Player.P2 : Player.P1);
             } else {
                 Round round = match.round == Round.ROUND_1 ? Round.ROUND_2 : Round.FINAL_ROUND;
                 router.goToLevel(match.p1, match.p2, round, previousLoser);

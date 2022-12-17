@@ -5,6 +5,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
+import com.badlogic.gdx.ai.msg.MessageDispatcher;
+import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.ai.msg.Telegraph;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -18,10 +21,12 @@ import io.github.fourlastor.game.component.AnimationFinishedComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.Match;
+import io.github.fourlastor.game.level.Message;
+import io.github.fourlastor.game.level.Player;
 
 import javax.inject.Inject;
 
-public class UiSystem extends EntitySystem {
+public class UiSystem extends EntitySystem implements Telegraph {
 
     private static final float UI_WIDTH = 320f;
     private static final float UI_HEIGHT = 180f;
@@ -31,15 +36,17 @@ public class UiSystem extends EntitySystem {
 
     private final TextureAtlas atlas;
     private final Match match;
+    private final MessageDispatcher dispatcher;
     private Image koImage;
 
     @Inject
     public UiSystem(
             TextureAtlas atlas,
-            Match match
-    ) {
+            Match match,
+            MessageDispatcher dispatcher) {
         this.atlas = atlas;
         this.match = match;
+        this.dispatcher = dispatcher;
     }
 
     @Override
@@ -79,11 +86,13 @@ public class UiSystem extends EntitySystem {
                 })
         ));
         stage.addActor(overlayImage);
+        dispatcher.addListener(this, Message.MATCH_END.ordinal());
     }
 
     @Override
     public void removedFromEngine(Engine engine) {
         super.removedFromEngine(engine);
+        dispatcher.removeListener(this);
         stage.dispose();
     }
 
@@ -119,4 +128,18 @@ public class UiSystem extends EntitySystem {
 
         }
     };
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        if (msg.message == Message.MATCH_END.ordinal() && msg.extraInfo instanceof Player) {
+            Player winner = ((Player) msg.extraInfo);
+            String winnerName = winner == Player.P1 ? match.p1 : match.p2;
+            Image overlayImage = new Image(atlas.findRegion("text-overlays/" + winnerName + "-won"));
+            overlayImage.setOrigin(Align.center);
+            overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
+            stage.addActor(overlayImage);
+            return true;
+        }
+        return false;
+    }
 }
