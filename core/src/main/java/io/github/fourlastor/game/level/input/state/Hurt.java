@@ -44,6 +44,8 @@ public class Hurt extends InputState {
         redTime = 0f;
         red = true;
         images.get(entity).image.setColor(Color.RED);
+        float x = players.get(entity).flipped ? 2f : -2f;
+        bodies.get(entity).body.setLinearVelocity(x, 0);
     }
 
     @Override
@@ -51,7 +53,7 @@ public class Hurt extends InputState {
         super.update(entity);
         redTime += delta();
         totalTime += delta();
-        if (totalTime >= 1f) {
+        if (totalTime >= 0.3f) {
             PlayerComponent player = players.get(entity);
             player.stateMachine.changeState(player.idle);
             return;

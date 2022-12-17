@@ -101,7 +101,7 @@ public class EntitiesFactory {
             return new BodyComponent(body, hitboxes);
         }));
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
-        entity.add(new PlayerRequestComponent(name, controls));
+        entity.add(new PlayerRequestComponent(name, controls, flipped));
         return entity;
     }
 

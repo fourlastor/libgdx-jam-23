@@ -10,9 +10,11 @@ public class PlayerRequestComponent implements Component {
 
     public final String name;
     public final Controls controls;
+    public final boolean flipped;
 
-    public PlayerRequestComponent(String name, Controls controls) {
+    public PlayerRequestComponent(String name, Controls controls, boolean flipped) {
         this.name = name;
         this.controls = controls;
+        this.flipped = flipped;
     }
 }

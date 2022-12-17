@@ -97,12 +97,13 @@ public class PlayerInputSystem extends IteratingSystem {
 
             String name = request.name;
             Controls controls = request.controls;
+            boolean flipped = request.flipped;
             Idle idle = idleFactory.create(name, controls);
             Walking walking = walkingFactory.create(name, controls);
             Attacking attacking = attackingFactory.create(name, controls);
             Hurt hurt = hurtFactory.create(name, controls);
             InputStateMachine stateMachine = stateMachineFactory.create(entity, idle);
-            entity.add(new PlayerComponent(stateMachine, idle, walking, attacking, hurt));
+            entity.add(new PlayerComponent(stateMachine, idle, walking, attacking, hurt, flipped));
             stateMachine.getCurrentState().enter(entity);
             for (Message value : Message.values()) {
                 messageDispatcher.addListener(stateMachine, value.ordinal());

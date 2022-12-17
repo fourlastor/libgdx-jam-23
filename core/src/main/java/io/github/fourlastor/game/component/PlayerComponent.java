@@ -17,17 +17,20 @@ public class PlayerComponent implements Component {
     public final Walking walking;
     public final Attacking attacking;
     public final Hurt hurt;
+    public final boolean flipped;
 
     public PlayerComponent(
             InputStateMachine stateMachine,
             Idle idle,
             Walking walking,
             Attacking attacking,
-            Hurt hurt) {
+            Hurt hurt,
+            boolean flipped) {
         this.stateMachine = stateMachine;
         this.idle = idle;
         this.walking = walking;
         this.attacking = attacking;
         this.hurt = hurt;
+        this.flipped = flipped;
     }
 }
