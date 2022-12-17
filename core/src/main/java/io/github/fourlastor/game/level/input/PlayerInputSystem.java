@@ -55,7 +55,6 @@ public class PlayerInputSystem extends IteratingSystem {
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
-        inputMultiplexer.addProcessor(inputProcessor);
         engine.addEntityListener(FAMILY_REQUEST, playerSetup);
         setProcessing(false);
         engine.addEntityListener(FAMILY_ANIMATION_FINISHED, enableOnAnimationFinished);
@@ -73,6 +72,7 @@ public class PlayerInputSystem extends IteratingSystem {
         @Override
         public void entityAdded(Entity entity) {
             setProcessing(true);
+            inputMultiplexer.addProcessor(inputProcessor);
         }
 
         @Override
