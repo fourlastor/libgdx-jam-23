@@ -10,24 +10,24 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
-import io.github.fourlastor.game.component.AnimatedImageComponent;
+import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.level.Message;
-import io.github.fourlastor.game.level.input.state.ChargeJump;
-import io.github.fourlastor.game.level.input.state.Falling;
-import io.github.fourlastor.game.level.input.state.Jumping;
-import io.github.fourlastor.game.level.input.state.OnGround;
+import io.github.fourlastor.game.level.input.controls.Controls;
+import io.github.fourlastor.game.level.input.state.Attacking;
+import io.github.fourlastor.game.level.input.state.Idle;
+import io.github.fourlastor.game.level.input.state.Walking;
+
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 public class PlayerInputSystem extends IteratingSystem {
 
     private static final Family FAMILY_REQUEST =
             Family.all(PlayerRequestComponent.class, BodyComponent.class).get();
     private static final Family FAMILY = Family.all(
-                    PlayerComponent.class, BodyComponent.class, AnimatedImageComponent.class)
+                    PlayerComponent.class, BodyComponent.class, AnimationImageComponent.class)
             .get();
 
     private final InputMultiplexer inputMultiplexer;
@@ -68,39 +68,37 @@ public class PlayerInputSystem extends IteratingSystem {
      */
     public static class PlayerSetup implements EntityListener {
 
-        private final Provider<OnGround> onGroundProvider;
-        private final Provider<Falling> fallingProvider;
-        private final Provider<Jumping> jumpingProvider;
-        private final Provider<ChargeJump> chargeJumpProvider;
+        private final Idle.Factory idleFactory;
+        private final Walking.Factory walkingFactory;
+        private final Attacking.Factory attackingFactory;
         private final InputStateMachine.Factory stateMachineFactory;
         private final MessageDispatcher messageDispatcher;
 
         @Inject
         public PlayerSetup(
-                Provider<OnGround> onGroundProvider,
-                Provider<Falling> fallingProvider,
-                Provider<Jumping> jumpingProvider,
-                Provider<ChargeJump> chargeJumpProvider,
+                Idle.Factory idleFactory,
+                Walking.Factory walkingFactory,
+                Attacking.Factory attackingFactory,
                 InputStateMachine.Factory stateMachineFactory,
                 MessageDispatcher messageDispatcher) {
-            this.onGroundProvider = onGroundProvider;
-            this.fallingProvider = fallingProvider;
-            this.jumpingProvider = jumpingProvider;
-            this.chargeJumpProvider = chargeJumpProvider;
+            this.idleFactory = idleFactory;
+            this.walkingFactory = walkingFactory;
+            this.attackingFactory = attackingFactory;
             this.stateMachineFactory = stateMachineFactory;
             this.messageDispatcher = messageDispatcher;
         }
 
         @Override
         public void entityAdded(Entity entity) {
-            entity.remove(PlayerRequestComponent.class);
-            Falling falling = fallingProvider.get();
-            InputStateMachine stateMachine = stateMachineFactory.create(entity, falling);
-            OnGround onGround = onGroundProvider.get();
-            Jumping jumping = jumpingProvider.get();
-            ChargeJump chargeJump = chargeJumpProvider.get();
+            PlayerRequestComponent request = entity.remove(PlayerRequestComponent.class);
 
-            entity.add(new PlayerComponent(stateMachine, onGround, falling, jumping, chargeJump));
+            String name = request.name;
+            Controls controls = request.controls;
+            Idle idle = idleFactory.create(name, controls);
+            Walking walking = walkingFactory.create(name, controls);
+            Attacking attacking = attackingFactory.create(name, controls);
+            InputStateMachine stateMachine = stateMachineFactory.create(entity, idle);
+            entity.add(new PlayerComponent(stateMachine, idle, walking, attacking));
             stateMachine.getCurrentState().enter(entity);
             for (Message value : Message.values()) {
                 messageDispatcher.addListener(stateMachine, value.ordinal());
@@ -108,10 +106,13 @@ public class PlayerInputSystem extends IteratingSystem {
         }
 
         @Override
-        public void entityRemoved(Entity entity) {}
+        public void entityRemoved(Entity entity) {
+        }
     }
 
-    /** Forwards the input to the current state. */
+    /**
+     * Forwards the input to the current state.
+     */
     private final InputProcessor inputProcessor = new InputAdapter() {
         @Override
         public boolean keyDown(int keycode) {

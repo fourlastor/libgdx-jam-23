@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set up butler
+        uses: jdno/setup-butler@v1
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
@@ -23,6 +25,6 @@ jobs:
         with:
           arguments: --no-daemon html:dist
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: html/build/dist
+        run: butler push html/build/dist sandramoen/kampenisse:html
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
