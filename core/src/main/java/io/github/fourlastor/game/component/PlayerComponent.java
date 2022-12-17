@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.component;
 
 import com.badlogic.ashley.core.Component;
+import io.github.fourlastor.game.level.Player;
 import io.github.fourlastor.game.level.input.InputStateMachine;
 import io.github.fourlastor.game.level.input.state.Attacking;
 import io.github.fourlastor.game.level.input.state.Hurt;
@@ -17,7 +18,7 @@ public class PlayerComponent implements Component {
     public final Walking walking;
     public final Attacking attacking;
     public final Hurt hurt;
-    public final boolean flipped;
+    public final Player player;
 
     public PlayerComponent(
             InputStateMachine stateMachine,
@@ -25,12 +26,12 @@ public class PlayerComponent implements Component {
             Walking walking,
             Attacking attacking,
             Hurt hurt,
-            boolean flipped) {
+            Player player) {
         this.stateMachine = stateMachine;
         this.idle = idle;
         this.walking = walking;
         this.attacking = attacking;
         this.hurt = hurt;
-        this.flipped = flipped;
+        this.player = player;
     }
 }

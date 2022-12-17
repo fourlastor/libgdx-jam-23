@@ -98,7 +98,7 @@ public class UiSystem extends EntitySystem {
             barContainer.addActor(barBg);
             barContainer.addActor(bar);
 
-            if (entity.getComponent(PlayerComponent.class).flipped) {
+            if (entity.getComponent(PlayerComponent.class).player.flipped) {
                 barContainer.setPosition(
                         UI_WIDTH / 2 + koImage.getWidth() / 2,
                         UI_HEIGHT - barBg.getHeight() - 6

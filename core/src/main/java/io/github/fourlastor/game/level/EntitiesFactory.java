@@ -48,13 +48,13 @@ public class EntitiesFactory {
 
     public Entity player(String name,
                          Controls controls,
-                         boolean flipped) {
-        return player(name, controls, flipped, false);
+                         Player player) {
+        return player(name, controls, player, false);
     }
 
     public Entity player(String name,
                          Controls controls,
-                         boolean flipped,
+                         Player player,
                          boolean isImpostor) {
         CharacterAnimationData animationData = animations.get(name);
         Entity entity = new Entity();
@@ -64,13 +64,13 @@ public class EntitiesFactory {
             image.setColor(MyGdxGame.IMPOSTOR_COLOR);
         }
         float scale = config.scale;
-        int flippedFactor = flipped ? -1 : 1;
+        int flippedFactor = player.flipped ? -1 : 1;
         image.setScale(flippedFactor * scale, scale);
         entity.add(new AnimationImageComponent(image));
         entity.add(new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
-            float x = flipped ? 15f : 1f;
+            float x = player.flipped ? 15f : 1f;
             float height = animationData.height * config.scale;
 
             bodyDef.position.set(new Vector2(x, height));
@@ -108,7 +108,7 @@ public class EntitiesFactory {
             return new BodyComponent(body, hitboxes);
         }));
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
-        entity.add(new PlayerRequestComponent(name, controls, flipped));
+        entity.add(new PlayerRequestComponent(name, controls, player));
         return entity;
     }
 

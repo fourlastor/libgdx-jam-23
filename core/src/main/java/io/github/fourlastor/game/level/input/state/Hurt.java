@@ -45,10 +45,11 @@ public class Hurt extends InputState {
         redTime = 0f;
         red = true;
         images.get(entity).image.setColor(Color.RED);
-        float x = players.get(entity).flipped ? 2f : -2f;
+        float x = players.get(entity).player.flipped ? 2f : -2f;
         bodies.get(entity).body.setLinearVelocity(x, 0);
-        hps.get(entity).hp -= 10;
-        hps.get(entity).hpChanged = true;
+        HpComponent hp = hps.get(entity);
+        hp.hp = Math.max(hp.hp - 10, 0);
+        hp.hpChanged = true;
     }
 
     @Override

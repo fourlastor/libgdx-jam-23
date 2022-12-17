@@ -51,8 +51,8 @@ public class LevelScreen extends ScreenAdapter {
     public void show() {
         engine.addEntity(entitiesFactory.background());
         engine.addEntity(entitiesFactory.base());
-        engine.addEntity(entitiesFactory.player(p1, Controls.Setup.P1, false));
-        engine.addEntity(entitiesFactory.player(p2, Controls.Setup.P2, true, p2IsImpostor));
+        engine.addEntity(entitiesFactory.player(p1, Controls.Setup.P1, Player.P1));
+        engine.addEntity(entitiesFactory.player(p2, Controls.Setup.P2, Player.P2, p2IsImpostor));
     }
 
     @Override
