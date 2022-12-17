@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -75,9 +76,17 @@ public class CharacterSelectionScreen implements Screen {
             if (Input.Keys.SPACE == keycode && valid[p1Index] && valid[p2Index]) {
                 router.goToLevel(names[p1Index], names[p2Index]);
             }
+            if (Input.Keys.M == keycode) {
+                if (music.isPlaying()) {
+                    music.stop();
+                } else {
+                    music.play();
+                }
+            }
             return false;
         }
     };
+    private Music music;
 
     @Inject
     public CharacterSelectionScreen(
@@ -102,6 +111,8 @@ public class CharacterSelectionScreen implements Screen {
         setup1P2PLine(root);
         setupCharacterNames(root);
         setupCharacterBigAvatars(root);
+        music = assetManager.get("music/character_selection_bg.mp3", Music.class);
+        music.play();
 
         root.pack();
     }

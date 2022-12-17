@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import dagger.Module;
 import dagger.Provides;
@@ -32,6 +33,7 @@ public class GameModule {
                 )
         );
         assetManager.load(PATH_TEXTURE_ATLAS, TextureAtlas.class);
+        assetManager.load("music/character_selection_bg.mp3", Music.class);
         assetManager.load(new AssetDescriptor<>("shaders/default.vs", Text.class, new TextLoader.TextParameter()));
         assetManager.load(new AssetDescriptor<>("shaders/wave.fs", Text.class, new TextLoader.TextParameter()));
         assetManager.finishLoading();
