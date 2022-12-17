@@ -10,6 +10,7 @@ import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.input.controls.Controls;
 
@@ -26,9 +27,10 @@ public class Attacking extends InputState {
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
-            Map<String, CharacterAnimationData> animations
+            Map<String, CharacterAnimationData> animations,
+            ComponentMapper<HpComponent> hps
     ) {
-        super(players, bodies, images, controls);
+        super(players, bodies, images, hps, controls);
         this.animation = animations.get(name).animations.get("attack_0");
     }
 

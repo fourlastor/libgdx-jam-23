@@ -10,6 +10,7 @@ import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.input.controls.Controls;
@@ -22,6 +23,7 @@ public abstract class InputState implements State<Entity> {
     protected final ComponentMapper<PlayerComponent> players;
     protected final ComponentMapper<BodyComponent> bodies;
     protected final ComponentMapper<AnimationImageComponent> images;
+    protected final ComponentMapper<HpComponent> hps;
     protected final Controls controls;
 
     private int playHead;
@@ -31,10 +33,12 @@ public abstract class InputState implements State<Entity> {
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
+            ComponentMapper<HpComponent> hps,
             Controls controls) {
         this.players = players;
         this.bodies = bodies;
         this.images = images;
+        this.hps = hps;
         this.controls = controls;
     }
 
@@ -72,6 +76,9 @@ public abstract class InputState implements State<Entity> {
                 box.feature.setFilterData(filter);
             }
         }
+
+        HpComponent hpComponent = hps.get(entity);
+        hpComponent.bar.setScale((float) hpComponent.hp / hpComponent.maxHp, 1f);
     }
 
     /**

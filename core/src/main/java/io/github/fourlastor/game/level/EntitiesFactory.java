@@ -17,6 +17,7 @@ import io.github.fourlastor.game.component.ActorComponent;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.blueprint.definitions.Platform;
@@ -59,6 +60,7 @@ public class EntitiesFactory {
                          boolean isImpostor) {
         CharacterAnimationData animationData = animations.get(name);
         Entity entity = new Entity();
+        entity.add(new HpComponent(hpBar));
         AnimationImage image = new AnimationImage();
         if (isImpostor) {
             image.setColor(MyGdxGame.IMPOSTOR_COLOR);
