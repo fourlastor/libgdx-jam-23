@@ -6,9 +6,12 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.fourlastor.game.component.HpComponent;
@@ -46,6 +49,22 @@ public class UiSystem extends EntitySystem {
         koImage.setPosition(UI_WIDTH / 2 - koImage.getWidth() / 2, UI_HEIGHT - koImage.getHeight());
         stage.addActor(koImage);
         engine.addEntityListener(Family.all(HpComponent.class, PlayerComponent.class).get(), entityListener);
+        Image overlayImage = new Image(atlas.findRegion("text-overlays/final-round"));
+        overlayImage.setOrigin(Align.center);
+        overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
+        overlayImage.addAction(Actions.sequence(
+                Actions.delay(0.7f),
+                Actions.scaleTo(0.01f, 0.01f, 0.3f),
+                Actions.run(() -> {
+                    TextureAtlas.AtlasRegion region = atlas.findRegion("text-overlays/fight");
+                    overlayImage.setDrawable(new TextureRegionDrawable(region));
+                    overlayImage.setSize(region.originalWidth, region.originalHeight);
+                    overlayImage.setOrigin(Align.center);
+                    overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
+                }),
+                Actions.scaleTo(1f, 1f, 0.7f, Interpolation.bounceOut)
+        ));
+        stage.addActor(overlayImage);
     }
 
     @Override
