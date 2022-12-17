@@ -20,6 +20,7 @@ import io.github.fourlastor.game.level.system.ClearScreenSystem;
 import io.github.fourlastor.game.level.system.MovingSystem;
 import io.github.fourlastor.game.level.system.SoundSystem;
 import io.github.fourlastor.game.level.system.StageSystem;
+import io.github.fourlastor.game.level.system.UiSystem;
 
 import javax.inject.Named;
 
@@ -56,9 +57,10 @@ public class LevelModule {
             StageSystem stageSystem,
             ClearScreenSystem clearScreenSystem,
             @SuppressWarnings("unused") // debug only
-                    PhysicsDebugSystem physicsDebugSystem,
+            PhysicsDebugSystem physicsDebugSystem,
             MovingSystem movingSystem,
-            SoundSystem soundSystem
+            SoundSystem soundSystem,
+            UiSystem uiSystem
     ) {
         Engine engine = new Engine();
         engine.addSystem(movingSystem);
@@ -68,6 +70,7 @@ public class LevelModule {
         engine.addSystem(actorFollowBodySystem);
         engine.addSystem(clearScreenSystem);
         engine.addSystem(stageSystem);
+        engine.addSystem(uiSystem);
 //        engine.addSystem(physicsDebugSystem);
         return engine;
     }

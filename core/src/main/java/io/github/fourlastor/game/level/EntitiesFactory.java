@@ -48,19 +48,17 @@ public class EntitiesFactory {
 
     public Entity player(String name,
                          Controls controls,
-                         Image hpBar,
                          boolean flipped) {
-        return player(name, controls, hpBar, flipped, false);
+        return player(name, controls, flipped, false);
     }
 
     public Entity player(String name,
                          Controls controls,
-                         Image hpBar,
                          boolean flipped,
                          boolean isImpostor) {
         CharacterAnimationData animationData = animations.get(name);
         Entity entity = new Entity();
-        entity.add(new HpComponent(hpBar));
+        entity.add(new HpComponent());
         AnimationImage image = new AnimationImage();
         if (isImpostor) {
             image.setColor(MyGdxGame.IMPOSTOR_COLOR);
