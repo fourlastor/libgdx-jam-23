@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dagger.Module;
 import dagger.Provides;
 import io.github.fourlastor.game.di.ScreenScoped;
+import io.github.fourlastor.game.level.Round;
 import io.github.fourlastor.game.level.WorldConfig;
 import io.github.fourlastor.game.level.input.PlayerInputSystem;
 import io.github.fourlastor.game.level.physics.PhysicsDebugSystem;
@@ -29,10 +30,12 @@ public class LevelModule {
 
     private final String p1Name;
     private final String p2Name;
+    private final Round round;
 
-    public LevelModule(String p1Name, String p2Name) {
+    public LevelModule(String p1Name, String p2Name, Round round) {
         this.p1Name = p1Name;
         this.p2Name = p2Name;
+        this.round = round;
     }
 
     @Provides
@@ -45,6 +48,11 @@ public class LevelModule {
     @Named("P2")
     public String p2() {
         return p2Name;
+    }
+
+    @Provides
+    public Round round() {
+        return round;
     }
 
 

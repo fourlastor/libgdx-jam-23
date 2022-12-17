@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.fourlastor.game.component.AnimationFinishedComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
+import io.github.fourlastor.game.level.Round;
 
 import javax.inject.Inject;
 
@@ -29,11 +30,16 @@ public class UiSystem extends EntitySystem {
     private final Stage stage = new Stage(new FitViewport(UI_WIDTH, UI_HEIGHT));
 
     private final TextureAtlas atlas;
+    private final Round round;
     private Image koImage;
 
     @Inject
-    public UiSystem(TextureAtlas atlas) {
+    public UiSystem(
+            TextureAtlas atlas,
+            Round round
+    ) {
         this.atlas = atlas;
+        this.round = round;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class UiSystem extends EntitySystem {
         koImage.setPosition(UI_WIDTH / 2 - koImage.getWidth() / 2, UI_HEIGHT - koImage.getHeight());
         stage.addActor(koImage);
         engine.addEntityListener(Family.all(HpComponent.class, PlayerComponent.class).get(), entityListener);
-        Image overlayImage = new Image(atlas.findRegion("text-overlays/final-round"));
+        Image overlayImage = new Image(atlas.findRegion("text-overlays/" + round.fileName));
         overlayImage.setOrigin(Align.center);
         overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
         overlayImage.addAction(Actions.sequence(
@@ -64,6 +70,7 @@ public class UiSystem extends EntitySystem {
                     overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
                 }),
                 Actions.scaleTo(1f, 1f, 0.7f, Interpolation.bounceOut),
+                Actions.delay(0.3f),
                 Actions.run(() -> {
                     Entity entity = new Entity();
                     entity.add(new AnimationFinishedComponent());
