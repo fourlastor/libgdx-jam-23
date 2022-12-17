@@ -45,11 +45,18 @@ public class EntitiesFactory {
         this.atlas = atlas;
     }
 
-    public Entity player(String name, Controls controls, boolean flipped) {
-        return player(name, controls, flipped, false);
+    public Entity player(String name,
+                         Controls controls,
+                         Image hpBar,
+                         boolean flipped) {
+        return player(name, controls, hpBar, flipped, false);
     }
 
-    public Entity player(String name, Controls controls, boolean flipped, boolean isImpostor) {
+    public Entity player(String name,
+                         Controls controls,
+                         Image hpBar,
+                         boolean flipped,
+                         boolean isImpostor) {
         CharacterAnimationData animationData = animations.get(name);
         Entity entity = new Entity();
         AnimationImage image = new AnimationImage();
