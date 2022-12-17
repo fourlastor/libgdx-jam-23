@@ -1,6 +1,23 @@
 # Libgdx jam 23
 
-test
+## Keys:
+
+### General
+
+- Mute music: `M`
+- Start fight: `Space`
+
+### Player 1
+
+- Left: `A`
+- Right: `D`
+- Attack: `F`
+
+### Player 2
+
+- Left: `J`
+- Right: `L`
+- Attack: `H`
 
 ## Credits
 
