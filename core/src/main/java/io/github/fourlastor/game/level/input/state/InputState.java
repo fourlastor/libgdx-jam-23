@@ -5,7 +5,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
@@ -78,7 +80,16 @@ public abstract class InputState implements State<Entity> {
         }
 
         HpComponent hpComponent = hps.get(entity);
-        hpComponent.bar.setScale((float) hpComponent.hp / hpComponent.maxHp, 1f);
+        if (hpComponent.hpChanged) {
+            hpComponent.hpChanged = false;
+            hpComponent.bar.clearActions();
+            hpComponent.bar.addAction(Actions.scaleTo(
+                    (float) hpComponent.hp / hpComponent.maxHp,
+                    1f,
+                    0.5f,
+                    Interpolation.bounce
+            ));
+        }
     }
 
     /**

@@ -48,6 +48,7 @@ public class Hurt extends InputState {
         float x = players.get(entity).flipped ? 2f : -2f;
         bodies.get(entity).body.setLinearVelocity(x, 0);
         hps.get(entity).hp -= 10;
+        hps.get(entity).hpChanged = true;
     }
 
     @Override
