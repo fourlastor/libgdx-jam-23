@@ -25,6 +25,7 @@ public class GameModule {
     public static final String SELECT_CHANGE = "audio/sound/character selection screen/select-change.wav";
     public static final String SELECT_FAIL = "audio/sound/character selection screen/select-fail.wav";
     public static final String SELECT_SUCCESS = "audio/sound/character selection screen/select-success.wav";
+    public static final String HIT = "audio/sound/arena/hit.wav";
     public static final String CHARACTER_SELECTION_BG = "audio/music/character_selection_bg.mp3";
     public static final String ARENA_BG = "audio/music/drawn_to_fight_-_title_screen.ogg";
 
@@ -44,6 +45,7 @@ public class GameModule {
         assetManager.load(SELECT_CHANGE, Sound.class);
         assetManager.load(SELECT_FAIL, Sound.class);
         assetManager.load(SELECT_SUCCESS, Sound.class);
+        assetManager.load(HIT, Sound.class);
         assetManager.load(new AssetDescriptor<>("shaders/default.vs", Text.class, new TextLoader.TextParameter()));
         assetManager.load(new AssetDescriptor<>("shaders/wave.fs", Text.class, new TextLoader.TextParameter()));
         assetManager.finishLoading();
