@@ -29,23 +29,6 @@
     ],
     "skins": {
         "default": {
-            "hitbox": {
-                "punch": {
-                    "name": "punch",
-                    "vertexCount": 4,
-                    "vertices": [
-                        3.97,
-                        3.25,
-                        3.97,
-                        -2.85,
-                        20.37,
-                        -2.7,
-                        20.37,
-                        3.4
-                    ],
-                    "type": "boundingbox"
-                }
-            },
             "hurtbox": {
                 "root_boundingBox": {
                     "name": "root_boundingBox",
@@ -109,6 +92,23 @@
                 "Idle 0": {
                     "name": "Idle 0"
                 }
+            },
+            "hitbox": {
+                "punch": {
+                    "name": "punch",
+                    "vertexCount": 4,
+                    "vertices": [
+                        3.97,
+                        3.25,
+                        3.97,
+                        -2.85,
+                        20.37,
+                        -2.7,
+                        20.37,
+                        3.4
+                    ],
+                    "type": "boundingbox"
+                }
             }
         }
     },
@@ -154,11 +154,11 @@
                             "name": "Right Punch 0"
                         },
                         {
-                            "time": 0.1667,
+                            "time": 0.1,
                             "name": "Right Punch 1"
                         },
                         {
-                            "time": 0.3334,
+                            "time": 0.25,
                             "name": "Right Punch 2"
                         }
                     ]
@@ -170,11 +170,11 @@
                             "name": ""
                         },
                         {
-                            "time": 0.1667,
+                            "time": 0.1,
                             "name": "punch"
                         },
                         {
-                            "time": 0.3334,
+                            "time": 0.25,
                             "name": ""
                         }
                     ]
