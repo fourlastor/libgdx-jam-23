@@ -12,8 +12,8 @@ public interface Controls {
     enum Setup implements Controls {
 
 
-        P1(Input.Keys.A, Input.Keys.D, Input.Keys.F),
-        P2(Input.Keys.J, Input.Keys.L, Input.Keys.H);
+        P1(Input.Keys.A, Input.Keys.D, Input.Keys.SPACE),
+        P2(Input.Keys.LEFT, Input.Keys.RIGHT, Input.Keys.ENTER);
 
         private final KeysControl left;
         private final KeysControl right;
