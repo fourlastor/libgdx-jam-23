@@ -32,6 +32,7 @@ public class Hurt extends InputState {
     private float totalTime;
     private float redTime;
     private boolean red;
+    private int damage;
 
     @AssistedInject
     public Hurt(
@@ -61,7 +62,7 @@ public class Hurt extends InputState {
         float x = player.flipped ? 2f : -2f;
         bodies.get(entity).body.setLinearVelocity(x, 0);
         HpComponent hp = hps.get(entity);
-        hp.hp = Math.max(hp.hp - 40, 0);
+        hp.hp = Math.max(hp.hp - damage, 0);
         hp.hpChanged = true;
         if (hp.hp == 0) {
             dispatcher.dispatchMessage(Message.PLAYER_DEFEATED.ordinal(), player);
@@ -101,6 +102,11 @@ public class Hurt extends InputState {
     @Override
     protected AnimationData animation() {
         return animation;
+    }
+
+    public Hurt withDamage(int damage) {
+        this.damage = damage;
+        return this;
     }
 
     @AssistedFactory

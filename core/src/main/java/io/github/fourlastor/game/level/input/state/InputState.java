@@ -14,6 +14,7 @@ import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
+import io.github.fourlastor.game.level.HurtData;
 import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
@@ -107,9 +108,14 @@ public abstract class InputState implements State<Entity> {
 
     @Override
     public boolean onMessage(Entity entity, Telegram telegram) {
-        if (telegram.message == Message.PLAYER_HIT.ordinal() && telegram.extraInfo == entity) {
+        Object extraInfo = telegram.extraInfo;
+        if (!(extraInfo instanceof HurtData)) {
+            return false;
+        }
+        HurtData data = (HurtData) extraInfo;
+        if (telegram.message == Message.PLAYER_HIT.ordinal() && data.entity == entity) {
             PlayerComponent player = players.get(entity);
-            player.stateMachine.changeState(player.hurt);
+            player.stateMachine.changeState(player.hurt.withDamage(data.damage));
             return true;
         }
         return false;
