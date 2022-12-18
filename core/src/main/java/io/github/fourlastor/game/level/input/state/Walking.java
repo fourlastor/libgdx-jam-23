@@ -2,7 +2,9 @@ package io.github.fourlastor.game.level.input.state;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -20,6 +22,7 @@ public class Walking extends InputState {
 
     private static final float VELOCITY = 4f;
     private final AnimationData animation;
+    private final Camera camera;
 
     @AssistedInject
     public Walking(
@@ -29,8 +32,10 @@ public class Walking extends InputState {
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             ComponentMapper<HpComponent> hps,
-            Map<String, CharacterAnimationData> animations) {
+            Map<String, CharacterAnimationData> animations,
+            Camera camera) {
         super(players, bodies, images, hps, controls);
+        this.camera = camera;
         this.animation = animations.get(name).animations.get("walking");
     }
 
@@ -83,7 +88,15 @@ public class Walking extends InputState {
     }
 
     private void updateBodyVelocity(Entity entity) {
-        bodies.get(entity).body.setLinearVelocity(velocity);
+        Body body = bodies.get(entity).body;
+        boolean goingLeft = velocity.x < 0;
+        boolean atLeftLimit = body.getPosition().x - 1 <= camera.position.x - camera.viewportWidth / 2f;
+        boolean atRightLimit = body.getPosition().x + 1 >= camera.position.x + camera.viewportWidth / 2f;
+        if ((goingLeft && atLeftLimit) || (!goingLeft && atRightLimit)) {
+            body.setLinearVelocity(Vector2.Zero);
+        } else {
+            body.setLinearVelocity(velocity);
+        }
     }
 
     @AssistedFactory
