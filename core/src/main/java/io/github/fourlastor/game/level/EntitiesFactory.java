@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import io.github.fourlastor.game.Fighter;
 import io.github.fourlastor.game.MyGdxGame;
 import io.github.fourlastor.game.animation.AnimationImage;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
@@ -45,17 +46,17 @@ public class EntitiesFactory {
         this.atlas = atlas;
     }
 
-    public Entity player(String name,
+    public Entity player(Fighter fighter,
                          Controls controls,
                          Player player) {
-        return player(name, controls, player, false);
+        return player(fighter, controls, player, false);
     }
 
-    public Entity player(String name,
+    public Entity player(Fighter fighter,
                          Controls controls,
                          Player player,
                          boolean isImpostor) {
-        CharacterAnimationData animationData = animations.get(name);
+        CharacterAnimationData animationData = animations.get(fighter.charName);
         Entity entity = new Entity();
         entity.add(new HpComponent());
         AnimationImage image = new AnimationImage();
@@ -107,7 +108,7 @@ public class EntitiesFactory {
             return new BodyComponent(body, hitboxes);
         }));
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
-        entity.add(new PlayerRequestComponent(name, controls, player));
+        entity.add(new PlayerRequestComponent(fighter, controls, player));
         return entity;
     }
 

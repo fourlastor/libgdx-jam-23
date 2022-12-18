@@ -29,23 +29,6 @@
     ],
     "skins": {
         "default": {
-            "hurtbox": {
-                "hurtbox": {
-                    "name": "hurtbox",
-                    "vertexCount": 4,
-                    "vertices": [
-                        -8.05,
-                        19.35,
-                        -7.6,
-                        -23.45,
-                        9.35,
-                        -23.65,
-                        8.9,
-                        19.15
-                    ],
-                    "type": "boundingbox"
-                }
-            },
             "hitbox": {
                 "kick": {
                     "name": "kick",
@@ -59,6 +42,23 @@
                         -0.55,
                         23.85,
                         8.5
+                    ],
+                    "type": "boundingbox"
+                }
+            },
+            "hurtbox": {
+                "hurtbox": {
+                    "name": "hurtbox",
+                    "vertexCount": 4,
+                    "vertices": [
+                        -8.05,
+                        19.35,
+                        -7.6,
+                        -23.45,
+                        9.35,
+                        -23.65,
+                        8.9,
+                        19.15
                     ],
                     "type": "boundingbox"
                 }
@@ -196,15 +196,15 @@
                             "name": "Left Kick 0"
                         },
                         {
-                            "time": 0.1667,
+                            "time": 0.1,
                             "name": "Left Kick 1"
                         },
                         {
-                            "time": 0.3334,
+                            "time": 0.2,
                             "name": "Left Kick 2"
                         },
                         {
-                            "time": 0.5001,
+                            "time": 0.35,
                             "name": "Left Kick 3"
                         }
                     ]
@@ -216,11 +216,11 @@
                             "name": ""
                         },
                         {
-                            "time": 0.3333,
+                            "time": 0.2,
                             "name": "kick"
                         },
                         {
-                            "time": 0.5,
+                            "time": 0.35,
                             "name": ""
                         }
                     ]

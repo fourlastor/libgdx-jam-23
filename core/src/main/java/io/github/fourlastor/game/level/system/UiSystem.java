@@ -136,7 +136,7 @@ public class UiSystem extends EntitySystem implements Telegraph {
     public boolean handleMessage(Telegram msg) {
         if (msg.message == Message.MATCH_END.ordinal() && msg.extraInfo instanceof Player) {
             Player winner = ((Player) msg.extraInfo);
-            String winnerName = winner == Player.P1 ? match.p1 : match.p2;
+            String winnerName = winner == Player.P1 ? match.p1.charName : match.p2.charName;
             Image overlayImage = new Image(atlas.findRegion("text-overlays/" + winnerName + "-won"));
             overlayImage.setOrigin(Align.center);
             overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);

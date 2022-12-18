@@ -15,6 +15,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.component.PlayerComponent;
+import io.github.fourlastor.game.level.HurtData;
 import io.github.fourlastor.game.level.Message;
 
 import javax.inject.Inject;
@@ -145,11 +147,17 @@ public class PhysicsSystem extends IntervalSystem {
     };
 
     private void propagateHit(@SuppressWarnings("unused") Fixture hitbox, Fixture hurtbox) {
-        Object userData = hurtbox.getUserData();
-        if (!(userData instanceof Entity)) {
+        Object hitUserData = hitbox.getUserData();
+        Object hurtUserData = hurtbox.getUserData();
+        if (!(hurtUserData instanceof Entity) || !(hitUserData instanceof Entity)) {
             return;
         }
+        Entity hurt = (Entity) hurtUserData;
+        Entity hit = (Entity) hitUserData;
 
-        messageDispatcher.dispatchMessage(Message.PLAYER_HIT.ordinal(), userData);
+        messageDispatcher.dispatchMessage(Message.PLAYER_HIT.ordinal(), new HurtData(
+                hurt,
+                hit.getComponent(PlayerComponent.class).fighter.damage
+        ));
     }
 }

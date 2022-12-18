@@ -10,6 +10,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
+import io.github.fourlastor.game.Fighter;
 import io.github.fourlastor.game.component.AnimationFinishedComponent;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
@@ -114,7 +115,8 @@ public class PlayerInputSystem extends IteratingSystem {
         public void entityAdded(Entity entity) {
             PlayerRequestComponent request = entity.remove(PlayerRequestComponent.class);
 
-            String name = request.name;
+            Fighter fighter = request.fighter;
+            String name = fighter.charName;
             Controls controls = request.controls;
             Player player = request.player;
             Idle idle = idleFactory.create(name, controls);
@@ -122,7 +124,7 @@ public class PlayerInputSystem extends IteratingSystem {
             Attacking attacking = attackingFactory.create(name, controls);
             Hurt hurt = hurtFactory.create(name, controls);
             InputStateMachine stateMachine = stateMachineFactory.create(entity, idle);
-            entity.add(new PlayerComponent(stateMachine, idle, walking, attacking, hurt, player));
+            entity.add(new PlayerComponent(stateMachine, idle, walking, attacking, hurt, player, fighter));
             stateMachine.getCurrentState().enter(entity);
             for (Message value : Message.values()) {
                 messageDispatcher.addListener(stateMachine, value.ordinal());

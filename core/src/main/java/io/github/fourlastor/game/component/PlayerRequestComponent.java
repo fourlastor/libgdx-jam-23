@@ -1,6 +1,7 @@
 package io.github.fourlastor.game.component;
 
 import com.badlogic.ashley.core.Component;
+import io.github.fourlastor.game.Fighter;
 import io.github.fourlastor.game.level.Player;
 import io.github.fourlastor.game.level.input.controls.Controls;
 
@@ -9,12 +10,12 @@ import io.github.fourlastor.game.level.input.controls.Controls;
  */
 public class PlayerRequestComponent implements Component {
 
-    public final String name;
+    public final Fighter fighter;
     public final Controls controls;
     public final Player player;
 
-    public PlayerRequestComponent(String name, Controls controls, Player player) {
-        this.name = name;
+    public PlayerRequestComponent(Fighter fighter, Controls controls, Player player) {
+        this.fighter = fighter;
         this.controls = controls;
         this.player = player;
     }

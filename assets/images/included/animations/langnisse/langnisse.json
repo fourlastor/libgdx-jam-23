@@ -178,19 +178,19 @@
                             "name": "Right Kick 0"
                         },
                         {
-                            "time": 0.2167,
+                            "time": 0.1167,
                             "name": "Right Kick 1"
                         },
                         {
-                            "time": 0.4,
+                            "time": 0.3,
                             "name": "Right Kick 2"
                         },
                         {
-                            "time": 0.5667,
+                            "time": 0.4333,
                             "name": "Right Kick 3"
                         },
                         {
-                            "time": 0.6667,
+                            "time": 0.5666,
                             "name": "Right Kick 4"
                         }
                     ]
@@ -202,11 +202,11 @@
                             "name": ""
                         },
                         {
-                            "time": 0.4,
+                            "time": 0.3,
                             "name": "kick"
                         },
                         {
-                            "time": 0.5667,
+                            "time": 0.4333,
                             "name": ""
                         }
                     ]
