@@ -45,7 +45,7 @@ public class LevelScreen extends ScreenAdapter {
         this.match = match;
         this.p2IsImpostor = match.p1.equals(match.p2);
         this.music = assetManager.get(GameModule.ARENA_BG);
-        music.setVolume(0.5f);
+        music.setVolume(0.3f);
         this.multiplexer = multiplexer;
     }
 

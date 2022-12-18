@@ -3,6 +3,8 @@ package io.github.fourlastor.game.level.input.state;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.ai.msg.MessageDispatcher;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
@@ -14,6 +16,7 @@ import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
+import io.github.fourlastor.game.di.modules.GameModule;
 import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.Player;
 import io.github.fourlastor.game.level.input.controls.Controls;
@@ -24,6 +27,7 @@ public class Hurt extends InputState {
 
     private final AnimationData animation;
     private final MessageDispatcher dispatcher;
+    private final Sound sound;
 
     private float totalTime;
     private float redTime;
@@ -37,15 +41,18 @@ public class Hurt extends InputState {
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             Map<String, CharacterAnimationData> animations, ComponentMapper<HpComponent> hps,
-            MessageDispatcher dispatcher) {
+            MessageDispatcher dispatcher,
+            AssetManager assetManager) {
         super(players, bodies, images, hps, controls);
         this.dispatcher = dispatcher;
         this.animation = animations.get(name).animations.get("idle");
+        this.sound = assetManager.get(GameModule.HIT);
     }
 
     @Override
     public void enter(Entity entity) {
         super.enter(entity);
+        sound.play(1f);
         totalTime = 0f;
         redTime = 0f;
         red = true;
