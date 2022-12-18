@@ -22,3 +22,4 @@
 ## Credits
 
 Character selection music: https://freesound.org/people/mrrap4food/sounds/493918/
+Battle music: https://opengameart.org/content/drawn-to-fight-title-screen

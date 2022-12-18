@@ -26,6 +26,7 @@ public class GameModule {
     public static final String SELECT_FAIL = "audio/sound/character selection screen/select-fail.wav";
     public static final String SELECT_SUCCESS = "audio/sound/character selection screen/select-success.wav";
     public static final String CHARACTER_SELECTION_BG = "audio/music/character_selection_bg.mp3";
+    public static final String ARENA_BG = "audio/music/drawn_to_fight_-_title_screen.ogg";
 
     @Provides
     @Singleton
@@ -39,6 +40,7 @@ public class GameModule {
         );
         assetManager.load(PATH_TEXTURE_ATLAS, TextureAtlas.class);
         assetManager.load(CHARACTER_SELECTION_BG, Music.class);
+        assetManager.load(ARENA_BG, Music.class);
         assetManager.load(SELECT_CHANGE, Sound.class);
         assetManager.load(SELECT_FAIL, Sound.class);
         assetManager.load(SELECT_SUCCESS, Sound.class);
