@@ -3,6 +3,7 @@ package io.github.fourlastor.game.animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import io.github.fourlastor.game.Fighter;
 import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
@@ -22,27 +23,28 @@ import java.util.Map;
 
 public class EntityAnimationDataParser {
 
-    private final Map<String, Integer> animationLengths = new HashMap<>();
-
     private final TextureAtlas atlas;
 
     @Inject
     public EntityAnimationDataParser(TextureAtlas atlas) {
         this.atlas = atlas;
-        animationLengths.put("idle", 800);
-        animationLengths.put("attack_0", 800);
-        animationLengths.put("walking", 800);
     }
 
     public CharacterAnimationData parseCharacterData(EntityData data, String name) {
+        Fighter fighter = Fighter.fighter(name);
+        Map<String, Integer> animationLengths = new HashMap<>();
+
+        animationLengths.put("idle", fighter.idle);
+        animationLengths.put("attack_0", fighter.attack);
+        animationLengths.put("walking", fighter.walking);
         return new CharacterAnimationData(
                 data.skeleton.width, data.skeleton.height, parseBoundingBoxes(data.skins.get("hitbox")),
                 parseBoundingBoxes(data.skins.get("hurtbox")),
-                parseAnimations(data.animations, name)
+                parseAnimations(data.animations, name, animationLengths)
         );
     }
 
-    private Map<String, AnimationData> parseAnimations(Map<String, Animation> animations, String name) {
+    private Map<String, AnimationData> parseAnimations(Map<String, Animation> animations, String name, Map<String, Integer> animationLengths) {
         HashMap<String, AnimationData> animationMap = new HashMap<>();
         for (Animation it : animations.values()) {
             animationMap.put(it.name, new AnimationData(

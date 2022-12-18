@@ -64,10 +64,11 @@ public class MyGdxGame extends Game implements Router {
 
     @Override
     public void goToLevel(String p1, String p2, Round round, Player previousLoser) {
+
         pendingScreen =
                 levelScreenFactory
                         .router(new RouterModule(this))
-                        .level(new LevelModule(new Match(round, p1, p2, previousLoser)))
+                        .level(new LevelModule(new Match(round, Fighter.fighter(p1), Fighter.fighter(p2), previousLoser)))
                         .build()
                         .screen();
     }

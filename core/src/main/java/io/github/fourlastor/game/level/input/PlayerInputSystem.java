@@ -114,7 +114,7 @@ public class PlayerInputSystem extends IteratingSystem {
         public void entityAdded(Entity entity) {
             PlayerRequestComponent request = entity.remove(PlayerRequestComponent.class);
 
-            String name = request.name;
+            String name = request.fighter.charName;
             Controls controls = request.controls;
             Player player = request.player;
             Idle idle = idleFactory.create(name, controls);
