@@ -20,7 +20,6 @@ import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
-import io.github.fourlastor.game.level.blueprint.definitions.Platform;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
 
@@ -160,7 +159,7 @@ public class EntitiesFactory {
             bodyDef.position.set(position);
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(Platform.Width.SIXTEEN.width / 2f, 0.25f);
+            shape.setAsBox(50f, 0.25f);
             body.createFixture(shape, 0.0f).setUserData(UserData.PLATFORM);
             shape.dispose();
             return new BodyComponent(body);
