@@ -112,30 +112,55 @@ public class EntitiesFactory {
         return entity;
     }
 
-    public Entity background() {
+    public ArrayList<Entity> backgroundLayers() {
+        String[] bgLayers = new String[]{
+                "sky",
+                "mountains",
+                "bg trees",
+                "mg trees",
+                "bg bg characters",
+                "ground",
+        };
+        String[] fgLayers = new String[]{
+                "fg ground",
+                "fg crowd",
+        };
+        ArrayList<Entity> layers = new ArrayList<>(8);
+
+        for (String layer : bgLayers) {
+            layers.add(createLayer(layer, ActorComponent.Layer.BG_PARALLAX));
+        }
+
+        for (String layer : fgLayers) {
+            layers.add(createLayer(layer, ActorComponent.Layer.FG_PARALLAX));
+        }
+        return layers;
+    }
+
+    private Entity createLayer(String name, ActorComponent.Layer layer) {
         Entity entity = new Entity();
-        Image image = new Image(atlas.findRegion("arena/arena 0/arena 0"));
+        Image image = new Image(atlas.findRegion("arena/arena 0/layers/arena 0_" + name));
         image.setScale(config.scale);
         image.setPosition(0, 0);
-        entity.add(new ActorComponent(image, ActorComponent.Layer.BG_PARALLAX));
+        entity.add(new ActorComponent(image, layer));
         return entity;
     }
 
     public Entity base() {
         Entity entity = new Entity();
         Vector2 initialPosition = new Vector2(config.width / 2, 1f);
-        entity.add(platformBuilder(initialPosition, Platform.Width.SIXTEEN));
+        entity.add(platformBuilder(initialPosition));
         return entity;
     }
 
-    private BodyBuilderComponent platformBuilder(Vector2 position, Platform.Width width) {
+    private BodyBuilderComponent platformBuilder(Vector2 position) {
         return new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.KinematicBody;
             bodyDef.position.set(position);
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(width.width / 2f, 0.25f);
+            shape.setAsBox(Platform.Width.SIXTEEN.width / 2f, 0.25f);
             body.createFixture(shape, 0.0f).setUserData(UserData.PLATFORM);
             shape.dispose();
             return new BodyComponent(body);
