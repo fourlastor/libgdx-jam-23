@@ -2,7 +2,10 @@ package io.github.fourlastor.game.level;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
@@ -65,6 +68,7 @@ public class LevelScreen extends ScreenAdapter {
         engine.addEntity(entitiesFactory.player(match.p1, Controls.Setup.P1, Player.P1));
         engine.addEntity(entitiesFactory.player(match.p2, Controls.Setup.P2, Player.P2, p2IsImpostor));
         music.play();
+        multiplexer.addProcessor(muteWithM);
     }
 
     @Override
@@ -72,6 +76,7 @@ public class LevelScreen extends ScreenAdapter {
         music.stop();
         engine.removeAllEntities();
         engine.removeAllSystems();
+        multiplexer.removeProcessor(muteWithM);
     }
 
     @Override
@@ -79,4 +84,19 @@ public class LevelScreen extends ScreenAdapter {
         super.dispose();
         world.dispose();
     }
+
+    private final InputProcessor muteWithM = new InputAdapter() {
+        @Override
+        public boolean keyDown(int keycode) {
+            if (keycode == Input.Keys.M) {
+                if (music.isPlaying()) {
+                    music.stop();
+                } else {
+                    music.play();
+                }
+                return true;
+            }
+            return super.keyDown(keycode);
+        }
+    };
 }
