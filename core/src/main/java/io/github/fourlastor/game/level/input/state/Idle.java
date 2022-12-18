@@ -2,7 +2,7 @@ package io.github.fourlastor.game.level.input.state;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.graphics.Camera;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -16,7 +16,7 @@ import io.github.fourlastor.game.level.input.controls.Controls;
 
 import java.util.Map;
 
-public class Idle extends InputState {
+public class Idle extends OnGround {
 
     private final AnimationData animation;
 
@@ -28,9 +28,10 @@ public class Idle extends InputState {
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             Map<String, CharacterAnimationData> animations,
-            ComponentMapper<HpComponent> hps
+            ComponentMapper<HpComponent> hps,
+            Camera camera
     ) {
-        super(players, bodies, images, hps, controls);
+        super(players, bodies, images, hps, controls, camera);
         this.animation = animations.get(name).animations.get("idle");
     }
 
@@ -39,27 +40,14 @@ public class Idle extends InputState {
         return animation;
     }
 
-    @Override
-    public boolean keyDown(Entity entity, int keycode) {
-        boolean goingLeft = controls.left().matches(keycode);
-        boolean goingRight = controls.right().matches(keycode);
-        if (goingLeft || goingRight) {
-            PlayerComponent player = players.get(entity);
-            player.stateMachine.changeState(player.walking);
-            return true;
-        }
-        if (controls.attack().matches(keycode)) {
-            PlayerComponent player = players.get(entity);
-            player.stateMachine.changeState(player.attacking);
-            return true;
-        }
-        return super.keyDown(entity, keycode);
-    }
 
     @Override
     public void update(Entity entity) {
         super.update(entity);
-        bodies.get(entity).body.setLinearVelocity(Vector2.Zero);
+        if (isMoving()) {
+            PlayerComponent player = players.get(entity);
+            player.stateMachine.changeState(player.walking);
+        }
     }
 
     @AssistedFactory
