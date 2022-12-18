@@ -63,25 +63,27 @@ public class CharacterSelectionScreen implements Screen {
 
         @Override
         public boolean keyDown(int keycode) {
-            if (Controls.Setup.P1.left().matches(keycode)) {
+            Controls.Setup p1 = Controls.Setup.P1;
+            Controls.Setup p2 = Controls.Setup.P2;
+            if (p1.left().matches(keycode)) {
                 p1Index = Math.max(0, p1Index - 1);
                 updatePlayersData();
                 return true;
-            } else if (Controls.Setup.P1.right().matches(keycode)) {
+            } else if (p1.right().matches(keycode)) {
                 p1Index = Math.min(7, p1Index + 1);
                 updatePlayersData();
                 return true;
             }
-            if (Controls.Setup.P2.left().matches(keycode)) {
+            if (p2.left().matches(keycode)) {
                 p2Index = Math.max(0, p2Index - 1);
                 updatePlayersData();
                 return true;
-            } else if (Controls.Setup.P2.right().matches(keycode)) {
+            } else if (p2.right().matches(keycode)) {
                 p2Index = Math.min(7, p2Index + 1);
                 updatePlayersData();
                 return true;
             }
-            if (Input.Keys.SPACE == keycode)
+            if (p1.attack().matches(keycode) || p2.attack().matches(keycode))
                 if (valid[p1Index] && valid[p2Index]) {
                     selectSuccess.play(VOLUME);
                     router.goToLevel(names[p1Index], names[p2Index], Round.ROUND_1, null);
