@@ -128,12 +128,4 @@ public abstract class InputState implements State<Entity> {
     public boolean keyUp(Entity entity, int keycode) {
         return false;
     }
-
-    public boolean touchDown(Entity entity, int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    public boolean touchUp(Entity entity, int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
 }
