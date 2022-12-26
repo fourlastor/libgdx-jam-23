@@ -20,7 +20,6 @@ import java.util.Map;
 public class Attacking extends CharacterState {
 
     private final AnimationData animation;
-    private final ComponentMapper<InputComponent> inputs;
 
     @AssistedInject
     public Attacking(
@@ -32,8 +31,7 @@ public class Attacking extends CharacterState {
             ComponentMapper<HpComponent> hps,
             ComponentMapper<InputComponent> inputs
     ) {
-        super(players, bodies, images, hps);
-        this.inputs = inputs;
+        super(players, bodies, images, hps, inputs);
         this.animation = animations.get(name).animations.get("attack_0");
     }
 

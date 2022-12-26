@@ -15,6 +15,7 @@ import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.di.modules.GameModule;
 import io.github.fourlastor.game.level.Message;
@@ -39,10 +40,11 @@ public class Hurt extends CharacterState {
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
+            ComponentMapper<InputComponent> inputs,
             Map<String, CharacterAnimationData> animations, ComponentMapper<HpComponent> hps,
             MessageDispatcher dispatcher,
             AssetManager assetManager) {
-        super(players, bodies, images, hps);
+        super(players, bodies, images, hps, inputs);
         this.dispatcher = dispatcher;
         this.animation = animations.get(name).animations.get("idle");
         this.sound = assetManager.get(GameModule.HIT);

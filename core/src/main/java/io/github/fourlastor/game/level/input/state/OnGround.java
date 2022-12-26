@@ -14,7 +14,6 @@ import io.github.fourlastor.game.level.input.controls.Command;
 
 public abstract class OnGround extends CharacterState {
     private static final float VELOCITY = 4f;
-    private final ComponentMapper<InputComponent> inputs;
     private final Camera camera;
     private final Vector2 velocity = Vector2.Zero.cpy();
 
@@ -24,8 +23,7 @@ public abstract class OnGround extends CharacterState {
                     ComponentMapper<HpComponent> hps,
                     ComponentMapper<InputComponent> inputs,
                     Camera camera) {
-        super(players, bodies, images, hps);
-        this.inputs = inputs;
+        super(players, bodies, images, hps, inputs);
         this.camera = camera;
     }
 
