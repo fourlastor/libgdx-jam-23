@@ -13,7 +13,8 @@ import dagger.Provides;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.Match;
 import io.github.fourlastor.game.level.WorldConfig;
-import io.github.fourlastor.game.level.input.PlayerInputSystem;
+import io.github.fourlastor.game.level.input.CharacterStateSystem;
+import io.github.fourlastor.game.level.input.InputBufferSystem;
 import io.github.fourlastor.game.level.physics.PhysicsDebugSystem;
 import io.github.fourlastor.game.level.physics.PhysicsSystem;
 import io.github.fourlastor.game.level.system.ActorFollowBodySystem;
@@ -43,7 +44,7 @@ public class LevelModule {
     @Provides
     @ScreenScoped
     public Engine engine(
-            PlayerInputSystem playerInputSystem,
+            CharacterStateSystem characterStateSystem,
             PhysicsSystem physicsSystem,
             ActorFollowBodySystem actorFollowBodySystem,
             StageSystem stageSystem,
@@ -54,11 +55,13 @@ public class LevelModule {
             SoundSystem soundSystem,
             UiSystem uiSystem,
             GoToNextScreenSystem goToNextScreenSystem,
-            CameraMovementSystem cameraMovementSystem
+            CameraMovementSystem cameraMovementSystem,
+            InputBufferSystem inputBufferSystem
     ) {
         Engine engine = new Engine();
         engine.addSystem(movingSystem);
-        engine.addSystem(playerInputSystem);
+        engine.addSystem(inputBufferSystem);
+        engine.addSystem(characterStateSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(soundSystem);
         engine.addSystem(actorFollowBodySystem);

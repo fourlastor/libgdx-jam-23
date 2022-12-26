@@ -11,26 +11,29 @@ import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.input.controls.Controls;
+import io.github.fourlastor.game.level.input.controls.Command;
 
 import java.util.Map;
 
-public class Attacking extends InputState {
+public class Attacking extends CharacterState {
 
     private final AnimationData animation;
+    private final ComponentMapper<InputComponent> inputs;
 
     @AssistedInject
     public Attacking(
             @Assisted String name,
-            @Assisted Controls controls,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             Map<String, CharacterAnimationData> animations,
-            ComponentMapper<HpComponent> hps
+            ComponentMapper<HpComponent> hps,
+            ComponentMapper<InputComponent> inputs
     ) {
-        super(players, bodies, images, hps, controls);
+        super(players, bodies, images, hps);
+        this.inputs = inputs;
         this.animation = animations.get(name).animations.get("attack_0");
     }
 
@@ -53,7 +56,8 @@ public class Attacking extends InputState {
         timePassed += Gdx.graphics.getDeltaTime();
         if (timePassed * 1000 >= animation.duration) {
             PlayerComponent player = players.get(entity);
-            if (controls.left().pressed() || controls.right().pressed()) {
+            Command command = inputs.get(entity).command;
+            if (command == Command.LEFT || command == Command.RIGHT) {
                 player.stateMachine.changeState(player.walking);
             } else {
                 player.stateMachine.changeState(player.idle);
@@ -64,6 +68,6 @@ public class Attacking extends InputState {
 
     @AssistedFactory
     public interface Factory {
-        Attacking create(String name, Controls controls);
+        Attacking create(String name);
     }
 }

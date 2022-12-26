@@ -16,33 +16,29 @@ import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.HurtData;
 import io.github.fourlastor.game.level.Message;
-import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
 
 import java.util.List;
 
-public abstract class InputState implements State<Entity> {
+public abstract class CharacterState implements State<Entity> {
 
     protected final ComponentMapper<PlayerComponent> players;
     protected final ComponentMapper<BodyComponent> bodies;
     protected final ComponentMapper<AnimationImageComponent> images;
     protected final ComponentMapper<HpComponent> hps;
-    protected final Controls controls;
 
     private int playHead;
     private int lastIndex;
 
-    public InputState(
+    public CharacterState(
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
-            ComponentMapper<HpComponent> hps,
-            Controls controls) {
+            ComponentMapper<HpComponent> hps) {
         this.players = players;
         this.bodies = bodies;
         this.images = images;
         this.hps = hps;
-        this.controls = controls;
     }
 
     protected abstract AnimationData animation();
@@ -118,14 +114,6 @@ public abstract class InputState implements State<Entity> {
             player.stateMachine.changeState(player.hurt.withDamage(data.damage));
             return true;
         }
-        return false;
-    }
-
-    public boolean keyDown(Entity entity, int keycode) {
-        return false;
-    }
-
-    public boolean keyUp(Entity entity, int keycode) {
         return false;
     }
 }

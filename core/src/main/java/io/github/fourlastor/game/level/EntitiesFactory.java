@@ -19,6 +19,7 @@ import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.input.controls.Controls;
@@ -66,6 +67,7 @@ public class EntitiesFactory {
         float scale = config.scale;
         int flippedFactor = player.flipped ? -1 : 1;
         image.setScale(flippedFactor * scale, scale);
+        entity.add(new InputComponent());
         entity.add(new AnimationImageComponent(image));
         entity.add(new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();

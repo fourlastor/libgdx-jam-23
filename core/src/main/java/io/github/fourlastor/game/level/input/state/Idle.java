@@ -11,8 +11,8 @@ import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.input.controls.Controls;
 
 import java.util.Map;
 
@@ -23,15 +23,15 @@ public class Idle extends OnGround {
     @AssistedInject
     public Idle(
             @Assisted String name,
-            @Assisted Controls controls,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
+            ComponentMapper<InputComponent> inputs,
             Map<String, CharacterAnimationData> animations,
             ComponentMapper<HpComponent> hps,
             Camera camera
     ) {
-        super(players, bodies, images, hps, controls, camera);
+        super(players, bodies, images, hps, inputs, camera);
         this.animation = animations.get(name).animations.get("idle");
     }
 
@@ -52,6 +52,6 @@ public class Idle extends OnGround {
 
     @AssistedFactory
     public interface Factory {
-        Idle create(String name, Controls controls);
+        Idle create(String name);
     }
 }

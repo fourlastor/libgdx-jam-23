@@ -19,11 +19,10 @@ import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.di.modules.GameModule;
 import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.Player;
-import io.github.fourlastor.game.level.input.controls.Controls;
 
 import java.util.Map;
 
-public class Hurt extends InputState {
+public class Hurt extends CharacterState {
 
     private final AnimationData animation;
     private final MessageDispatcher dispatcher;
@@ -37,14 +36,13 @@ public class Hurt extends InputState {
     @AssistedInject
     public Hurt(
             @Assisted String name,
-            @Assisted Controls controls,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             Map<String, CharacterAnimationData> animations, ComponentMapper<HpComponent> hps,
             MessageDispatcher dispatcher,
             AssetManager assetManager) {
-        super(players, bodies, images, hps, controls);
+        super(players, bodies, images, hps);
         this.dispatcher = dispatcher;
         this.animation = animations.get(name).animations.get("idle");
         this.sound = assetManager.get(GameModule.HIT);
@@ -111,6 +109,6 @@ public class Hurt extends InputState {
 
     @AssistedFactory
     public interface Factory {
-        Hurt create(String name, Controls controls);
+        Hurt create(String name);
     }
 }
