@@ -1,1 +1,4 @@
-include 'desktop', 'html', 'core'
+include 'core'
+include 'desktop'
+include 'html'
+include 'training-room'
