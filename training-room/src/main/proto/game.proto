@@ -6,7 +6,7 @@ option java_outer_classname = "GameRpc";
 package io.github.fourlastor;
 
 service Game {
-  rpc Update (Action) returns (GameInfo) {}
+  rpc Update (Actions) returns (GameInfo) {}
 }
 
 enum ActionType {
@@ -14,6 +14,11 @@ enum ActionType {
   Left = 1;
   Right = 2;
   Attack = 3;
+}
+
+message Actions {
+  Action p1 = 1;
+  Action p2 = 2;
 }
 
 message Action {
