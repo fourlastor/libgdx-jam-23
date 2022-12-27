@@ -1,9 +1,14 @@
 import com.google.protobuf.gradle.id
 
+@Suppress(
+    // known false positive: https://github.com/gradle/gradle/issues/22797
+    "DSL_SCOPE_VIOLATION"
+)
 plugins {
     id("java")
-    kotlin("jvm") version "1.7.22"
-    id("com.google.protobuf") version "0.9.1"
+    alias(libs.plugins.kotlin.jvm) version libs.versions.kotlin
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.protobuf)
 }
 
 group = "io.github.fourlastor"
@@ -16,6 +21,7 @@ repositories {
 val protobufVersion = "3.21.12"
 val grpcVersion = "1.51.1"
 val grpcKotlinVersion = "1.3.0"
+val daggerVersion = "2.40"
 
 protobuf {
     protoc {
@@ -45,10 +51,13 @@ protobuf {
 }
 
 dependencies {
-    implementation("io.grpc:grpc-protobuf:$grpcVersion")
-    implementation("com.google.protobuf:protobuf-kotlin:$protobufVersion")
-    implementation("io.grpc:grpc-kotlin-stub:$grpcKotlinVersion")
     implementation(kotlin("stdlib-jdk8"))
     implementation(project(":core"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+    implementation(libs.grpc)
+    implementation(libs.grpcKotlin)
+    implementation(libs.protobufKotlin)
+    implementation(libs.kotlinCoroutines)
+    implementation(libs.gdxBackendHeadless)
+    implementation(libs.dagger)
+    kapt(libs.daggerCompiler)
 }
