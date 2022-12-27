@@ -10,7 +10,7 @@ service Game {
 }
 
 enum ActionType {
-  Pass = 0;
+  None = 0;
   Left = 1;
   Right = 2;
   Attack = 3;
@@ -39,6 +39,7 @@ message PlayerInfo {
   Player player = 1;
   Position position = 2;
   float health = 3;
+  ActionType currentAction = 4;
 }
 
 message GameInfo {

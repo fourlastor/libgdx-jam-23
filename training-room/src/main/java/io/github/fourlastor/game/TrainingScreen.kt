@@ -77,6 +77,7 @@ class TrainingScreen @Inject constructor(
         val playerComponent = players.get(entity)
         val body = bodies.get(entity).body
         val hp = hps.get(entity)
+        val command = inputs.get(entity).command
         return PlayerInfo.newBuilder().apply {
             player = if (playerComponent.player.flipped) {
                 io.github.fourlastor.rpc.Player.P2
@@ -89,15 +90,23 @@ class TrainingScreen @Inject constructor(
             }.build()
 
             health = hp.hp.toFloat() / hp.maxHp.toFloat()
+            currentAction = command.asAction()
         }.build()
     }
 }
 
 private fun Action.asCommand(): Command = when (this.type) {
     null -> Command.NONE
-    ActionType.Pass -> Command.NONE
+    ActionType.None -> Command.NONE
     ActionType.Left -> Command.LEFT
     ActionType.Right -> Command.RIGHT
     ActionType.Attack -> Command.ATTACK
     ActionType.UNRECOGNIZED -> Command.NONE
+}
+
+private fun Command.asAction(): ActionType = when (this) {
+    Command.NONE -> ActionType.None
+    Command.ATTACK -> ActionType.Attack
+    Command.LEFT -> ActionType.Left
+    Command.RIGHT -> ActionType.Right
 }
