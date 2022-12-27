@@ -14,6 +14,11 @@ public class CharacterStateMachine extends DefaultStateMachine<Entity, Character
         super(entity, initialState);
     }
 
+    public void update(float deltaTime) {
+        currentState.setDelta(deltaTime);
+        update();
+    }
+
     @AssistedFactory
     public interface Factory {
         CharacterStateMachine create(Entity entity, CharacterState initialState);

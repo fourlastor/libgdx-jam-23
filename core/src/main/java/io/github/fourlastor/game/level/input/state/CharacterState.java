@@ -2,7 +2,6 @@ package io.github.fourlastor.game.level.input.state;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
 import com.badlogic.gdx.math.Interpolation;
@@ -29,6 +28,7 @@ public abstract class CharacterState implements State<Entity> {
     protected final ComponentMapper<HpComponent> hps;
     protected final ComponentMapper<InputComponent> inputs;
 
+    private float delta;
     private int playHead;
     private int lastIndex;
 
@@ -47,8 +47,12 @@ public abstract class CharacterState implements State<Entity> {
 
     protected abstract AnimationData animation();
 
+    public final void setDelta(float delta) {
+        this.delta = delta;
+    }
+
     protected final float delta() {
-        return Gdx.graphics.getDeltaTime();
+        return delta;
     }
 
     @Override
@@ -60,7 +64,7 @@ public abstract class CharacterState implements State<Entity> {
 
     @Override
     public void update(Entity entity) {
-        playHead += Gdx.graphics.getDeltaTime() * 1000;
+        playHead += delta() * 1000;
 
         AnimatedValue<String> hitbox = animation().hitbox;
         int index = hitbox.findIndex(playHead);

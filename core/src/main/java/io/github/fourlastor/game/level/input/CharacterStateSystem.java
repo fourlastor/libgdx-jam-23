@@ -46,7 +46,7 @@ public class CharacterStateSystem extends IteratingSystem {
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        players.get(entity).stateMachine.update();
+        players.get(entity).stateMachine.update(deltaTime);
     }
 
     @Override
