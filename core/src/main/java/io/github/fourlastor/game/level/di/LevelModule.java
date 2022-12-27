@@ -21,7 +21,6 @@ import io.github.fourlastor.game.level.system.ActorFollowBodySystem;
 import io.github.fourlastor.game.level.system.CameraMovementSystem;
 import io.github.fourlastor.game.level.system.ClearScreenSystem;
 import io.github.fourlastor.game.level.system.GoToNextScreenSystem;
-import io.github.fourlastor.game.level.system.MovingSystem;
 import io.github.fourlastor.game.level.system.SoundSystem;
 import io.github.fourlastor.game.level.system.StageSystem;
 import io.github.fourlastor.game.level.system.UiSystem;
@@ -51,7 +50,6 @@ public class LevelModule {
             ClearScreenSystem clearScreenSystem,
             @SuppressWarnings("unused") // debug only
             PhysicsDebugSystem physicsDebugSystem,
-            MovingSystem movingSystem,
             SoundSystem soundSystem,
             UiSystem uiSystem,
             GoToNextScreenSystem goToNextScreenSystem,
@@ -59,7 +57,6 @@ public class LevelModule {
             InputBufferSystem inputBufferSystem
     ) {
         Engine engine = new Engine();
-        engine.addSystem(movingSystem);
         engine.addSystem(inputBufferSystem);
         engine.addSystem(characterStateSystem);
         engine.addSystem(physicsSystem);
