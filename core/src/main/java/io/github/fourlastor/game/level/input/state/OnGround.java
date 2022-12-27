@@ -27,28 +27,6 @@ public abstract class OnGround extends CharacterState {
         this.camera = camera;
     }
 
-//    @Override
-//    public boolean keyDown(Entity entity, int keycode) {
-//        if (controls.attack().matches(keycode)) {
-//            PlayerComponent player = players.get(entity);
-//            player.stateMachine.changeState(player.attacking);
-//            return true;
-//        }
-//        return super.keyDown(entity, keycode);
-//    }
-
-//    @Override
-//    public boolean keyUp(Entity entity, int keycode) {
-//        boolean goingLeft = controls.left().matches(keycode) && velocity.x < 0;
-//        boolean goingRight = controls.right().matches(keycode) && velocity.x > 0;
-//        if (goingLeft || goingRight) {
-//            velocity.set(Vector2.Zero);
-//            return true;
-//        }
-//
-//        return super.keyUp(entity, keycode);
-//    }
-
     @Override
     public void exit(Entity entity) {
         velocity.set(Vector2.Zero);
