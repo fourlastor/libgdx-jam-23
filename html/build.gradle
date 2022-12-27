@@ -3,7 +3,7 @@ plugins {
     id "java-library"
     id "org.wisepersist.gwt" version "1.1.16"
     id "war"
-    id "org.gretty" version "3.0.7"
+    id "org.gretty" version "4.0.3"
 }
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -25,8 +25,9 @@ gwt {
     }
 }
 
-import org.wisepersist.gradle.plugins.gwt.GwtSuperDev
+
 import org.akhikhl.gretty.AppBeforeIntegrationTestTask
+import org.wisepersist.gradle.plugins.gwt.GwtSuperDev
 
 gretty.httpPort = 8080
 gretty.resourceBase = project.buildDir.path + "/gwt/draftOut"
