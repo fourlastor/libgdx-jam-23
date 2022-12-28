@@ -9,7 +9,7 @@ class TrainingGame @Inject constructor(
     screenComponent: TrainingScreenComponent.Builder,
 ) : Game() {
 
-    private val trainingScreen: TrainingScreen = screenComponent.build().screen()
+    private val trainingScreen: TrainingScreen by lazy { screenComponent.build().screen() }
 
     fun update(actions: Actions) {
         trainingScreen.update(actions)
