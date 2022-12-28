@@ -1,8 +1,6 @@
 package io.github.fourlastor.game.animation;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import io.github.fourlastor.game.Fighter;
 import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.AnimationData;
@@ -15,7 +13,6 @@ import io.github.fourlastor.game.animation.json.Skin;
 import io.github.fourlastor.game.animation.json.Skins;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -23,11 +20,8 @@ import java.util.Map;
 
 public class EntityAnimationDataParser {
 
-    private final TextureAtlas atlas;
-
     @Inject
-    public EntityAnimationDataParser(TextureAtlas atlas) {
-        this.atlas = atlas;
+    public EntityAnimationDataParser() {
     }
 
     public CharacterAnimationData parseCharacterData(EntityData data, String name) {
@@ -40,16 +34,16 @@ public class EntityAnimationDataParser {
         return new CharacterAnimationData(
                 data.skeleton.width, data.skeleton.height, parseBoundingBoxes(data.skins.get("hitbox")),
                 parseBoundingBoxes(data.skins.get("hurtbox")),
-                parseAnimations(data.animations, name, animationLengths)
+                parseAnimations(data.animations, animationLengths)
         );
     }
 
-    private Map<String, AnimationData> parseAnimations(Map<String, Animation> animations, String name, Map<String, Integer> animationLengths) {
+    private Map<String, AnimationData> parseAnimations(Map<String, Animation> animations, Map<String, Integer> animationLengths) {
         HashMap<String, AnimationData> animationMap = new HashMap<>();
         for (Animation it : animations.values()) {
             animationMap.put(it.name, new AnimationData(
                     animationLengths.get(it.name),
-                    parseSprite(it, name),
+                    parseSprite(it),
                     parseHitboxesValues(it)
             ));
         }
@@ -93,21 +87,7 @@ public class EntityAnimationDataParser {
         return hitboxes;
     }
 
-    private AnimatedValue<TextureRegionDrawable> parseSprite(Animation animation, String name) {
-        return new AnimatedValue<>(parseKeyFrames(
-                "animations/" + name + "/library",
-                animation.slots.get("sprite").keyFrames
-        ));
-    }
-
-    private List<KeyFrame<TextureRegionDrawable>> parseKeyFrames(String path, List<KeyFrame<String>> json) {
-        List<KeyFrame<TextureRegionDrawable>> keyFrames = new ArrayList<>(json.size());
-        for (KeyFrame<String> it : json) {
-            keyFrames.add(new KeyFrame<>(
-                    it.start,
-                    new TextureRegionDrawable(atlas.findRegion(path + "/" + it.value))
-            ));
-        }
-        return keyFrames;
+    private List<KeyFrame<String>> parseSprite(Animation animation) {
+        return animation.slots.get("sprite").keyFrames;
     }
 }

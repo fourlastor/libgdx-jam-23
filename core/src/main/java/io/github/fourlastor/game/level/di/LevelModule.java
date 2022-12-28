@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dagger.Module;
 import dagger.Provides;
 import io.github.fourlastor.game.di.ScreenScoped;
+import io.github.fourlastor.game.level.AnimationUpdateSystem;
 import io.github.fourlastor.game.level.Match;
 import io.github.fourlastor.game.level.WorldConfig;
 import io.github.fourlastor.game.level.input.CharacterStateSystem;
@@ -54,11 +55,13 @@ public class LevelModule {
             UiSystem uiSystem,
             GoToNextScreenSystem goToNextScreenSystem,
             CameraMovementSystem cameraMovementSystem,
-            InputBufferSystem inputBufferSystem
+            InputBufferSystem inputBufferSystem,
+            AnimationUpdateSystem animationUpdateSystem
     ) {
         Engine engine = new Engine();
         engine.addSystem(inputBufferSystem);
         engine.addSystem(characterStateSystem);
+        engine.addSystem(animationUpdateSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(soundSystem);
         engine.addSystem(actorFollowBodySystem);

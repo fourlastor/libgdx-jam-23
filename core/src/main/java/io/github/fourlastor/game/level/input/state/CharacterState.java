@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.AnimationData;
+import io.github.fourlastor.game.component.AnimationChangeComponent;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
@@ -57,7 +58,7 @@ public abstract class CharacterState implements State<Entity> {
 
     @Override
     public void enter(Entity entity) {
-        images.get(entity).image.setAnimatedValue(animation().sprite, animation().duration);
+        entity.add(new AnimationChangeComponent(animation()));
         playHead = 0;
         lastIndex = -1;
     }
