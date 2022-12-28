@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.kotlinCoroutines)
     implementation(libs.gdxBackendHeadless)
     implementation(libs.dagger)
+    implementation("com.badlogicgames.gdx:gdx-platform:${libs.versions.gdx.get()}:natives-desktop")
     implementation("com.badlogicgames.gdx:gdx-box2d-platform:${libs.versions.gdx.get()}:natives-desktop")
     kapt(libs.daggerCompiler)
 }
