@@ -5,5 +5,5 @@ import io.github.fourlastor.game.level.input.controls.Command;
 
 public class InputComponent implements Component {
 
-    public Command command = Command.NONE;
+    public Command command = Command.IDLE;
 }

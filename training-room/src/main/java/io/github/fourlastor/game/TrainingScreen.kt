@@ -93,16 +93,16 @@ class TrainingScreen @Inject constructor(
 }
 
 private fun Action.asCommand(): Command = when (this.type) {
-    null -> Command.NONE
-    ActionType.None -> Command.NONE
+    null -> Command.IDLE
+    ActionType.Idle -> Command.IDLE
     ActionType.Left -> Command.LEFT
     ActionType.Right -> Command.RIGHT
     ActionType.Attack -> Command.ATTACK
-    ActionType.UNRECOGNIZED -> Command.NONE
+    ActionType.UNRECOGNIZED -> Command.IDLE
 }
 
 private fun Command.asAction(): ActionType = when (this) {
-    Command.NONE -> ActionType.None
+    Command.IDLE -> ActionType.Idle
     Command.ATTACK -> ActionType.Attack
     Command.LEFT -> ActionType.Left
     Command.RIGHT -> ActionType.Right
