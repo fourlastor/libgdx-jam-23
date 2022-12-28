@@ -14,7 +14,6 @@ import io.github.fourlastor.game.level.Round
 import io.github.fourlastor.game.level.WorldConfig
 import io.github.fourlastor.game.level.di.Gravity
 import io.github.fourlastor.game.level.input.CharacterStateSystem
-import io.github.fourlastor.game.level.input.InputBufferSystem
 import io.github.fourlastor.game.level.physics.PhysicsSystem
 import io.github.fourlastor.game.level.system.ActorFollowBodySystem
 
@@ -34,13 +33,11 @@ class TrainingModule {
     @Provides
     @ScreenScoped
     fun engine(
-        characterStateSystem: CharacterStateSystem?,
-        physicsSystem: PhysicsSystem?,
-        actorFollowBodySystem: ActorFollowBodySystem?,
-        inputBufferSystem: InputBufferSystem?,
+        characterStateSystem: CharacterStateSystem,
+        physicsSystem: PhysicsSystem,
+        actorFollowBodySystem: ActorFollowBodySystem,
     ): Engine {
         val engine = Engine()
-        engine.addSystem(inputBufferSystem)
         engine.addSystem(characterStateSystem)
         engine.addSystem(physicsSystem)
         engine.addSystem(actorFollowBodySystem)
@@ -68,7 +65,7 @@ class TrainingModule {
 
     @Provides
     @ScreenScoped
-    fun world(@Gravity gravity: Vector2?): World {
+    fun world(@Gravity gravity: Vector2): World {
         return World(gravity, true)
     }
 
