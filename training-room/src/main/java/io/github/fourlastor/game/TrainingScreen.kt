@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.ScreenAdapter
-import com.badlogic.gdx.physics.box2d.World
 import io.github.fourlastor.game.component.BodyComponent
 import io.github.fourlastor.game.component.HpComponent
 import io.github.fourlastor.game.component.InputComponent
@@ -25,7 +24,6 @@ import javax.inject.Inject
 class TrainingScreen @Inject constructor(
     private val engine: Engine,
     private val entitiesFactory: EntitiesFactory,
-    private val world: World,
     match: Match,
     private val inputs: ComponentMapper<InputComponent>,
     private val players: ComponentMapper<PlayerComponent>,
@@ -45,16 +43,6 @@ class TrainingScreen @Inject constructor(
         engine.addEntity(entitiesFactory.base())
         engine.addEntity(p1)
         engine.addEntity(p2)
-    }
-
-    override fun hide() {
-        engine.removeAllEntities()
-        engine.removeAllSystems()
-    }
-
-    override fun dispose() {
-        super.dispose()
-        world.dispose()
     }
 
     fun update(actions: Actions) {
