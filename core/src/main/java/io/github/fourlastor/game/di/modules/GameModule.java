@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.di.modules;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
@@ -39,7 +40,6 @@ public class GameModule {
                         new InternalFileHandleResolver()
                 )
         );
-        assetManager.load(PATH_TEXTURE_ATLAS, TextureAtlas.class);
         assetManager.load(CHARACTER_SELECTION_BG, Music.class);
         assetManager.load(ARENA_BG, Music.class);
         assetManager.load(SELECT_CHANGE, Sound.class);
@@ -61,8 +61,8 @@ public class GameModule {
 
     @Provides
     @Singleton
-    public TextureAtlas textureAtlas(AssetManager assetManager) {
-        return assetManager.get(PATH_TEXTURE_ATLAS, TextureAtlas.class);
+    public TextureAtlas textureAtlas() {
+        return new TextureAtlas(Gdx.files.internal(PATH_TEXTURE_ATLAS));
     }
 
     @Provides
