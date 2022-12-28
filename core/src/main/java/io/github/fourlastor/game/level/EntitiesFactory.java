@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import dagger.Lazy;
 import io.github.fourlastor.game.Fighter;
 import io.github.fourlastor.game.MyGdxGame;
 import io.github.fourlastor.game.animation.AnimationImage;
@@ -38,10 +39,10 @@ public class EntitiesFactory {
 
     private final WorldConfig config;
     private final Map<String, CharacterAnimationData> animations;
-    private final TextureAtlas atlas;
+    private final Lazy<TextureAtlas> atlas;
 
     @Inject
-    public EntitiesFactory(WorldConfig config, Map<String, CharacterAnimationData> animations, TextureAtlas atlas) {
+    public EntitiesFactory(WorldConfig config, Map<String, CharacterAnimationData> animations, Lazy<TextureAtlas> atlas) {
         this.config = config;
         this.animations = animations;
         this.atlas = atlas;
@@ -141,7 +142,7 @@ public class EntitiesFactory {
 
     private Entity createLayer(String name, ActorComponent.Layer layer) {
         Entity entity = new Entity();
-        Image image = new Image(atlas.findRegion("arena/arena 0/layers/arena 0_" + name));
+        Image image = new Image(atlas.get().findRegion("arena/arena 0/layers/arena 0_" + name));
         image.setScale(config.scale);
         image.setPosition(0, 0);
         entity.add(new ActorComponent(image, layer));
