@@ -20,6 +20,7 @@ gdxBackendHeadless = { module = "com.badlogicgames.gdx:gdx-backend-headless", ve
 gdxBackendLwjgl3 = { module = "com.badlogicgames.gdx:gdx-backend-lwjgl3", version.ref = "gdx" }
 gdxBox2d = { module = "com.badlogicgames.gdx:gdx-box2d", version.ref = "gdx" }
 grpc = { module = "io.grpc:grpc-protobuf", version.ref = "grpc" }
+grpcNetty = { module = "io.grpc:grpc-netty", version.ref = "grpc" }
 grpcKotlin = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpcKotlin" }
 kotlinCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinCoroutines" }
 protobufKotlin = { module = "com.google.protobuf:protobuf-kotlin", version.ref = "protobuf" }
