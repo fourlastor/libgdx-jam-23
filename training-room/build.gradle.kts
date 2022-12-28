@@ -18,6 +18,12 @@ repositories {
     mavenCentral()
 }
 
+val assetsDir = rootProject.files("assets")
+
+sourceSets.main.configure {
+    resources.srcDir(assetsDir)
+}
+
 protobuf {
     protoc {
         artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.get()}"
