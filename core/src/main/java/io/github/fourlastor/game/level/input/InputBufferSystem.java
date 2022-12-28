@@ -42,7 +42,7 @@ public class InputBufferSystem extends IntervalSystem {
             } else if (controls.right().pressed()) {
                 inputComponent.command = Command.RIGHT;
             } else {
-                inputComponent.command = Command.NONE;
+                inputComponent.command = Command.IDLE;
             }
         }
     }

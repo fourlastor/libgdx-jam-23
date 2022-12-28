@@ -14,6 +14,7 @@ import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.component.HpChangedComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
@@ -63,7 +64,7 @@ public class Hurt extends CharacterState {
         bodies.get(entity).body.setLinearVelocity(x, 0);
         HpComponent hp = hps.get(entity);
         hp.hp = Math.max(hp.hp - damage, 0);
-        hp.hpChanged = true;
+        entity.add(new HpChangedComponent());
         if (hp.hp == 0) {
             dispatcher.dispatchMessage(Message.PLAYER_DEFEATED.ordinal(), player);
         }

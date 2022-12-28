@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import io.github.fourlastor.game.component.AnimationFinishedComponent;
+import io.github.fourlastor.game.component.HpBarComponent;
+import io.github.fourlastor.game.component.HpChangedComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.Match;
@@ -29,6 +31,8 @@ import javax.inject.Inject;
 
 public class UiSystem extends EntitySystem implements Telegraph {
 
+    private static final Family HP_CHANGED = Family.all(HpComponent.class, HpBarComponent.class, HpChangedComponent.class).get();
+    private static final Family HP_SETUP = Family.all(HpComponent.class, PlayerComponent.class).get();
     private static final float UI_WIDTH = 320f;
     private static final float UI_HEIGHT = 180f;
     private static final float HP_WIDTH = 130f;
@@ -62,10 +66,11 @@ public class UiSystem extends EntitySystem implements Telegraph {
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
+        engine.addEntityListener(HP_SETUP, hpBarSetupListener);
+        engine.addEntityListener(HP_CHANGED, hpChangedListener);
         koImage = new Image(atlas.findRegion("health-bar/ko"));
         koImage.setPosition(UI_WIDTH / 2 - koImage.getWidth() / 2, UI_HEIGHT - koImage.getHeight());
         stage.addActor(koImage);
-        engine.addEntityListener(Family.all(HpComponent.class, PlayerComponent.class).get(), entityListener);
         Image overlayImage = new Image(atlas.findRegion("text-overlays/" + match.round.fileName));
         overlayImage.setOrigin(Align.center);
         overlayImage.setPosition(UI_WIDTH / 2 - overlayImage.getWidth() / 2, UI_HEIGHT / 2 - overlayImage.getHeight() / 2);
@@ -94,12 +99,34 @@ public class UiSystem extends EntitySystem implements Telegraph {
 
     @Override
     public void removedFromEngine(Engine engine) {
-        super.removedFromEngine(engine);
+        engine.removeEntityListener(hpBarSetupListener);
         dispatcher.removeListener(this);
         stage.dispose();
+        super.removedFromEngine(engine);
     }
 
-    private final EntityListener entityListener = new EntityListener() {
+    private final EntityListener hpChangedListener = new EntityListener() {
+        @Override
+        public void entityAdded(Entity entity) {
+            entity.remove(HpChangedComponent.class);
+            Image bar = entity.getComponent(HpBarComponent.class).bar;
+            HpComponent hpComponent = entity.getComponent(HpComponent.class);
+            bar.clearActions();
+            bar.addAction(Actions.scaleTo(
+                    (float) hpComponent.hp / hpComponent.maxHp,
+                    1f,
+                    0.5f,
+                    Interpolation.bounce
+            ));
+        }
+
+        @Override
+        public void entityRemoved(Entity entity) {
+
+        }
+    };
+
+    private final EntityListener hpBarSetupListener = new EntityListener() {
         @Override
         public void entityAdded(Entity entity) {
             Group barContainer = new Group();
@@ -122,7 +149,7 @@ public class UiSystem extends EntitySystem implements Telegraph {
                         UI_HEIGHT - barBg.getHeight() - 6
                 );
             }
-            entity.getComponent(HpComponent.class).bar = bar;
+            entity.add(new HpBarComponent(bar));
             stage.addActor(barContainer);
         }
 
