@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import game_pb2 as game__pb2
+import trainer.src.generated.game_pb2 as game__pb2
 
 
 class GameStub(object):

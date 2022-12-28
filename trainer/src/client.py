@@ -5,11 +5,11 @@ from trainer.src.generated.game_pb2_grpc import GameStub
 
 
 def run():
-    with grpc.insecure_channel('192.168.1.21:8980') as channel:
+    with grpc.insecure_channel('localhost:8980') as channel:
         stub = GameStub(channel)
         state = stub.Update(Actions(
-            p1 = Action(Attack),
-            p2 = Action(Left),
+            p1 = Action(type=Attack),
+            p2 = Action(type=Left),
         ))
         print(state)
 
