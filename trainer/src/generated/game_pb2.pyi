@@ -5,8 +5,8 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 
 Attack: ActionType
 DESCRIPTOR: _descriptor.FileDescriptor
+Idle: ActionType
 Left: ActionType
-None: ActionType
 P1: Player
 P2: Player
 Right: ActionType
