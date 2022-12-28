@@ -42,9 +42,6 @@ class TrainingScreen @Inject constructor(
     private val p2 = entitiesFactory.player(match.p2, Controls.Setup.P2, Player.P2, p2IsImpostor)
 
     override fun show() {
-        for (layer in entitiesFactory.backgroundLayers()) {
-            engine.addEntity(layer)
-        }
         engine.addEntity(entitiesFactory.base())
         engine.addEntity(p1)
         engine.addEntity(p2)
