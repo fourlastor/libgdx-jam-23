@@ -14,7 +14,7 @@ class GameService @Inject constructor(
         val config = HeadlessApplicationConfiguration().apply {
             updatesPerSecond = -1
         }
-        
+
         @Suppress("UNUSED_VARIABLE") // This is to set up Gdx.xxx which requires an application
         val app = HeadlessApplication(
             game,
@@ -22,15 +22,13 @@ class GameService @Inject constructor(
         )
     }
 
-    override suspend fun update(request: Actions): GameInfo {
-        return game.run {
-            update(request)
-            state()
-        }
+    override suspend fun update(request: Actions): GameInfo = game.run {
+        update(request)
+        state()
     }
 
-    override suspend fun reset(request: Empty): Empty {
-        game.reset()
-        return Empty.getDefaultInstance()
+    override suspend fun reset(request: Empty): GameInfo = game.run {
+        reset()
+        state()
     }
 }

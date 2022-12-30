@@ -8,7 +8,7 @@ package io.github.fourlastor;
 
 service Game {
   rpc Update (Actions) returns (GameInfo) {}
-  rpc Reset (google.protobuf.Empty) returns (google.protobuf.Empty) {}
+  rpc Reset (google.protobuf.Empty) returns (GameInfo) {}
 }
 
 enum ActionType {
