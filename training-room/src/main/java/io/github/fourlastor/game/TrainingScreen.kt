@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper
 import com.badlogic.ashley.core.Engine
 import com.badlogic.ashley.core.Entity
 import com.badlogic.gdx.ScreenAdapter
+import io.github.fourlastor.game.component.AnimationFinishedComponent
 import io.github.fourlastor.game.component.BodyComponent
 import io.github.fourlastor.game.component.HpComponent
 import io.github.fourlastor.game.component.InputComponent
@@ -40,6 +41,8 @@ class TrainingScreen @Inject constructor(
     private val p2 = entitiesFactory.player(match.p2, Controls.Setup.P2, Player.P2, p2IsImpostor)
 
     override fun show() {
+        /** [io.github.fourlastor.game.level.input.CharacterStateSystem] waits for the UI to disappear. */
+        engine.addEntity(Entity().apply { add(AnimationFinishedComponent()) })
         engine.addEntity(entitiesFactory.base())
         engine.addEntity(p1)
         engine.addEntity(p2)
