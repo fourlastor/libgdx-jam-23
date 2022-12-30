@@ -54,7 +54,6 @@ public class Hurt extends CharacterState {
     @Override
     public void enter(Entity entity) {
         super.enter(entity);
-        System.out.println("Hurt");
         sound.play(1f);
         totalTime = 0f;
         redTime = 0f;
