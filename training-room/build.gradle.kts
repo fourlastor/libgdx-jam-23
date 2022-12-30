@@ -1,4 +1,5 @@
 import com.google.protobuf.gradle.id
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress(
     // known false positive: https://github.com/gradle/gradle/issues/22797
@@ -27,6 +28,16 @@ val assetsDir = rootProject.files("assets")
 
 sourceSets.main.configure {
     resources.srcDir(assetsDir)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+java {
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 protobuf {
