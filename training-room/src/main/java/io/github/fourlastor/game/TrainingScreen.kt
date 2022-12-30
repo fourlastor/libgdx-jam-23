@@ -21,6 +21,7 @@ import io.github.fourlastor.rpc.GameInfo
 import io.github.fourlastor.rpc.PlayerInfo
 import io.github.fourlastor.rpc.Position
 import javax.inject.Inject
+import io.github.fourlastor.rpc.Fighter as RpcFighter
 
 class TrainingScreen @Inject constructor(
     private val engine: Engine,
@@ -67,11 +68,7 @@ class TrainingScreen @Inject constructor(
         val hp = hps.get(entity)
         val command = inputs.get(entity).command
         return PlayerInfo.newBuilder().apply {
-            player = if (playerComponent.player.flipped) {
-                io.github.fourlastor.rpc.Player.P2
-            } else {
-                io.github.fourlastor.rpc.Player.P1
-            }
+            fighter = playerComponent.fighter.toRpc()
             position = Position.newBuilder().apply {
                 x = body.position.x
                 y = body.position.y
@@ -86,6 +83,12 @@ class TrainingScreen @Inject constructor(
         engine.removeAllEntities()
         super.dispose()
     }
+}
+
+private fun Fighter.toRpc(): RpcFighter = when (this) {
+    Fighter.NISSEFAR -> RpcFighter.Nissefar
+    Fighter.LANGNISSE -> RpcFighter.Langnisse
+    Fighter.NISSEMOR -> RpcFighter.Nissemor
 }
 
 private fun Action.asCommand(): Command = when (this.type) {
