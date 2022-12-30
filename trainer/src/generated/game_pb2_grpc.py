@@ -3,6 +3,7 @@
 import grpc
 
 import trainer.src.generated.game_pb2 as game__pb2
+from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
 class GameStub(object):
@@ -15,10 +16,15 @@ class GameStub(object):
             channel: A grpc.Channel.
         """
         self.Update = channel.unary_unary(
-                '/io.github.fourlastor.Game/Update',
-                request_serializer=game__pb2.Actions.SerializeToString,
-                response_deserializer=game__pb2.GameInfo.FromString,
-                )
+            "/io.github.fourlastor.Game/Update",
+            request_serializer=game__pb2.Actions.SerializeToString,
+            response_deserializer=game__pb2.GameInfo.FromString,
+        )
+        self.Reset = channel.unary_unary(
+            "/io.github.fourlastor.Game/Reset",
+            request_serializer=google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            response_deserializer=game__pb2.GameInfo.FromString,
+        )
 
 
 class GameServicer(object):
@@ -27,40 +33,93 @@ class GameServicer(object):
     def Update(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
+
+    def Reset(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details("Method not implemented!")
+        raise NotImplementedError("Method not implemented!")
 
 
 def add_GameServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'Update': grpc.unary_unary_rpc_method_handler(
-                    servicer.Update,
-                    request_deserializer=game__pb2.Actions.FromString,
-                    response_serializer=game__pb2.GameInfo.SerializeToString,
-            ),
+        "Update": grpc.unary_unary_rpc_method_handler(
+            servicer.Update,
+            request_deserializer=game__pb2.Actions.FromString,
+            response_serializer=game__pb2.GameInfo.SerializeToString,
+        ),
+        "Reset": grpc.unary_unary_rpc_method_handler(
+            servicer.Reset,
+            request_deserializer=google_dot_protobuf_dot_empty__pb2.Empty.FromString,
+            response_serializer=game__pb2.GameInfo.SerializeToString,
+        ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'io.github.fourlastor.Game', rpc_method_handlers)
+        "io.github.fourlastor.Game", rpc_method_handlers
+    )
     server.add_generic_rpc_handlers((generic_handler,))
 
 
- # This class is part of an EXPERIMENTAL API.
+# This class is part of an EXPERIMENTAL API.
 class Game(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Update(request,
+    def Update(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
             target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/io.github.fourlastor.Game/Update',
+            "/io.github.fourlastor.Game/Update",
             game__pb2.Actions.SerializeToString,
             game__pb2.GameInfo.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )
+
+    @staticmethod
+    def Reset(
+        request,
+        target,
+        options=(),
+        channel_credentials=None,
+        call_credentials=None,
+        insecure=False,
+        compression=None,
+        wait_for_ready=None,
+        timeout=None,
+        metadata=None,
+    ):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            "/io.github.fourlastor.Game/Reset",
+            google_dot_protobuf_dot_empty__pb2.Empty.SerializeToString,
+            game__pb2.GameInfo.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+        )

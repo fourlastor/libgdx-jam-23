@@ -1,3 +1,4 @@
+from google.protobuf import empty_pb2 as _empty_pb2
 from google.protobuf.internal import enum_type_wrapper as _enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
@@ -6,9 +7,10 @@ from typing import ClassVar as _ClassVar, Mapping as _Mapping, Optional as _Opti
 Attack: ActionType
 DESCRIPTOR: _descriptor.FileDescriptor
 Idle: ActionType
+Langnisse: Fighter
 Left: ActionType
-P1: Player
-P2: Player
+Nissefar: Fighter
+Nissemor: Fighter
 Right: ActionType
 
 class Action(_message.Message):
@@ -34,16 +36,16 @@ class GameInfo(_message.Message):
     def __init__(self, p1: _Optional[_Union[PlayerInfo, _Mapping]] = ..., p2: _Optional[_Union[PlayerInfo, _Mapping]] = ...) -> None: ...
 
 class PlayerInfo(_message.Message):
-    __slots__ = ["currentAction", "health", "player", "position"]
+    __slots__ = ["currentAction", "fighter", "health", "position"]
     CURRENTACTION_FIELD_NUMBER: _ClassVar[int]
+    FIGHTER_FIELD_NUMBER: _ClassVar[int]
     HEALTH_FIELD_NUMBER: _ClassVar[int]
-    PLAYER_FIELD_NUMBER: _ClassVar[int]
     POSITION_FIELD_NUMBER: _ClassVar[int]
     currentAction: ActionType
+    fighter: Fighter
     health: float
-    player: Player
     position: Position
-    def __init__(self, player: _Optional[_Union[Player, str]] = ..., position: _Optional[_Union[Position, _Mapping]] = ..., health: _Optional[float] = ..., currentAction: _Optional[_Union[ActionType, str]] = ...) -> None: ...
+    def __init__(self, fighter: _Optional[_Union[Fighter, str]] = ..., position: _Optional[_Union[Position, _Mapping]] = ..., health: _Optional[float] = ..., currentAction: _Optional[_Union[ActionType, str]] = ...) -> None: ...
 
 class Position(_message.Message):
     __slots__ = ["x", "y"]
@@ -56,5 +58,5 @@ class Position(_message.Message):
 class ActionType(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = []
 
-class Player(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
+class Fighter(int, metaclass=_enum_type_wrapper.EnumTypeWrapper):
     __slots__ = []
