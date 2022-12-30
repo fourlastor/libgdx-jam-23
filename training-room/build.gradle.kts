@@ -6,9 +6,14 @@ import com.google.protobuf.gradle.id
 )
 plugins {
     id("java")
+    application
     alias(libs.plugins.kotlin.jvm) version libs.versions.kotlin
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.protobuf)
+}
+
+application {
+    mainClass.set("io.github.fourlastor.MainKt")
 }
 
 group = "io.github.fourlastor"
