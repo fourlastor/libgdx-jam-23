@@ -16,6 +16,7 @@ import io.github.fourlastor.game.level.di.Gravity
 import io.github.fourlastor.game.level.input.CharacterStateSystem
 import io.github.fourlastor.game.level.physics.PhysicsSystem
 import io.github.fourlastor.game.level.system.ActorFollowBodySystem
+import io.github.fourlastor.game.level.system.CameraMovementSystem
 
 @Module
 class TrainingModule {
@@ -36,11 +37,13 @@ class TrainingModule {
         characterStateSystem: CharacterStateSystem,
         physicsSystem: PhysicsSystem,
         actorFollowBodySystem: ActorFollowBodySystem,
+        cameraMovementSystem: CameraMovementSystem,
     ): Engine {
         val engine = Engine()
         engine.addSystem(characterStateSystem)
         engine.addSystem(physicsSystem)
         engine.addSystem(actorFollowBodySystem)
+        engine.addSystem(cameraMovementSystem)
         return engine
     }
 
