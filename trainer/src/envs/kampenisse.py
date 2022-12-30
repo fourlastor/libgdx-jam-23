@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Dict
 
 import gymnasium
 import numpy as np
@@ -49,7 +49,9 @@ class KampenisseEnv(gym.Env[dict, Tuple[int]]):
         )
         self.observation_space = spaces.Dict({"p1": p_space, "p2": p_space})
 
-        self.action_space = spaces.Discrete(ACTION_COUNT)
+        self.action_space = spaces.Dict(
+            {"p1": spaces.Discrete(ACTION_COUNT), "p2": spaces.Discrete(ACTION_COUNT)},
+        )
 
         self.render_mode = None
 
@@ -96,8 +98,8 @@ class KampenisseEnv(gym.Env[dict, Tuple[int]]):
         # return self.observation_space.sample(), {}
         return self._convert_observation(self.rpc_client.reset()), {}
 
-    def step(self, actions: Tuple[int]) -> Tuple[dict, Tuple[float, float], bool, bool, dict]:
-        observation = self.rpc_client.update(self._convert_action(actions[0]), self._convert_action(actions[1]))
+    def step(self, actions: Dict[str, int]) -> Tuple[dict, Tuple[float, float], bool, bool, dict]:
+        observation = self.rpc_client.update(self._convert_action(actions["p1"]), self._convert_action(actions["p2"]))
 
         reward = (self._reward(observation.p1, observation.p2), self._reward(observation.p2, observation.p1))
 
