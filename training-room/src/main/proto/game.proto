@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "google/protobuf/empty.proto";
 option java_multiple_files = true;
 option java_package = "io.github.fourlastor.rpc";
 option java_outer_classname = "GameRpc";
@@ -7,6 +8,7 @@ package io.github.fourlastor;
 
 service Game {
   rpc Update (Actions) returns (GameInfo) {}
+  rpc Reset (google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
 
 enum ActionType {

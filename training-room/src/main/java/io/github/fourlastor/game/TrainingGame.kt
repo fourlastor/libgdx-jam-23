@@ -6,10 +6,10 @@ import io.github.fourlastor.rpc.GameInfo
 import javax.inject.Inject
 
 class TrainingGame @Inject constructor(
-    screenComponent: TrainingScreenComponent.Builder,
+    private val screenComponent: TrainingScreenComponent.Builder,
 ) : Game() {
 
-    private val trainingScreen: TrainingScreen by lazy { screenComponent.build().screen() }
+    private lateinit var trainingScreen: TrainingScreen
 
     fun update(actions: Actions) {
         trainingScreen.update(actions)
@@ -19,7 +19,12 @@ class TrainingGame @Inject constructor(
         return trainingScreen.state()
     }
 
-    override fun create() {
+    fun reset() {
+        trainingScreen = screenComponent.build().screen()
         setScreen(trainingScreen)
+    }
+
+    override fun create() {
+        reset()
     }
 }

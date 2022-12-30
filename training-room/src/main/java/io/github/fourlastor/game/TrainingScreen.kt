@@ -81,6 +81,11 @@ class TrainingScreen @Inject constructor(
             currentAction = command.asAction()
         }.build()
     }
+
+    override fun dispose() {
+        engine.removeAllEntities()
+        super.dispose()
+    }
 }
 
 private fun Action.asCommand(): Command = when (this.type) {

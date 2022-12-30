@@ -2,6 +2,7 @@ package io.github.fourlastor.rpc
 
 import com.badlogic.gdx.backends.headless.HeadlessApplication
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration
+import com.google.protobuf.Empty
 import io.github.fourlastor.game.TrainingGame
 import javax.inject.Inject
 
@@ -26,5 +27,10 @@ class GameService @Inject constructor(
             update(request)
             state()
         }
+    }
+
+    override suspend fun reset(request: Empty): Empty {
+        game.reset()
+        return Empty.getDefaultInstance()
     }
 }
