@@ -15,6 +15,7 @@ from trainer.src.generated.game_pb2 import (
     Right,
     Attack,
     GameInfo,
+    PlayerInfo,
 )
 
 FIGHTER_COUNT = 3
@@ -83,6 +84,9 @@ class KampenisseEnv(gym.Env[dict, Tuple[int]]):
             },
         }
 
+    def _reward(self, current: PlayerInfo, opponent: PlayerInfo):
+        return (1 - opponent.health) * current.health
+
     def reset(
         self,
         seed=None,
@@ -95,8 +99,7 @@ class KampenisseEnv(gym.Env[dict, Tuple[int]]):
     def step(self, actions: Tuple[int]) -> Tuple[dict, Tuple[float, float], bool, bool, dict]:
         observation = self.rpc_client.update(self._convert_action(actions[0]), self._convert_action(actions[1]))
 
-        # TODO reward computation
-        reward = (100, 100)
+        reward = (self._reward(observation.p1, observation.p2), self._reward(observation.p2, observation.p1))
 
         # terminated if health of one of the two fighters is 0
         terminated = observation.p1.health == 0 or observation.p2.health == 0
