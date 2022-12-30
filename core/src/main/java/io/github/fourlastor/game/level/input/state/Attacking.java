@@ -2,7 +2,6 @@ package io.github.fourlastor.game.level.input.state;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import dagger.assisted.Assisted;
 import dagger.assisted.AssistedFactory;
 import dagger.assisted.AssistedInject;
@@ -52,7 +51,7 @@ public class Attacking extends CharacterState {
     @Override
     public void update(Entity entity) {
         super.update(entity);
-        timePassed += Gdx.graphics.getDeltaTime();
+        timePassed += delta();
         if (timePassed * 1000 >= animation.duration) {
             PlayerComponent player = players.get(entity);
             Command command = inputs.get(entity).command;
