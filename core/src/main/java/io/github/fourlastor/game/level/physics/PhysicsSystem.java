@@ -147,6 +147,7 @@ public class PhysicsSystem extends IntervalSystem {
     };
 
     private void propagateHit(@SuppressWarnings("unused") Fixture hitbox, Fixture hurtbox) {
+        System.out.println("Hit");
         Object hitUserData = hitbox.getUserData();
         Object hurtUserData = hurtbox.getUserData();
         if (!(hurtUserData instanceof Entity) || !(hitUserData instanceof Entity)) {

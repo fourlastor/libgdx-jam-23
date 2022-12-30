@@ -45,6 +45,7 @@ public class Attacking extends CharacterState {
     @Override
     public void enter(Entity entity) {
         super.enter(entity);
+        System.out.println("Attack");
         timePassed = 0f;
     }
 
