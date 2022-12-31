@@ -1,5 +1,6 @@
 package io.github.fourlastor.game.level.physics;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -20,6 +21,7 @@ import io.github.fourlastor.game.level.HurtData;
 import io.github.fourlastor.game.level.Message;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class PhysicsSystem extends IntervalSystem {
 
@@ -77,8 +79,10 @@ public class PhysicsSystem extends IntervalSystem {
         @Override
         public void entityAdded(Entity entity) {
             BodyBuilderComponent component = bodyBuilders.get(entity);
-            BodyComponent body = component.factory.build(world);
-            entity.add(body);
+            List<Component> components = component.factory.build(world);
+            for (Component it : components) {
+                entity.add(it);
+            }
             entity.remove(BodyBuilderComponent.class);
         }
 
@@ -136,7 +140,11 @@ public class PhysicsSystem extends IntervalSystem {
 
         @Override
         public void preSolve(Contact contact, Manifold oldManifold) {
-
+            Fixture fixtureA = contact.getFixtureA();
+            Fixture fixtureB = contact.getFixtureB();
+            if (fixtureA.getUserData() == fixtureB.getUserData()) {
+                contact.setEnabled(false);
+            }
         }
 
         @Override

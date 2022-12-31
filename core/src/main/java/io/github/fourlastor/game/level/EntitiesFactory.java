@@ -22,12 +22,15 @@ import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
 import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
+import io.github.fourlastor.game.component.ShadowComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -75,8 +78,8 @@ public class EntitiesFactory {
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             float x = player.flipped ? 15f : 1f;
             float height = animationData.height * config.scale;
-
-            bodyDef.position.set(new Vector2(x, height));
+            Vector2 initialPosition = new Vector2(x, height);
+            bodyDef.position.set(initialPosition);
             bodyDef.allowSleep = false;
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
@@ -85,7 +88,18 @@ public class EntitiesFactory {
             def.shape = shape;
             def.filter.categoryBits = Bits.Category.BODY.bits;
             def.filter.maskBits = Bits.Mask.BODY.bits;
-            body.createFixture(def).setUserData(UserData.PLAYER);
+            body.createFixture(def).setUserData(entity);
+
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.KinematicBody;
+            bodyDef.position.set(initialPosition);
+            Body shadow = world.createBody(bodyDef);
+            def = new FixtureDef();
+            def.shape = shape;
+            def.filter.categoryBits = Bits.Category.SHADOW.bits;
+            def.filter.maskBits = Bits.Mask.SHADOW.bits;
+            shadow.createFixture(def).setUserData(entity);
+
             def = new FixtureDef();
             def.shape = shape;
             def.filter.categoryBits = Bits.Category.HITBOX.bits;
@@ -107,8 +121,12 @@ public class EntitiesFactory {
                 Fixture fixture = body.createFixture(def);
                 fixture.setUserData(entity);
             }
+
             shape.dispose();
-            return new BodyComponent(body, hitboxes);
+            return Arrays.asList(
+                    new BodyComponent(body, hitboxes),
+                    new ShadowComponent(shadow)
+            );
         }));
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
         entity.add(new PlayerRequestComponent(fighter, controls, player));
@@ -164,9 +182,13 @@ public class EntitiesFactory {
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(50f, 0.25f);
-            body.createFixture(shape, 0.0f).setUserData(UserData.PLATFORM);
+            FixtureDef def = new FixtureDef();
+            def.filter.categoryBits = Bits.Category.GROUND.bits;
+            def.filter.maskBits = Bits.Mask.GROUND.bits;
+            def.shape = shape;
+            body.createFixture(def).setUserData(UserData.PLATFORM);
             shape.dispose();
-            return new BodyComponent(body);
+            return Collections.singletonList(new BodyComponent(body));
         });
     }
 }
