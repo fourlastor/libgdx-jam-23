@@ -73,7 +73,7 @@ public class LevelModule {
         engine.addSystem(stageSystem);
         engine.addSystem(uiSystem);
         engine.addSystem(goToNextScreenSystem);
-        engine.addSystem(physicsDebugSystem);
+//        engine.addSystem(physicsDebugSystem);
         return engine;
     }
 
