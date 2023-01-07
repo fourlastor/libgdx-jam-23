@@ -17,13 +17,13 @@ Featured in this review video
 
 - Left: `A`
 - Right: `D`
-- Attack: `F`
+- Attack: `SPACE`
 
 ### Player 2
 
-- Left: `J`
-- Right: `L`
-- Attack: `H`
+- Left: `LEFT ARROW`
+- Right: `RIGHT ARROW`
+- Attack: `ENTER`
 
 ## Credits
 
