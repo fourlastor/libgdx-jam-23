@@ -2,65 +2,68 @@ package io.github.fourlastor.game.level.input.state;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.fsm.State;
 import com.badlogic.gdx.ai.msg.Telegram;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import io.github.fourlastor.game.animation.data.AnimatedValue;
 import io.github.fourlastor.game.animation.data.AnimationData;
+import io.github.fourlastor.game.component.AnimationChangeComponent;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.level.HurtData;
 import io.github.fourlastor.game.level.Message;
-import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
 
 import java.util.List;
 
-public abstract class InputState implements State<Entity> {
+public abstract class CharacterState implements State<Entity> {
 
     protected final ComponentMapper<PlayerComponent> players;
     protected final ComponentMapper<BodyComponent> bodies;
     protected final ComponentMapper<AnimationImageComponent> images;
     protected final ComponentMapper<HpComponent> hps;
-    protected final Controls controls;
+    protected final ComponentMapper<InputComponent> inputs;
 
+    private float delta;
     private int playHead;
     private int lastIndex;
 
-    public InputState(
+    public CharacterState(
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             ComponentMapper<HpComponent> hps,
-            Controls controls) {
+            ComponentMapper<InputComponent> inputs) {
         this.players = players;
         this.bodies = bodies;
         this.images = images;
         this.hps = hps;
-        this.controls = controls;
+        this.inputs = inputs;
     }
 
     protected abstract AnimationData animation();
 
+    public final void setDelta(float delta) {
+        this.delta = delta;
+    }
+
     protected final float delta() {
-        return Gdx.graphics.getDeltaTime();
+        return delta;
     }
 
     @Override
     public void enter(Entity entity) {
-        images.get(entity).image.setAnimatedValue(animation().sprite, animation().duration);
+        entity.add(new AnimationChangeComponent(animation()));
         playHead = 0;
         lastIndex = -1;
     }
 
     @Override
     public void update(Entity entity) {
-        playHead += Gdx.graphics.getDeltaTime() * 1000;
+        playHead += delta() * 1000;
 
         AnimatedValue<String> hitbox = animation().hitbox;
         int index = hitbox.findIndex(playHead);
@@ -78,18 +81,6 @@ public abstract class InputState implements State<Entity> {
                         : Bits.Mask.DISABLED.bits;
                 box.feature.setFilterData(filter);
             }
-        }
-
-        HpComponent hpComponent = hps.get(entity);
-        if (hpComponent.hpChanged) {
-            hpComponent.hpChanged = false;
-            hpComponent.bar.clearActions();
-            hpComponent.bar.addAction(Actions.scaleTo(
-                    (float) hpComponent.hp / hpComponent.maxHp,
-                    1f,
-                    0.5f,
-                    Interpolation.bounce
-            ));
         }
     }
 
@@ -118,22 +109,6 @@ public abstract class InputState implements State<Entity> {
             player.stateMachine.changeState(player.hurt.withDamage(data.damage));
             return true;
         }
-        return false;
-    }
-
-    public boolean keyDown(Entity entity, int keycode) {
-        return false;
-    }
-
-    public boolean keyUp(Entity entity, int keycode) {
-        return false;
-    }
-
-    public boolean touchDown(Entity entity, int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    public boolean touchUp(Entity entity, int screenX, int screenY, int pointer, int button) {
         return false;
     }
 }

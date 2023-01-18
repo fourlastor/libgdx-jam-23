@@ -11,8 +11,8 @@ import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.input.controls.Controls;
 
 import java.util.Map;
 
@@ -23,14 +23,14 @@ public class Walking extends OnGround {
     @AssistedInject
     public Walking(
             @Assisted String name,
-            @Assisted Controls controls,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
             ComponentMapper<HpComponent> hps,
+            ComponentMapper<InputComponent> inputs,
             Map<String, CharacterAnimationData> animations,
             Camera camera) {
-        super(players, bodies, images, hps, controls, camera);
+        super(players, bodies, images, hps, inputs, camera);
         this.animation = animations.get(name).animations.get("walking");
     }
 
@@ -50,6 +50,6 @@ public class Walking extends OnGround {
 
     @AssistedFactory
     public interface Factory {
-        Walking create(String name, Controls controls);
+        Walking create(String name);
     }
 }

@@ -1,0 +1,51 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+option java_multiple_files = true;
+option java_package = "io.github.fourlastor.rpc";
+option java_outer_classname = "GameRpc";
+
+package io.github.fourlastor;
+
+service Game {
+  rpc Update (Actions) returns (GameInfo) {}
+  rpc Reset (google.protobuf.Empty) returns (GameInfo) {}
+}
+
+enum ActionType {
+  Idle = 0;
+  Left = 1;
+  Right = 2;
+  Attack = 3;
+}
+
+message Actions {
+  Action p1 = 1;
+  Action p2 = 2;
+}
+
+message Action {
+  ActionType type = 1;
+}
+
+enum Fighter {
+  Langnisse = 0;
+  Nissefar = 1;
+  Nissemor = 2;
+}
+
+message Position {
+  float x = 1;
+  float y = 2;
+}
+
+message PlayerInfo {
+  Fighter fighter = 1;
+  Position position = 2;
+  float health = 3;
+  ActionType currentAction = 4;
+}
+
+message GameInfo {
+  PlayerInfo p1 = 1;
+  PlayerInfo p2 = 2;
+}

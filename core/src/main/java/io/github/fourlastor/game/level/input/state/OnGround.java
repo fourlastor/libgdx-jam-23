@@ -8,39 +8,23 @@ import com.badlogic.gdx.physics.box2d.Body;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
-import io.github.fourlastor.game.level.input.controls.Controls;
+import io.github.fourlastor.game.level.input.controls.Command;
 
-public abstract class OnGround extends InputState {
+public abstract class OnGround extends CharacterState {
     private static final float VELOCITY = 4f;
     private final Camera camera;
     private final Vector2 velocity = Vector2.Zero.cpy();
 
-    public OnGround(ComponentMapper<PlayerComponent> players, ComponentMapper<BodyComponent> bodies, ComponentMapper<AnimationImageComponent> images, ComponentMapper<HpComponent> hps, Controls controls, Camera camera) {
-        super(players, bodies, images, hps, controls);
+    public OnGround(ComponentMapper<PlayerComponent> players,
+                    ComponentMapper<BodyComponent> bodies,
+                    ComponentMapper<AnimationImageComponent> images,
+                    ComponentMapper<HpComponent> hps,
+                    ComponentMapper<InputComponent> inputs,
+                    Camera camera) {
+        super(players, bodies, images, hps, inputs);
         this.camera = camera;
-    }
-
-    @Override
-    public boolean keyDown(Entity entity, int keycode) {
-        if (controls.attack().matches(keycode)) {
-            PlayerComponent player = players.get(entity);
-            player.stateMachine.changeState(player.attacking);
-            return true;
-        }
-        return super.keyDown(entity, keycode);
-    }
-
-    @Override
-    public boolean keyUp(Entity entity, int keycode) {
-        boolean goingLeft = controls.left().matches(keycode) && velocity.x < 0;
-        boolean goingRight = controls.right().matches(keycode) && velocity.x > 0;
-        if (goingLeft || goingRight) {
-            velocity.set(Vector2.Zero);
-            return true;
-        }
-
-        return super.keyUp(entity, keycode);
     }
 
     @Override
@@ -53,10 +37,18 @@ public abstract class OnGround extends InputState {
     @Override
     public void update(Entity entity) {
         super.update(entity);
-        boolean goingLeft = controls.left().pressed();
-        boolean goingRight = controls.right().pressed();
+        Command command = inputs.get(entity).command;
+        if (command == Command.ATTACK) {
+            PlayerComponent player = players.get(entity);
+            player.stateMachine.changeState(player.attacking);
+            return;
+        }
+        boolean goingLeft = command == Command.LEFT;
+        boolean goingRight = command == Command.RIGHT;
         if (goingLeft || goingRight) {
             velocity.x = goingLeft ? -VELOCITY : VELOCITY;
+        } else {
+            velocity.set(Vector2.Zero);
         }
         updateBodyVelocity(entity);
     }

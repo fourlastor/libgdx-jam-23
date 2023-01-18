@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import dagger.Lazy;
 import io.github.fourlastor.game.Fighter;
 import io.github.fourlastor.game.MyGdxGame;
 import io.github.fourlastor.game.animation.AnimationImage;
@@ -19,13 +20,17 @@ import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerRequestComponent;
+import io.github.fourlastor.game.component.ShadowComponent;
 import io.github.fourlastor.game.di.ScreenScoped;
 import io.github.fourlastor.game.level.input.controls.Controls;
 import io.github.fourlastor.game.level.physics.Bits;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -37,10 +42,10 @@ public class EntitiesFactory {
 
     private final WorldConfig config;
     private final Map<String, CharacterAnimationData> animations;
-    private final TextureAtlas atlas;
+    private final Lazy<TextureAtlas> atlas;
 
     @Inject
-    public EntitiesFactory(WorldConfig config, Map<String, CharacterAnimationData> animations, TextureAtlas atlas) {
+    public EntitiesFactory(WorldConfig config, Map<String, CharacterAnimationData> animations, Lazy<TextureAtlas> atlas) {
         this.config = config;
         this.animations = animations;
         this.atlas = atlas;
@@ -66,14 +71,15 @@ public class EntitiesFactory {
         float scale = config.scale;
         int flippedFactor = player.flipped ? -1 : 1;
         image.setScale(flippedFactor * scale, scale);
+        entity.add(new InputComponent());
         entity.add(new AnimationImageComponent(image));
         entity.add(new BodyBuilderComponent(world -> {
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.DynamicBody;
             float x = player.flipped ? 15f : 1f;
             float height = animationData.height * config.scale;
-
-            bodyDef.position.set(new Vector2(x, height));
+            Vector2 initialPosition = new Vector2(x, height);
+            bodyDef.position.set(initialPosition);
             bodyDef.allowSleep = false;
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
@@ -82,7 +88,18 @@ public class EntitiesFactory {
             def.shape = shape;
             def.filter.categoryBits = Bits.Category.BODY.bits;
             def.filter.maskBits = Bits.Mask.BODY.bits;
-            body.createFixture(def).setUserData(UserData.PLAYER);
+            body.createFixture(def).setUserData(entity);
+
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.KinematicBody;
+            bodyDef.position.set(initialPosition);
+            Body shadow = world.createBody(bodyDef);
+            def = new FixtureDef();
+            def.shape = shape;
+            def.filter.categoryBits = Bits.Category.SHADOW.bits;
+            def.filter.maskBits = Bits.Mask.SHADOW.bits;
+            shadow.createFixture(def).setUserData(entity);
+
             def = new FixtureDef();
             def.shape = shape;
             def.filter.categoryBits = Bits.Category.HITBOX.bits;
@@ -104,8 +121,12 @@ public class EntitiesFactory {
                 Fixture fixture = body.createFixture(def);
                 fixture.setUserData(entity);
             }
+
             shape.dispose();
-            return new BodyComponent(body, hitboxes);
+            return Arrays.asList(
+                    new BodyComponent(body, hitboxes),
+                    new ShadowComponent(shadow)
+            );
         }));
         entity.add(new ActorComponent(image, ActorComponent.Layer.CHARACTER));
         entity.add(new PlayerRequestComponent(fighter, controls, player));
@@ -139,7 +160,7 @@ public class EntitiesFactory {
 
     private Entity createLayer(String name, ActorComponent.Layer layer) {
         Entity entity = new Entity();
-        Image image = new Image(atlas.findRegion("arena/arena 0/layers/arena 0_" + name));
+        Image image = new Image(atlas.get().findRegion("arena/arena 0/layers/arena 0_" + name));
         image.setScale(config.scale);
         image.setPosition(0, 0);
         entity.add(new ActorComponent(image, layer));
@@ -161,9 +182,13 @@ public class EntitiesFactory {
             Body body = world.createBody(bodyDef);
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(50f, 0.25f);
-            body.createFixture(shape, 0.0f).setUserData(UserData.PLATFORM);
+            FixtureDef def = new FixtureDef();
+            def.filter.categoryBits = Bits.Category.GROUND.bits;
+            def.filter.maskBits = Bits.Mask.GROUND.bits;
+            def.shape = shape;
+            body.createFixture(def).setUserData(UserData.PLATFORM);
             shape.dispose();
-            return new BodyComponent(body);
+            return Collections.singletonList(new BodyComponent(body));
         });
     }
 }

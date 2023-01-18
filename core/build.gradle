@@ -15,11 +15,7 @@ spotless {
     }
 }
 
-tasks.withType(JavaCompile) {
-    options.incremental = false
-}
-
-task packTextures {
+tasks.register('packTextures') {
     def inputDir = "$rootDir/assets/images/included"
     def outputDir = "$rootDir/assets/images/included/packed"
     inputs.dir inputDir

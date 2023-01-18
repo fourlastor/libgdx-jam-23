@@ -9,8 +9,10 @@ import io.github.fourlastor.game.component.BodyBuilderComponent;
 import io.github.fourlastor.game.component.BodyComponent;
 import io.github.fourlastor.game.component.ChunkRemovalComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.MovingComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
+import io.github.fourlastor.game.component.ShadowComponent;
 import io.github.fourlastor.game.component.SoundComponent;
 
 import javax.inject.Singleton;
@@ -34,6 +36,12 @@ public class EcsModule {
     @Singleton
     public ComponentMapper<BodyComponent> bodyComponent() {
         return ComponentMapper.getFor(BodyComponent.class);
+    }
+
+    @Provides
+    @Singleton
+    public ComponentMapper<ShadowComponent> shadowComponent() {
+        return ComponentMapper.getFor(ShadowComponent.class);
     }
 
     @Provides
@@ -70,5 +78,11 @@ public class EcsModule {
     @Singleton
     public ComponentMapper<HpComponent> hpComponent() {
         return ComponentMapper.getFor(HpComponent.class);
+    }
+
+    @Provides
+    @Singleton
+    public ComponentMapper<InputComponent> inputComponent() {
+        return ComponentMapper.getFor(InputComponent.class);
     }
 }

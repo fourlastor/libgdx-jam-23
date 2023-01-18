@@ -14,16 +14,17 @@ import io.github.fourlastor.game.animation.data.AnimationData;
 import io.github.fourlastor.game.animation.data.CharacterAnimationData;
 import io.github.fourlastor.game.component.AnimationImageComponent;
 import io.github.fourlastor.game.component.BodyComponent;
+import io.github.fourlastor.game.component.HpChangedComponent;
 import io.github.fourlastor.game.component.HpComponent;
+import io.github.fourlastor.game.component.InputComponent;
 import io.github.fourlastor.game.component.PlayerComponent;
 import io.github.fourlastor.game.di.modules.GameModule;
 import io.github.fourlastor.game.level.Message;
 import io.github.fourlastor.game.level.Player;
-import io.github.fourlastor.game.level.input.controls.Controls;
 
 import java.util.Map;
 
-public class Hurt extends InputState {
+public class Hurt extends CharacterState {
 
     private final AnimationData animation;
     private final MessageDispatcher dispatcher;
@@ -37,14 +38,14 @@ public class Hurt extends InputState {
     @AssistedInject
     public Hurt(
             @Assisted String name,
-            @Assisted Controls controls,
             ComponentMapper<PlayerComponent> players,
             ComponentMapper<BodyComponent> bodies,
             ComponentMapper<AnimationImageComponent> images,
+            ComponentMapper<InputComponent> inputs,
             Map<String, CharacterAnimationData> animations, ComponentMapper<HpComponent> hps,
             MessageDispatcher dispatcher,
             AssetManager assetManager) {
-        super(players, bodies, images, hps, controls);
+        super(players, bodies, images, hps, inputs);
         this.dispatcher = dispatcher;
         this.animation = animations.get(name).animations.get("idle");
         this.sound = assetManager.get(GameModule.HIT);
@@ -63,7 +64,7 @@ public class Hurt extends InputState {
         bodies.get(entity).body.setLinearVelocity(x, 0);
         HpComponent hp = hps.get(entity);
         hp.hp = Math.max(hp.hp - damage, 0);
-        hp.hpChanged = true;
+        entity.add(new HpChangedComponent());
         if (hp.hp == 0) {
             dispatcher.dispatchMessage(Message.PLAYER_DEFEATED.ordinal(), player);
         }
@@ -111,6 +112,6 @@ public class Hurt extends InputState {
 
     @AssistedFactory
     public interface Factory {
-        Hurt create(String name, Controls controls);
+        Hurt create(String name);
     }
 }

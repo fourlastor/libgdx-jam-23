@@ -11,16 +11,18 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import dagger.Module;
 import dagger.Provides;
 import io.github.fourlastor.game.di.ScreenScoped;
+import io.github.fourlastor.game.level.AnimationUpdateSystem;
 import io.github.fourlastor.game.level.Match;
 import io.github.fourlastor.game.level.WorldConfig;
-import io.github.fourlastor.game.level.input.PlayerInputSystem;
+import io.github.fourlastor.game.level.input.CharacterStateSystem;
+import io.github.fourlastor.game.level.input.InputBufferSystem;
 import io.github.fourlastor.game.level.physics.PhysicsDebugSystem;
 import io.github.fourlastor.game.level.physics.PhysicsSystem;
 import io.github.fourlastor.game.level.system.ActorFollowBodySystem;
 import io.github.fourlastor.game.level.system.CameraMovementSystem;
 import io.github.fourlastor.game.level.system.ClearScreenSystem;
 import io.github.fourlastor.game.level.system.GoToNextScreenSystem;
-import io.github.fourlastor.game.level.system.MovingSystem;
+import io.github.fourlastor.game.level.system.ShadowFollowBodySystem;
 import io.github.fourlastor.game.level.system.SoundSystem;
 import io.github.fourlastor.game.level.system.StageSystem;
 import io.github.fourlastor.game.level.system.UiSystem;
@@ -43,22 +45,26 @@ public class LevelModule {
     @Provides
     @ScreenScoped
     public Engine engine(
-            PlayerInputSystem playerInputSystem,
+            CharacterStateSystem characterStateSystem,
             PhysicsSystem physicsSystem,
             ActorFollowBodySystem actorFollowBodySystem,
             StageSystem stageSystem,
             ClearScreenSystem clearScreenSystem,
             @SuppressWarnings("unused") // debug only
             PhysicsDebugSystem physicsDebugSystem,
-            MovingSystem movingSystem,
             SoundSystem soundSystem,
             UiSystem uiSystem,
             GoToNextScreenSystem goToNextScreenSystem,
-            CameraMovementSystem cameraMovementSystem
+            CameraMovementSystem cameraMovementSystem,
+            InputBufferSystem inputBufferSystem,
+            AnimationUpdateSystem animationUpdateSystem,
+            ShadowFollowBodySystem shadowFollowBodySystem
     ) {
         Engine engine = new Engine();
-        engine.addSystem(movingSystem);
-        engine.addSystem(playerInputSystem);
+        engine.addSystem(inputBufferSystem);
+        engine.addSystem(characterStateSystem);
+        engine.addSystem(shadowFollowBodySystem);
+        engine.addSystem(animationUpdateSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(soundSystem);
         engine.addSystem(actorFollowBodySystem);
